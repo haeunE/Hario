@@ -28,7 +28,7 @@ FLASK_DEBUG=True
 FLASK_CONFIG_KEY=local
 ```
 
-# DB 설정
+## DB 설정
 
 ```
 flask db init
