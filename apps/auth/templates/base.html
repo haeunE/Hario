@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %} {%endblock%}</title>
+</head>
+<body>
+  {% if current_user.is_authenticated %}
+  <div>
+    <span>{{ current_user.username }}</span>
+    <span><a href="{{ url_for('auth.logout')}}"> 로그아웃</a></span>
+  </div>
+  {% else %}
+  <div>
+    <a href="{{ url_for('auth.login')}}">로그인</a>
+  </div>
+  
+  {% endif %}
+  {% block content %}
+  {% endblock %}
+</body>
+</html>
