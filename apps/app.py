@@ -23,13 +23,6 @@ def create_app():
    # Flask 앱 인스턴스 생성
   app = Flask(__name__)
 
-  # MySQL 연결
-  app.config.from_mapping(
-    SQLALCHEMY_DATABASE_URI='mysql+mysqlconnector://root:1234@localhost:3306/hario',
-    SQLALCHEMY_TRACK_MODIFICATIONS=False,
-    SQLALCHEMY_EHCO=True
-  )
-
   # 애플리케이션 설정 로드(local로)
   app.config.from_object(config[config_key])
   
@@ -46,12 +39,22 @@ def create_app():
   #========================= 블루프린트 설정 ==============================
 
   from apps.auth import views as auth_views
-
   app.register_blueprint(auth_views.auth, url_prefix='/auth')
+
+  from apps.crud import views as crud_views
+  app.register_blueprint(crud_views.crud, url_prefix='/crud')
 
   #========================== 에러 핸들러 설정 ============================
   app.register_error_handler(404, page_not_found)
   app.register_error_handler(500, internal_server_error)
+
+  
+  # #========================== department 초기 값 설정 ============================
+  #   # 여기서 import 사용
+  # with app.app_context():
+  #   from apps.crud.models import Department  # 모델 임포트
+  #   Department.seed_departments()  # 초기 데이터 삽입
+
 
   return app
 
