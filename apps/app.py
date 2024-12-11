@@ -42,7 +42,7 @@ def create_app():
   app.register_blueprint(auth_views.auth, url_prefix='/auth')
 
   from apps.crud import views as crud_views
-  app.register_blueprint(crud_views.crud, url_prefix='/crud')
+  app.register_blueprint(crud_views.crud)
 
   #========================== 에러 핸들러 설정 ============================
   app.register_error_handler(404, page_not_found)

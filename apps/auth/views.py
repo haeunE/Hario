@@ -6,9 +6,6 @@ from flask_login import login_user, logout_user
 
 auth = Blueprint("auth", __name__, template_folder="templates/auth", static_folder="static")
 
-@auth.route("/")
-def index():
-    return render_template("index.html")
 
 @auth.route("/signup/check", methods=["POST"])
 def uni_num_check():
@@ -40,6 +37,7 @@ def process_userinfo(uniquenum, info):
         name=info.name.data,
         birthdate=info.birthdate.data,
         tel=info.tel.data,
+        email =info.email.data,
         department_id=99  # '소속없음'으로 설정
     )
     db.session.add(userinfo)
@@ -58,8 +56,20 @@ def signup():
 
     if request.method == "POST":
         if not userinfo_exists and info.validate_on_submit():
-            # 개인정보 등록
+            existing_user = Userinfo.query.filter(
+                (Userinfo.tel == info.tel.data) | (Userinfo.email == info.email.data)
+            ).first()
+
+            if existing_user:
+                if existing_user.tel == info.tel.data:
+                    flash("이미 등록된 전화번호입니다. 다른 번호를 사용해주세요.", "error")
+                if existing_user.email == info.email.data:
+                    flash("이미 등록된 이메일입니다. 다른 이메일을 사용해주세요.", "error")
+                return redirect(url_for("auth.signup"))
+
+            # 중복이 없을 경우 사용자 정보 처리 및 저장
             process_userinfo(uniquenum, info)
+
             flash("개인정보가 등록되었습니다. 회원 정보를 입력해주세요.")
             session['userinfo_exists'] = True
             return redirect(url_for("auth.signup"))
@@ -104,7 +114,7 @@ def signup():
                     flash("회원가입이 완료되었습니다.")
                     session.pop('userinfo_exists', None)
                     session.pop('uniquenum', None)
-                    return redirect(url_for("auth.index"))
+                    return redirect(url_for("crud.index"))
             else:
                 flash("유효한 고유번호로 회원 정보를 찾을 수 없습니다.")
                 return redirect(url_for("auth.signup"))
@@ -115,9 +125,18 @@ def signup():
 
 @auth.route("/login", methods=["GET", "POST"])
 def login():
-    return render_template("login.html")
+    form = UserForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username = form.username.data).first()
+
+        if user is not None and user.verify_password(form.password.data):
+            login_user(user)
+            return redirect(url_for("crud.index"))
+        
+        flash("아이디 또는 비밀번호가 일치하지 않습니다.")
+    return render_template("login.html", form = form)
 
 @auth.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for("auth.index"))
+    return redirect(url_for("crud.index"))
