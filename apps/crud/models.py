@@ -44,12 +44,17 @@ class User(db.Model, UserMixin):
     def is_duplicate_username(self):
         return User.query.filter_by(username=self.username).first() is not None
 
+# 로그인 성공 + 특정 요청 -> 세션에 저장 된 id이용해, DB에 정보 가져옴
+@login_manager.user_loader
+def load_user(user_id):
+  return User.query.get(user_id)  
+
 # Userinfo 모델
 class Userinfo(db.Model):
     __tablename__ = 'userinfo'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
-    birthdate = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    birthdate = db.Column(db.DateTime, nullable=False)
     tel = db.Column(db.String(255), nullable=False)
 
     department_id = db.Column(db.Integer, db.ForeignKey("department.id", ondelete='CASCADE'), nullable=False)
@@ -101,3 +106,26 @@ class Department(db.Model):
                 db.session.add(Department(**dept))
             db.session.commit()
             print("Departments seeded!")
+
+
+
+# Userinfo 데이터 삽입
+def seed_userinfos():
+    """초기 Userinfo 데이터 삽입"""
+    if not Userinfo.query.first():  # 데이터가 없는 경우에만 삽입
+        users = [
+            {"name": "홍길동", "birthdate": "1980-01-01", "tel": "010-1234-5678", "department_id": 1},
+            {"name": "김철수", "birthdate": "1990-05-15", "tel": "010-2345-6789", "department_id": 2},
+            {"name": "이영희", "birthdate": "1985-08-25", "tel": "010-3456-7890", "department_id": 3},
+            {"name": "박민수", "birthdate": "1995-02-10", "tel": "010-4567-8901", "department_id": 4},
+            {"name": "최지은", "birthdate": "1992-06-30", "tel": "010-5678-9012", "department_id": 5},
+        ]
+        
+        for user in users:
+            userinfo = Userinfo(**user)
+            db.session.add(userinfo)
+        
+        db.session.commit()
+        print("Userinfo 데이터가 삽입되었습니다.")
+
+

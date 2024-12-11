@@ -50,10 +50,11 @@ def create_app():
 
   
   # #========================== department 초기 값 설정 ============================
-  #   # 여기서 import 사용
+
   # with app.app_context():
-  #   from apps.crud.models import Department  # 모델 임포트
+  #   from apps.crud.models import Department, seed_userinfos  # 모델 임포트
   #   Department.seed_departments()  # 초기 데이터 삽입
+  #   seed_userinfos()
 
 
   return app

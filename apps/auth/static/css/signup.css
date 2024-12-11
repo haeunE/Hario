@@ -1,0 +1,173 @@
+/* 회원가입 페이지 스타일 */
+
+/* 기본 폰트 스타일 */
+@font-face {
+  font-family: 'YESMyoungjo-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_13@1.0/YESMyoungjo-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* 고유번호 확인 폼 */
+.uni_num_check {
+  background-color: #FFFFFF; /* 배경색 */
+  border: 1px solid #FE6232; /* 테두리 색상 */
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+.uni_num_check label {
+  font-size: 1rem;
+  color: #000000;
+}
+
+.uni_num_check input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #FE6232;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 5px;
+}
+
+.uni_num_check button {
+  background-color: #FE6232;
+  color: #FFFFFF;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.uni_num_check button:hover {
+  background-color: #E04D1A;
+}
+
+/* 회원 정보 입력 폼 */
+.signup {
+  background-color: #FFFFFF; /* 배경색 */
+  border: 1px solid #FE6232; /* 테두리 색상 */
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+.signup div {
+  margin-bottom: 15px;
+}
+
+.signup label {
+  font-size: 1rem;
+  color: #000000;
+}
+
+.signup input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #FE6232;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 5px;
+}
+
+.signup input:focus {
+  outline-color: #FE6232;
+}
+
+.signup button {
+  background-color: #FE6232;
+  color: #FFFFFF;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.signup button:hover {
+  background-color: #E04D1A;
+}
+
+/* 개인정보 입력 폼 */
+.userinfo {
+  background-color: #FFFFFF; /* 배경색 */
+  border: 1px solid #FE6232; /* 테두리 색상 */
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+.userinfo div {
+  margin-bottom: 15px;
+}
+
+.userinfo label {
+  font-size: 1rem;
+  color: #000000;
+}
+
+.userinfo input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #FE6232;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 5px;
+}
+
+.userinfo input:focus {
+  outline-color: #FE6232;
+}
+
+.userinfo button {
+  background-color: #FE6232;
+  color: #FFFFFF;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.userinfo button:hover {
+  background-color: #E04D1A;
+}
+
+/* 에러 메시지 스타일 */
+span[style="color: red;"] {
+  font-size: 0.9rem;
+  color: red;
+}
+
+/* Flash 메시지 스타일 */
+.flash-message {
+  color: red; /* 글자 색을 빨간색으로 설정 */
+  font-size: 1.5rem; /* 글자 크기 크게 설정 */
+  background-color: #FFEBEB; /* 배경색 연한 빨간색 */
+  border: 1px solid red; /* 빨간색 테두리 */
+  padding: 15px;
+  border-radius: 5px;
+  max-width: 600px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.flash-message ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.flash-message li {
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+
