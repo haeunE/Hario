@@ -137,6 +137,7 @@ def login():
     return render_template("login.html", form = form)
 
 @auth.route("/logout")
+@login_required
 def logout():
     logout_user()
     session.pop('userinfo_exists', None)
@@ -145,6 +146,7 @@ def logout():
     return redirect(url_for("crud.index"))
 
 @auth.route("/userinfo", methods=["GET", "POST"])
+@login_required
 def userinfo():
     form = passwordForm()
 
@@ -163,6 +165,7 @@ def userinfo():
     return render_template("userinfo.html", user=user, userinfo=userinfo, department=department, form=form)
 
 @auth.route("/delete", methods=["POST"])
+@login_required
 def delete():
     User.query.filter_by(id = current_user.id).delete()
     db.session.commit()

@@ -115,21 +115,33 @@
   cursor: not-allowed;
 }
 
-/* 삭제 버튼 스타일 */
-form input[type="submit"] {
-  background-color: #E61E2E; /* CJ Red */
-  color: #FFFFFF;
+
+
+/* 회원 삭제 섹션 */
+.userdelete {
+  display: flex; /* Flexbox로 정렬 */
+  flex-direction: column; /* 수직 정렬 */
+  align-items: center; /* 가로축 가운데 정렬 */
+  justify-content: center; /* 세로축 가운데 정렬 */
+}
+
+
+.userdelete input[type="submit"] {
+  background-color: red; /* 기존 색상 변수 사용 */
+  color: white;
   border: none;
   padding: 10px 20px;
   font-size: 1rem;
-  width: 100%;
   cursor: pointer;
   border-radius: 4px;
+  width: 100%;
   margin-top: 10px;
+  margin-bottom: 10px;
 }
 
-form input[type="submit"]:hover {
-  background-color: #D41D1D; /* 좀 더 어두운 빨간색 */
+.userdelete input[type="submit"]:hover {
+  background-color: darkred;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
 }
 
 /* 에러 메시지 스타일 */
