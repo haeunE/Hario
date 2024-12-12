@@ -99,15 +99,36 @@
   color: #FFFFFF;
 }
 
-.page-hario .auth-menu {
+/* 로그인 및 회원정보 메뉴 */
+.page-hario .navbar-nav .auth-menu {
   color: #000000;
   font-size: 1rem;
 }
 
-.page-hario .auth-menu a {
+.page-hario .navbar-nav .auth-menu a {
   color: #FE6232;
 }
 
-.page-hario .auth-menu a:hover {
+.page-hario .navbar-nav .auth-menu a:hover {
   text-decoration: underline;
+}
+
+/* 로그인, 회원정보 및 로그아웃 메뉴를 오른쪽 끝으로 배치 */
+.page-hario .navbar-nav {
+  display: flex;
+  align-items: center; /* 세로로 중앙 정렬 */
+}
+
+.page-hario .navbar-nav.ml-auto {
+  margin-left: auto; /* 로그인/회원정보를 오른쪽으로 배치 */
+}
+
+.page-hario .navbar-nav .nav-item {
+  margin-left: 10px; /* 항목 간 간격을 넓힘 */
+  display: flex;
+  align-items: center; /* 세로 중앙 정렬 */
+}
+
+.page-hario .navbar-nav .nav-item span {
+  padding-left: 10px; /* 로그인/회원정보와 다른 항목 간 간격을 추가 */
 }

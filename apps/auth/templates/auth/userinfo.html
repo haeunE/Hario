@@ -71,7 +71,7 @@
       <input type="text" value="{{department.name}}" disabled>
     </div>
   </div>
-  <div>  
+  <div class="userdelete">  
     <form action="{{url_for('auth.delete')}}" method="post">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <input type="submit" value="회원삭제">
