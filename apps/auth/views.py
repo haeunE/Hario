@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, session
 from apps.app import db
-from apps.crud.models import User, Userinfo, UserRole
-from apps.auth.forms import UserForm, UserinfoForm
-from flask_login import login_user, logout_user
+from apps.crud.models import User, Userinfo, UserRole, Department
+from apps.auth.forms import UserForm, UserinfoForm, passwordForm
+from flask_login import login_user, logout_user, login_required, current_user
 
 auth = Blueprint("auth", __name__, template_folder="templates/auth", static_folder="static")
 
@@ -111,7 +111,7 @@ def signup():
                     db.session.add(user)
                     db.session.commit()
                     login_user(user)
-                    flash("회원가입이 완료되었습니다.")
+                    
                     session.pop('userinfo_exists', None)
                     session.pop('uniquenum', None)
                     return redirect(url_for("crud.index"))
@@ -139,4 +139,32 @@ def login():
 @auth.route("/logout")
 def logout():
     logout_user()
+    session.pop('userinfo_exists', None)
+    session.pop('uniquenum', None)
+    flash(" ", "info")
+    return redirect(url_for("crud.index"))
+
+@auth.route("/userinfo", methods=["GET", "POST"])
+def userinfo():
+    form = passwordForm()
+
+    user = User.query.filter_by(id = current_user.id).first()
+    userinfo = Userinfo.query.filter_by(id=user.userinfo_id).first()
+    department = Department.query.filter_by(id =userinfo.department_id).first() 
+
+    if form.validate_on_submit():
+        user.password = form.password.data
+
+        db.session.add(user)
+        db.session.commit()
+        flash("비밀번호 수정 완료되었습니다.")
+        return redirect(url_for("auth.userinfo"))
+
+    return render_template("userinfo.html", user=user, userinfo=userinfo, department=department, form=form)
+
+@auth.route("/delete", methods=["POST"])
+def delete():
+    User.query.filter_by(id = current_user.id).delete()
+    db.session.commit()
+
     return redirect(url_for("crud.index"))

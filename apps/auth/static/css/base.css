@@ -4,98 +4,99 @@
   font-weight: normal;
   font-style: normal;
 }
+/* 색상 변수 */
+:root {
+  --cj-red: #E61E2E;
+  --cj-blue: #0047AB;
+  --cj-orange: #FF6600;
+  --white: #FFFFFF;
+  --black: #000000;
+  --gray: #888888; /* 추가적인 회색 계열 색상 */
+}
 
 /* 기본 설정 */
 body {
-  background-color: #FCF2E8; /* 배경색 */
-  color: #000000; /* 텍스트 기본 색상 */
-  font-family:YESMyoungjo-Regular, sans-serif;
+  background-color: var(--white);
+  color: var(--black);
+  font-family: YESMyoungjo-Regular, sans-serif;
 }
 
 /* 헤더 */
 h1 {
-  color: black; /* 포인트 컬러 */
+  color: var(--cj-blue);
   font-size: 2.5rem;
 }
 
 .navbar {
-  background-color: #FFFFFF; /* 흰색 배경 */
-  border-bottom: 2px solid #FE6232; /* 포인트 컬러로 아래쪽 테두리 */
+  background-color: var(--white);
+  border-bottom: 2px solid var(--cj-red);
 }
 
 .navbar-nav .nav-link {
-  color: #000000; /* 네비게이션 링크 기본 색상 */
-}
-
-.navbar-nav .nav-link:hover {
-  color: #FE6232; /* 포인트 컬러로 호버 색상 */
+  color: var(--black);
+  &:hover {
+    color: var(--cj-red);
+  }
 }
 
 .navbar-toggler-icon {
-  background-color: #FFFFFF; /* 토글 버튼 아이콘 색상 */
+  background-color: var(--white);
+  &:hover {
+    background-color: var(--cj-red);
+  }
 }
-
-.navbar-toggler-icon:hover {
-  background-color: #FE6232; /* 토글 버튼 아이콘 색상 */
-}
-
 
 /* 로그인/회원가입 버튼 */
 a {
-  color: #FE6232; /* 포인트 컬러 */
+  color: var(--cj-red);
   text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 /* 검색 폼 */
 .form-control {
-  background-color: #FFFFFF; /* 검색 입력창 배경색 */
-  border: 1px solid #FE6232; /* 포인트 컬러 테두리 */
+  background-color: var(--white);
+  border: 1px solid var(--cj-red);
 }
 
 .btn-outline-success {
-  color: #FE6232;
-  border-color: #FE6232;
+  color: var(--cj-red);
+  border-color: var(--cj-red);
+  &:hover {
+    background-color: var(--cj-red);
+    color: var(--white);
+  }
 }
 
-.btn-outline-success:hover {
-  background-color: #FE6232;
-  color: #FFFFFF;
-}
-
-.navbar-nav .dropdown-item {
-  color: #000000; /* 드롭다운 항목 기본 색상 */
-}
-
-.navbar-nav .dropdown-item:hover {
-  background-color: #FE6232; /* 드롭다운 항목 호버 색상 */
-  color: #FFFFFF;
+/* 드롭다운 메뉴 */
+.dropdown-item {
+  color: var(--black);
+  &:hover {
+    background-color: var(--cj-orange);
+    color: var(--white);
+  }
 }
 
 /* 인증된 사용자 메뉴 */
 .auth-menu {
-  color: #000000;
+  color: var(--black);
   font-size: 1rem;
+  a {
+    color: var(--cj-red);
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
-.auth-menu a {
-  color: #FE6232;
-}
-
-.auth-menu a:hover {
-  text-decoration: underline;
-}
-
-/* 기타 기본 스타일 */
+/* 버튼 스타일 */
 button {
-  border: 1px solid #FE6232;
-  color: #FE6232;
-}
-
-button:hover {
-  background-color: #FE6232;
-  color: #FFFFFF;
+  border: 1px solid var(--cj-red);
+  color: var(--cj-red);
+  &:hover {
+    background-color: var(--cj-red);
+    color: var(--white);
+  }
 }

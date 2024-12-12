@@ -1,0 +1,83 @@
+/* 로그인 폼 스타일 */
+@font-face {
+  font-family: 'YESMyoungjo-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_13@1.0/YESMyoungjo-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'YESMyoungjo-Regular', Arial, sans-serif;
+  background-color: #FFFFFF; /* 페이지 배경색 */
+  margin: 0;
+  padding: 0;
+}
+
+.login {
+  background-color: #FFFFFF; /* 배경색 */
+  border: 1px solid #FE6232; /* 테두리 색상 */
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  margin: 40px auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login div {
+  margin-bottom: 15px;
+}
+
+.login label {
+  font-size: 1rem;
+  color: #000000;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.login input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #FE6232;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.login input:focus {
+  outline-color: #FE6232;
+  box-shadow: 0 0 5px rgba(254, 98, 50, 0.5);
+}
+
+.login button {
+  background-color: #FE6232;
+  color: #FFFFFF;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.login button:hover {
+  background-color: #E04D1A;
+}
+
+/* 에러 메시지 스타일 */
+span[style="color: red;"] {
+  font-size: 0.9rem;
+  color: red;
+}
+
+/* Flash 메시지 스타일 */
+.flash-message {
+  color: red; /* 글자 색을 빨간색으로 설정 */
+  font-size: 1rem; /* 글자 크기 */
+  background-color: #FFEBEB; /* 배경색 연한 빨간색 */
+  border: 1px solid red; /* 빨간색 테두리 */
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 500px;
+  margin: 20px auto;
+  text-align: center;
+}

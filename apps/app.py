@@ -41,6 +41,9 @@ def create_app():
   from apps.auth import views as auth_views
   app.register_blueprint(auth_views.auth, url_prefix='/auth')
 
+  from apps.hire import views as hire_views
+  app.register_blueprint(hire_views.hire, url_prefix='/hire')
+
   from apps.crud import views as crud_views
   app.register_blueprint(crud_views.crud)
 

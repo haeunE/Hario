@@ -14,12 +14,27 @@ class UserForm(FlaskForm):
   password = PasswordField(
     "비밀번호",
     validators=[
-      DataRequired(message="비밀번호 필수 입력 해주세요.")
+      DataRequired(message="비밀번호 필수 입력 해주세요."),
+      # Regexp(
+      #   regex=r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,16}$",
+      #   message="비밀번호는 영문 대/소문자, 숫자, 특수문자 포함해야 합니다."
+      #   )
     ]
   )
 
   submit = SubmitField("회원가입")
 
+class passwordForm(FlaskForm):
+  password = PasswordField(
+    "비밀번호",
+    validators=[
+      DataRequired(message="비밀번호 필수 입력 해주세요."),
+      # Regexp(
+      #   regex=r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,16}$",
+      #   message="비밀번호는 영문 대/소문자, 숫자, 특수문자 포함해야 합니다."
+      #   )
+    ]
+  )
 
 
 class UserinfoForm(FlaskForm):
@@ -45,7 +60,7 @@ class UserinfoForm(FlaskForm):
         DataRequired(message="전화번호 필수 입력해 주세요."),
         Regexp(
             regex=r"^010\d{8}$",
-            message="전화번호는 '010-xxxx-xxxx' 또는 '010xxxxxxxx' 형식이어야 합니다."
+            message="전화번호는 '010xxxxxxxx' 형식이어야 합니다."
         )
     ]
   )
