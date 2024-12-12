@@ -1,0 +1,139 @@
+/* 기본 폰트 스타일 */
+@font-face {
+  font-family: 'YESMyoungjo-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_13@1.0/YESMyoungjo-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* 고유번호 영역 (반전 색상 적용) */
+.uni-userinfo {
+  background-color: #8BC34A; /* 초록색 배경 */
+  border: 1px solid #FFFFFF; /* 흰색 테두리 */
+  padding: 15px;
+  border-radius: 8px;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+.uni-userinfo label {
+  font-size: 1rem;
+  color: #FFFFFF; /* 흰색 텍스트 */
+}
+
+.uni-userinfo input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #FFFFFF; /* 흰색 테두리 */
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 5px;
+  background-color: #ffffff; /* 흰색 입력 필드 배경 */
+  color: #000000; /* 검은색 텍스트 */
+}
+
+.uni-userinfo input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+/* 비밀번호 수정 폼 */
+.password-userinfo {
+  background-color: #FFFFFF;
+  border: 1px solid #8BC34A; /* 밝은 초록색 테두리 */
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+.password-userinfo div {
+  margin-bottom: 15px;
+}
+
+.password-userinfo label {
+  font-size: 1rem;
+  color: #000000;
+}
+
+.password-userinfo input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #8BC34A;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 5px;
+}
+
+.password-userinfo button {
+  background-color: #8BC34A;
+  color: #FFFFFF;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.password-userinfo button:hover {
+  background-color: #7CB342;
+}
+
+/* 사용자 정보 (반전 색상 적용) */
+.userinfo {
+  background-color: #8BC34A; /* 초록색 배경 */
+  border: 1px solid #FFFFFF; /* 흰색 테두리 */
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+.userinfo div {
+  margin-bottom: 15px;
+}
+
+.userinfo label {
+  font-size: 1rem;
+  color: #FFFFFF; /* 흰색 텍스트 */
+}
+
+.userinfo input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #FFFFFF; /* 흰색 테두리 */
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 5px;
+  background-color: #ffffff; /* 흰색 입력 필드 배경 */
+  color: #000000; /* 검은색 텍스트 */
+}
+
+.userinfo input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+/* 삭제 버튼 스타일 */
+form input[type="submit"] {
+  background-color: #E61E2E; /* CJ Red */
+  color: #FFFFFF;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+form input[type="submit"]:hover {
+  background-color: #D41D1D; /* 좀 더 어두운 빨간색 */
+}
+
+/* 에러 메시지 스타일 */
+span[style="color: red;"] {
+  font-size: 0.9rem;
+  color: #E61E2E; /* CJ Red */
+}

@@ -41,8 +41,11 @@ def create_app():
   from apps.auth import views as auth_views
   app.register_blueprint(auth_views.auth, url_prefix='/auth')
 
+  from apps.hire import views as hire_views
+  app.register_blueprint(hire_views.hire, url_prefix='/hire')
+
   from apps.crud import views as crud_views
-  app.register_blueprint(crud_views.crud, url_prefix='/crud')
+  app.register_blueprint(crud_views.crud)
 
   #========================== 에러 핸들러 설정 ============================
   app.register_error_handler(404, page_not_found)
@@ -50,10 +53,11 @@ def create_app():
 
   
   # #========================== department 초기 값 설정 ============================
-  #   # 여기서 import 사용
+
   # with app.app_context():
-  #   from apps.crud.models import Department  # 모델 임포트
+  #   from apps.crud.models import Department, seed_userinfos  # 모델 임포트
   #   Department.seed_departments()  # 초기 데이터 삽입
+  #   seed_userinfos()
 
 
   return app

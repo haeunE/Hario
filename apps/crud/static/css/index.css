@@ -1,0 +1,162 @@
+/* 전체 배경 설정 */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #FCF2E8;
+}
+
+/* 상단 헤더 디자인 */
+.company-header {
+  background-color: #6CA64D;
+  color: #FFFFFF;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.company-header .logo img {
+  max-height: 50px;
+}
+
+.company-header .company-vision {
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.company-header .company-message h1 {
+  font-size: 24px;
+  margin: 0;
+  color: #FFFFFF;
+}
+
+.company-header .company-message p {
+  color: #FE6232;
+  font-size: 16px;
+}
+
+.company-header .ceo-message h2 {
+  font-size: 20px;
+  margin: 10px 0;
+}
+
+.company-header .ceo-message p {
+  color: #A4C639;
+  font-size: 16px;
+}
+
+/* 회사 스토리 섹션 */
+.company-story {
+  background-color: #FCF2E8;
+  padding: 40px;
+}
+
+.company-story h2 {
+  color: #0047AB;
+  font-size: 28px;
+}
+
+.company-story p {
+  font-size: 16px;
+  color: #000000;
+}
+
+.company-story ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.company-story ul li {
+  font-size: 16px;
+  margin: 10px 0;
+}
+
+.company-story ul li strong {
+  color: #FE6232;
+}
+
+.company-story .achievements p {
+  font-size: 16px;
+  color: #0047AB;
+}
+
+.company-story .timeline {
+  margin-top: 20px;
+  font-size: 16px;
+  color: #0047AB;
+}
+
+/* 뉴스와 최신 정보 섹션 */
+.news {
+  padding: 20px;
+  background-color: #FFFFFF;
+}
+
+.news h2 {
+  color: #0047AB;
+  font-size: 24px;
+}
+
+.news .news-item p {
+  font-size: 16px;
+  color: #E61E2E;
+}
+
+.news .employee-story p {
+  font-size: 16px;
+  color: #000000;
+}
+
+/* 상장 계열사 버튼 섹션 */
+.subsidiaries {
+  background-color: #FFFFFF;
+  padding: 40px;
+  text-align: center;
+}
+
+.subsidiaries h2 {
+  color: #0047AB;
+  font-size: 28px;
+}
+
+.subsidiaries .subsidiary-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.subsidiaries .subsidiary-buttons button {
+  background-color: #FF6600;
+  border: none;
+  color: #FFFFFF;
+  padding: 20px;
+  width: 200px;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.subsidiaries .subsidiary-buttons button:hover {
+  background-color: #E61E2E;
+}
+
+.subsidiaries .subsidiary-buttons img {
+  max-width: 120px;
+  margin-bottom: 10px;
+}
+
+/* 스타일 추가 (글자 크기, 간격 등) */
+h1, h2, h3, h4 {
+  margin: 20px 0;
+  font-weight: bold;
+}
+
+p {
+  margin: 10px 0;
+}
+
+ul {
+  margin: 10px 0;
+}

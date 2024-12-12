@@ -1,7 +1,84 @@
-{% extends "auth/base.html" %}
+{% extends "base.html" %}
 {% block title %} 회원가입 {% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('auth.static', filename='css/signup.css') }}">
+{% endblock %}
 
 {% block content %}
+{% with messages = get_flashed_messages() %}
+  {% for message in messages %}
+    <li>{{message}}</li>
+  {% endfor %}
+ {% endwith %}   
+
+ <!-- 고유번호 확인 폼 -->
+ {% if not userinfo_exists %}
+ <form action="{{ url_for('auth.uni_num_check') }}" method="post" class="uni_num_check">
+   <input type="hidden" name="csrf_token" value="{{ form.csrf_token._value() }}">
+   <div>
+     <label for="uniquenum">고유 번호:</label>
+     <input type="text" id="uniquenum" name="uniquenum" value="{{uniquenum if uniquenum is not none else ''}}" placeholder="숫자만 입력하세요" >
+    </div>
+    <div>
+      <button type="submit">확인</button>
+    </div>
+  </form>
+  {% endif %}
+
+<!-- 회원 정보 입력 폼 -->
+{% if userinfo_exists %}
+<form action="{{ url_for('auth.signup') }}" method="post" class="signup">
+  {{form.csrf_token}}
+  <div>
+    {{ form.username.label }} {{ form.username(placeholder="아이디 입력") }}
+  </div>
+  {% for error in form.username.errors %}
+    <span style="color: red;">{{ error }}</span>
+  {% endfor %}
+  <div>
+    {{ form.password.label }} {{ form.password(placeholder="비밀번호 입력") }}
+  </div>
+  {% for error in form.password.errors %}
+    <span style="color: red;">{{ error }}</span>
+  {% endfor %}
+  <div>
+    <button type="submit">{{ form.submit.label }}</button>
+  </div>
+</form>
+{% else %}
+
+<!-- 개인정보 입력 폼 -->
+<form action="{{ url_for('auth.signup') }}" method="post" class="userinfo">
+  {{info.csrf_token}}
+  <div>
+    {{ info.name.label }} {{ info.name(placeholder="이름 입력") }}
+  </div>
+  {% for error in info.name.errors %}
+    <span style="color: red;">{{ error }}</span>
+  {% endfor %}
+  <div>
+    {{ info.birthdate.label }} {{ info.birthdate(placeholder="생년월일 입력") }}
+  </div>
+  {% for error in info.birthdate.errors %}
+    <span style="color: red;">{{ error }}</span>
+  {% endfor %}
+  <div>
+    {{ info.tel.label }} {{ info.tel(placeholder="전화번호 입력") }}
+  </div>
+  {% for error in info.tel.errors %}
+    <span style="color: red;">{{ error }}</span>
+  {% endfor %}
+  <div>
+    {{ info.email.label }} {{ info.email(placeholder="이메일 입력") }}
+  </div>
+  {% for error in info.email.errors %}
+    <span style="color: red;">{{ error }}</span>
+  {% endfor %}
+  <div>
+    <button type="submit">{{ info.submit.label }}</button>
+  </div>
+</form>
+{% endif %}
 
 
 {% endblock %}
