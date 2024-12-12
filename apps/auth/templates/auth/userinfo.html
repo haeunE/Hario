@@ -14,14 +14,14 @@
   {% endfor %}
  {% endwith %}
 <!-- 고유번호 -->
-<div>
+<div class="uni-userinfo">
   <label for="uniquenum">고유 번호</label>
   <input type="text" id="uniquenum" name="uniquenum" value="{{ userinfo.uniquenum }}" disabled>
 </div>
 
 <!-- 회원정보 폼 시작 -->
 
-<form action="{{url_for('auth.userinfo')}}" method="post">
+<form action="{{url_for('auth.userinfo')}}" method="post" class="password-userinfo">
   {{ form.csrf_token }}
   <div>
     <div>아이디</div>
@@ -35,41 +35,43 @@
   {% for error in form.password.errors %}
     <span style="color: red;">{{ error }}</span>
   {% endfor %}
-
-  <!-- 사용자 정보 입력 (수정 불가) -->
   <div>
-    <div>이름</div>
-    <input type="text" value="{{ userinfo.name }}" disabled> <!-- name 수정 불가 -->
-  </div>
-
-  <div>
-    <div>생년월일</div>
-    <input type="text" value="{{ userinfo.birthdate }}" disabled> <!-- birthdate 수정 불가 -->
-  </div>
-
-  <div>
-    <div>전화번호</div>
-    <input type="text" value="{{ userinfo.tel }}" disabled> <!-- tel 수정 불가 -->
-  </div>
-
-  <div>
-    <div>이메일</div>
-    <input type="text" value="{{ userinfo.email }}" disabled> <!-- email 수정 불가 -->
-  </div>
-
-  <div>
-    <div>부서번호</div>
-    <input type="text" value="{{department.id}}" disabled>
-  </div>
-  <div>
-    <div>부서이름</div>
-    <input type="text" value="{{department.name}}" disabled>
-  </div>
-  <div>
-    <button type="submit">정보 업데이트</button>
+    <button type="submit">비밀번호 수정</button>
   </div>
 </form>
-  <div>
+
+  <!-- 사용자 정보 입력 (수정 불가) -->
+  <div class="userinfo"> 
+    <div>
+      <div>이름</div>
+      <input type="text" value="{{ userinfo.name }}" disabled> <!-- name 수정 불가 -->
+    </div>
+
+    <div>
+      <div>생년월일</div>
+      <input type="text" value="{{ userinfo.birthdate }}" disabled> <!-- birthdate 수정 불가 -->
+    </div>
+
+    <div>
+      <div>전화번호</div>
+      <input type="text" value="{{ userinfo.tel }}" disabled> <!-- tel 수정 불가 -->
+    </div>
+
+    <div>
+      <div>이메일</div>
+      <input type="text" value="{{ userinfo.email }}" disabled> <!-- email 수정 불가 -->
+    </div>
+
+    <div>
+      <div>부서번호</div>
+      <input type="text" value="{{department.id}}" disabled>
+    </div>
+    <div>
+      <div>부서이름</div>
+      <input type="text" value="{{department.name}}" disabled>
+    </div>
+  </div>
+  <div>  
     <form action="{{url_for('auth.delete')}}" method="post">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <input type="submit" value="회원삭제">

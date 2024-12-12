@@ -1,124 +1,162 @@
-/* 공통 스타일 */
+/* 전체 배경 설정 */
 body {
-  font-family: 'Arial', sans-serif;
-  background-color: #FCF2E8;
-  color: #333;
+  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  background-color: #FCF2E8;
 }
 
-/* 1. 상단 헤더: 회사 소개와 메시지 */
+/* 상단 헤더 디자인 */
 .company-header {
-  background-color: #FFFFFF;
+  background-color: #6CA64D;
+  color: #FFFFFF;
   padding: 20px;
-  text-align: center;
-  border-bottom: 3px solid #FE6232;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .company-header .logo img {
-  width: 150px;
-  margin-bottom: 10px;
+  max-height: 50px;
 }
 
 .company-header .company-vision {
-  font-weight: bold;
-  font-size: 1.2rem;
-  color: #FE6232;
+  font-size: 14px;
+  margin-top: 10px;
 }
 
-.company-header h1 {
-  font-size: 2rem;
-  color: #333;
+.company-header .company-message h1 {
+  font-size: 24px;
+  margin: 0;
+  color: #FFFFFF;
+}
+
+.company-header .company-message p {
+  color: #FE6232;
+  font-size: 16px;
+}
+
+.company-header .ceo-message h2 {
+  font-size: 20px;
   margin: 10px 0;
 }
 
-.company-header .ceo-message {
-  background-color: #FE6232;
-  color: white;
-  padding: 10px;
-  margin-top: 20px;
+.company-header .ceo-message p {
+  color: #A4C639;
+  font-size: 16px;
 }
 
-/* 2. 회사 코로나 극복 스토리 섹션 */
+/* 회사 스토리 섹션 */
 .company-story {
+  background-color: #FCF2E8;
   padding: 40px;
-  background-color: #FFFFFF;
-  text-align: center;
 }
 
 .company-story h2 {
-  color: #FE6232;
-  font-size: 2rem;
+  color: #0047AB;
+  font-size: 28px;
+}
+
+.company-story p {
+  font-size: 16px;
+  color: #000000;
 }
 
 .company-story ul {
-  text-align: left;
-  margin: 20px auto;
-  max-width: 800px;
+  list-style-type: none;
+  padding: 0;
 }
 
-.company-story .achievements {
-  text-align: left;
-  margin-top: 20px;
-  font-weight: bold;
+.company-story ul li {
+  font-size: 16px;
+  margin: 10px 0;
+}
+
+.company-story ul li strong {
+  color: #FE6232;
+}
+
+.company-story .achievements p {
+  font-size: 16px;
+  color: #0047AB;
 }
 
 .company-story .timeline {
-  margin-top: 30px;
-  background-color: #F8F8F8;
-  padding: 15px;
+  margin-top: 20px;
+  font-size: 16px;
+  color: #0047AB;
 }
 
-/* 3. 뉴스와 최신 정보 */
+/* 뉴스와 최신 정보 섹션 */
 .news {
-  padding: 40px;
+  padding: 20px;
   background-color: #FFFFFF;
 }
 
 .news h2 {
-  color: #FE6232;
-  font-size: 2rem;
+  color: #0047AB;
+  font-size: 24px;
 }
 
-.news-item, .employee-story {
-  margin: 20px 0;
-  font-size: 1.2rem;
+.news .news-item p {
+  font-size: 16px;
+  color: #E61E2E;
 }
 
-/* 4. 상장 계열사 버튼 섹션 */
+.news .employee-story p {
+  font-size: 16px;
+  color: #000000;
+}
+
+/* 상장 계열사 버튼 섹션 */
 .subsidiaries {
-  padding: 40px;
   background-color: #FFFFFF;
+  padding: 40px;
   text-align: center;
 }
 
 .subsidiaries h2 {
-  color: #FE6232;
-  font-size: 2rem;
+  color: #0047AB;
+  font-size: 28px;
 }
 
-.subsidiary-buttons {
+.subsidiaries .subsidiary-buttons {
   display: flex;
   justify-content: center;
-  gap: 30px;
+  gap: 20px;
 }
 
-.subsidiary-buttons button {
-  background-color: #FE6232;
-  color: white;
-  padding: 20px;
+.subsidiaries .subsidiary-buttons button {
+  background-color: #FF6600;
   border: none;
-  cursor: pointer;
-  width: 250px;
+  color: #FFFFFF;
+  padding: 20px;
+  width: 200px;
   text-align: center;
-  transition: background-color 0.3s ease;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.subsidiary-buttons button:hover {
-  background-color: #FF4500;
+.subsidiaries .subsidiary-buttons button:hover {
+  background-color: #E61E2E;
 }
 
-.subsidiary-buttons img {
-  width: 80px;
+.subsidiaries .subsidiary-buttons img {
+  max-width: 120px;
   margin-bottom: 10px;
+}
+
+/* 스타일 추가 (글자 크기, 간격 등) */
+h1, h2, h3, h4 {
+  margin: 20px 0;
+  font-weight: bold;
+}
+
+p {
+  margin: 10px 0;
+}
+
+ul {
+  margin: 10px 0;
 }

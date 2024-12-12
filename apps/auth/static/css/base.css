@@ -4,99 +4,110 @@
   font-weight: normal;
   font-style: normal;
 }
-/* 색상 변수 */
-:root {
-  --cj-red: #E61E2E;
-  --cj-blue: #0047AB;
-  --cj-orange: #FF6600;
-  --white: #FFFFFF;
-  --black: #000000;
-  --gray: #888888; /* 추가적인 회색 계열 색상 */
-}
 
-/* 기본 설정 */
-body {
-  background-color: var(--white);
-  color: var(--black);
+/* 특정 페이지에만 적용 */
+.page-hario {
+  color: #000000; /* 텍스트 기본 색상 */
   font-family: YESMyoungjo-Regular, sans-serif;
 }
 
-/* 헤더 */
-h1 {
-  color: var(--cj-blue);
+.page-hario h1 {
+  color: black; /* 포인트 컬러 */
   font-size: 2.5rem;
 }
 
-.navbar {
-  background-color: var(--white);
-  border-bottom: 2px solid var(--cj-red);
+/* h1 마우스 오버 시 파란색 밑줄 */
+.page-hario h1:hover {
+  text-decoration: underline;
+  text-decoration-color: #FE6232; /* 파란색 밑줄 */
 }
 
-.navbar-nav .nav-link {
-  color: var(--black);
-  &:hover {
-    color: var(--cj-red);
-  }
+.page-hario .navbar {
+  background-color: #FFFFFF; /* 흰색 배경 */
+  border-bottom: 2px solid #0047AB; /* 포인트 컬러로 아래쪽 테두리 */
 }
 
-.navbar-toggler-icon {
-  background-color: var(--white);
-  &:hover {
-    background-color: var(--cj-red);
-  }
+.page-hario .navbar-nav .nav-link {
+  color: #000000; /* 네비게이션 링크 기본 색상 */
 }
 
-/* 로그인/회원가입 버튼 */
-a {
-  color: var(--cj-red);
+.page-hario .navbar-nav .nav-link:hover {
+  color: #FE6232; /* 포인트 컬러로 호버 색상 */
+}
+
+/* 토글 버튼 기본 스타일 */
+.page-hario .navbar-toggler {
+  background-color: #FFFFFF; /* 기본 흰색 배경 */
+  border: 2px solid ; /* 기본 상태 테두리 */
+  border-radius: 5px; /* 둥근 테두리 */
+}
+
+/* 토글 버튼 클릭 시 스타일 */
+.page-hario .navbar-toggler:active {
+  background-color: #E61E2E; /* 클릭 시 빨간색 배경 */
+  color: #FFFFFF; /* 클릭 시 흰색 아이콘 */
+}
+
+/* 토글 버튼 아이콘 기본 색상 */
+.page-hario .navbar-toggler-icon {
+  background-color: transparent; /* 배경 제거 */
+}
+
+.page-hario .navbar-toggler-icon:hover {
+  background-color: transparent; /* 호버 시에도 배경 없음 */
+}
+
+.page-hario a {
+  color: #FE6232; /* 포인트 컬러 */
   text-decoration: none;
-  &:hover {
-    text-decoration: underline;
-  }
 }
 
-/* 검색 폼 */
-.form-control {
-  background-color: var(--white);
-  border: 1px solid var(--cj-red);
+/* 클릭 시 글씨 빨간색 */
+.page-hario a:active {
+  color: #E61E2E; /* 빨간색 */
 }
 
-.btn-outline-success {
-  color: var(--cj-red);
-  border-color: var(--cj-red);
-  &:hover {
-    background-color: var(--cj-red);
-    color: var(--white);
-  }
+.page-hario a:hover {
+  text-decoration: underline;
 }
 
-/* 드롭다운 메뉴 */
-.dropdown-item {
-  color: var(--black);
-  &:hover {
-    background-color: var(--cj-orange);
-    color: var(--white);
-  }
+.page-hario .form-control {
+  background-color: #FFFFFF; /* 검색 입력창 배경색 */
+  border: 1px solid #E61E2E; /* 포인트 컬러 테두리 */
 }
 
-/* 인증된 사용자 메뉴 */
-.auth-menu {
-  color: var(--black);
+/* 검색 버튼 기본 스타일 */
+.page-hario .btn-outline-success {
+  background-color: #E61E2E; /* 빨간색 배경 */
+  color: #FFFFFF; /* 흰색 글씨 */
+  border-color: #E61E2E;
+}
+
+/* 검색 버튼 클릭 시 스타일 */
+.page-hario .btn-outline-success:active {
+  background-color: #FFFFFF; /* 흰색 배경 */
+  color: #E61E2E; /* 빨간색 글씨 */
+  border-color: #E61E2E;
+}
+
+.page-hario .navbar-nav .dropdown-item {
+  color: #000000; /* 드롭다운 항목 기본 색상 */
+}
+
+.page-hario .navbar-nav .dropdown-item:hover {
+  background-color: #0047AB; /* 드롭다운 항목 호버 색상 */
+  color: #FFFFFF;
+}
+
+.page-hario .auth-menu {
+  color: #000000;
   font-size: 1rem;
-  a {
-    color: var(--cj-red);
-    &:hover {
-      text-decoration: underline;
-    }
-  }
 }
 
-/* 버튼 스타일 */
-button {
-  border: 1px solid var(--cj-red);
-  color: var(--cj-red);
-  &:hover {
-    background-color: var(--cj-red);
-    color: var(--white);
-  }
+.page-hario .auth-menu a {
+  color: #FE6232;
+}
+
+.page-hario .auth-menu a:hover {
+  text-decoration: underline;
 }
