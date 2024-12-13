@@ -5,6 +5,8 @@ from flask_wtf import CSRFProtect
 from apps.config import config
 import os
 from flask_login import LoginManager
+from .graphtest import graphtest
+from .graphtest import register_dash  # graph.py에서 정의한 함수 불러오기
 
 #config_key
 config_key = os.environ.get('FLASK_CONFIG_KEY')
@@ -47,6 +49,12 @@ def create_app():
   from apps.crud import views as crud_views
   app.register_blueprint(crud_views.crud)
 
+  from apps.graphtest import views as graphtest_views
+  app.register_blueprint(graphtest_views.hire, url_prefix='/graphtest')
+
+
+  register_dash(graphtest)
+
   #========================== 에러 핸들러 설정 ============================
   app.register_error_handler(404, page_not_found)
   app.register_error_handler(500, internal_server_error)
@@ -54,10 +62,10 @@ def create_app():
   
   # #========================== department 초기 값 설정 ============================
 
-  # with app.app_context():
-  #   from apps.crud.models import Department, seed_userinfos  # 모델 임포트
-  #   Department.seed_departments()  # 초기 데이터 삽입
-  #   seed_userinfos()
+  with app.app_context():
+    from apps.crud.models import Department, seed_userinfos  # 모델 임포트
+    Department.seed_departments()  # 초기 데이터 삽입
+    seed_userinfos()
 
 
   return app
