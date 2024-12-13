@@ -132,3 +132,32 @@
 .page-hario .navbar-nav .nav-item span {
   padding-left: 10px; /* 로그인/회원정보와 다른 항목 간 간격을 추가 */
 }
+
+#scrollToTop {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #0047AB; /* CJ Blue */
+  color: white;
+  border: none;
+  border-radius: 50%; /* 동그랗게 만들기 */
+  width: 50px; /* 버튼 크기 조정 */
+  height: 50px; /* 버튼 크기 조정 */
+  padding: 0; /* 패딩 제거 */
+  font-size: 24px; /* 아이콘 크기 유지 */
+  display: flex; /* flexbox 사용 */
+  align-items: center; /* 세로 중앙 정렬 */
+  justify-content: center; /* 가로 중앙 정렬 */
+  text-align: center; /* 텍스트 가운데 정렬 */
+  line-height: normal; /* 라인 높이 조정 */
+  cursor: pointer;
+}
+
+#scrollToTop:hover {
+  background-color: #00A65A; /* 초록색으로 변경 */
+}
+
+#scrollToTop i {
+  line-height: normal; /* 아이콘과 버튼의 중앙 정렬 */
+}
+
