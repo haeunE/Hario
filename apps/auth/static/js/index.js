@@ -42,37 +42,3 @@ subsidiaries.forEach((subsidiary) => {
 });
 
 
-// document.addEventListener("DOMContentLoaded", function() {
-//   // 최신 뉴스 데이터를 가져오는 함수
-//   function fetchLatestNews() {
-//       fetch('/latest-news')
-//           .then(response => response.json())
-//           .then(data => {
-//               const newsContainer = document.getElementById('latest-news-container');
-//               const lastUpdated = data.last_updated;
-//               const articles = data.articles;
-
-//               // 날짜 업데이트 표시
-//               document.getElementById('last-updated').innerText = `최종 업데이트: ${lastUpdated}`;
-
-//               // 뉴스 항목을 화면에 추가
-//               newsContainer.innerHTML = '';  // 기존 내용 초기화
-
-//               articles.forEach(article => {
-//                   const articleElement = document.createElement('div');
-//                   articleElement.classList.add('news-item');
-//                   articleElement.innerHTML = `
-//                       <h3><a href="${article.link}" target="_blank">${article.title}</a></h3>
-//                       <p>${article.summary}</p>
-//                   `;
-//                   newsContainer.appendChild(articleElement);
-//               });
-//           })
-//           .catch(error => {
-//               console.error('뉴스를 가져오는 데 오류가 발생했습니다:', error);
-//           });
-//   }
-
-//   // 뉴스 데이터를 로드
-//   fetchLatestNews();
-// });

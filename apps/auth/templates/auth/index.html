@@ -69,16 +69,44 @@
         </button>
       </div>
   </section>
-  <!-- 3. 뉴스와 최신 정보 -->
-  <section class="news">
-    <h2>최신 뉴스</h2>
-    <p id="last-updated">최종 업데이트: 없음</p> <!-- 마지막 업데이트 시간 표시 -->
-    <div id="latest-news-container"></div> <!-- 최신 뉴스 항목이 표시될 영역 -->
+
+<!-- 3. 뉴스와 최신 정보 -->
+<section class="news">
+  <h2>최신 뉴스</h2>
+  
+  <!-- 조건부로 최종 업데이트 및 뉴스 목록 표시 -->
+  {% if news_items %}
+    <div id="latest-news-container">
+      <ul>
+        {% for item in news_items %}
+        <li>
+          <!-- 제목을 링크로 추가 -->
+          <a href="{{ item.link }}" target="_blank">{{ item.title }}</a>
+          
+          <!-- 본문 요약 표시 -->
+          <p>{{ item.summary if item.summary else "요약 정보가 없습니다." }}</p>
+          
+          <!-- 이미지 표시 -->
+          {% if item.image %}
+            <img src="{{ item.image }}" alt="news image" style="max-width: 200px;"/>
+          {% else %}
+            <p>이미지가 없습니다.</p>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% else %}
+    <p id="last-updated">최종 업데이트: 없음</p>
+    <p>현재 표시할 뉴스가 없습니다.</p>
+  {% endif %}
 </section>
+
+
+
 
   <!-- 4. 상장 계열사 버튼 섹션 -->
   <section class="subsidiaries">
-    <h2>"함께 성장하는 계열사"</h2>
     <div class="subsidiary-slider">
       <div class="slider-track"></div>
       <div id="subsidiary-data" 

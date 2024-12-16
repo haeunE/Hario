@@ -23,21 +23,34 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">성장</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">주식</a>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                CJ
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">코로나 실황</a></li>
+                <li><a class="dropdown-item" href="#">노력</a></li>
+              </ul>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                채용
+                주식
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">채용 일정</a></li>
-                <li><a class="dropdown-item" href="#">현직자 리뷰</a></li>
+                <li><a class="dropdown-item" href="#">1</a></li>
+                <li><a class="dropdown-item" href="#">2</a></li>
+                <li><a class="dropdown-item" href="#">3</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                미정
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">1</a></li>
+                <li><a class="dropdown-item" href="#">2</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">취업률 합격률</a></li>
+                <li><a class="dropdown-item" href="#">3</a></li>
               </ul>
             </li>
             <li class="nav-item dropdown">
@@ -46,7 +59,7 @@
               </a>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="{{url_for('board.index')}}">직장인</a></li>
-                <li><a class="dropdown-item" href="{{url_for('board.index')}}">취준생</a></li>
+                <li><a class="dropdown-item" href="{{url_for('board.index')}}">구직자</a></li>
               </ul>
             </li>
 

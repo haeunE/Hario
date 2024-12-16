@@ -1,130 +1,50 @@
-# from flask import Flask, render_template, jsonify
-# import requests
-# from bs4 import BeautifulSoup
-# from datetime import datetime, timedelta
-# import threading
-# from flask_sqlalchemy import SQLAlchemy
-# from flask_migrate import Migrate
-# from flask_wtf import CSRFProtect
-# from flask_login import LoginManager
-# from apps.config import config
-# import os
+import requests
+from bs4 import BeautifulSoup
 
-# # 전역 변수로 보도자료를 저장
-# latest_articles = []
-# last_updated = None
+def crawl_naver_news(query="CJ", max_results=2):
+    url = f"https://search.naver.com/search.naver?where=news&sm=tab_jum&query={query}"
+    
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    }
+    
+    response = requests.get(url, headers=headers)
+    if response.status_code != 200:
+        raise Exception(f"HTTP 요청 실패: {response.status_code}")
+    
+    soup = BeautifulSoup(response.text, "html.parser")
+    news_items = []
+    
+    # 뉴스 항목 추출
+    news_list = soup.find_all('div', class_='news_wrap', limit=max_results)
+    
+    for news in news_list:
+        title_tag = news.find('a', class_='news_tit')  # 제목
+        summary_tag = news.find('a', class_='api_txt_lines dsc_txt_wrap')  # 본문 요약
+        image_tag = news.find('a', class_='dsc_thumb')  # 이미지가 포함된 a 태그
+        
+        if title_tag and summary_tag:
+            title = title_tag.get('title')  # 제목 텍스트
+            link = title_tag.get('href')   # 링크
+            summary = summary_tag.text.strip()  # 본문 요약 텍스트
+            
+            # 이미지 URL 추출 (a 태그에서 이미지 링크 가져오기)
+            image_url = None
+            if image_tag:
+                img_tag = image_tag.find('img')  # a 태그 안의 img 태그 찾기
+                if img_tag:
+                    image_url = img_tag.get('src')  # 이미지 src 속성 값 추출
 
-# # config_key
-# config_key = os.environ.get('FLASK_CONFIG_KEY')
+            # 이미지를 가져올 수 없는 경우, 다른 방법으로 시도 (img 태그에서 직접 src 속성 추출)
+            if not image_url:
+                img_tag = news.find('img')  # 다른 img 태그에서 src 속성 추출
+                if img_tag:
+                    image_url = img_tag.get('src')
+            
+            news_items.append({'title': title, 'summary': summary, 'link': link, 'image': image_url})
+    
+    return news_items
 
-# # SQLAlchemy 객체 생성
-# db = SQLAlchemy()
-
-# # CSRF 보안 객체 생성
-# csrf = CSRFProtect()
-
-# # Flask-Login의 LoginManager 객체 생성
-# login_manager = LoginManager()
-
-# def create_app():
-#     #======================== 초기 앱 설정 ==============================
-#     # Flask 앱 인스턴스 생성
-#     app = Flask(__name__)
-
-#     # 애플리케이션 설정 로드(local로)
-#     app.config.from_object(config[config_key])
-
-#     # 확장모듈 초기화
-#     db.init_app(app)
-#     Migrate(app, db)
-#     csrf.init_app(app)  # CSRF 보호 활성화
-#     login_manager.init_app(app)  # 사용자 인증 활성화
-
-#     # 로그인되지 않은 사용자가 접근 시 리다이렉트할 페이지
-#     login_manager.login_view = "auth.login"
-#     login_manager.login_message = "로그인 후 사용 가능합니다."
-
-#     #========================= 블루프린트 설정 ==============================
-#     from apps.auth import views as auth_views
-#     app.register_blueprint(auth_views.auth, url_prefix='/auth')
-
-#     from apps.hire import views as hire_views
-#     app.register_blueprint(hire_views.hire, url_prefix='/hire')
-
-#     from apps.crud import views as crud_views
-#     app.register_blueprint(crud_views.crud)
-   
-#     # #========================== department 초기 값 설정 ============================
-
-#     # with app.app_context():
-#     #   from apps.crud.models import Department, seed_userinfos  # 모델 임포트
-#     #   Department.seed_departments()  # 초기 데이터 삽입
-#     #   seed_userinfos()
-
-#     # 에러 핸들러 설정
-#     app.register_error_handler(404, page_not_found)
-#     app.register_error_handler(500, internal_server_error)
-
-#     # 최신 보도자료를 가져오는 기능
-#     fetch_latest_articles()
-#     schedule_fetch()
-
-#     # 최신 뉴스 API 엔드포인트
-#     @app.route('/latest-news', methods=['GET'])
-#     def get_latest_news():
-#         """
-#         최신 보도자료를 반환하는 API 엔드포인트.
-#         """
-#         global latest_articles, last_updated
-#         if not latest_articles or (datetime.now() - last_updated) > timedelta(days=1):
-#             fetch_latest_articles()
-#         return jsonify({
-#             "last_updated": last_updated.strftime("%Y-%m-%d %H:%M:%S") if last_updated else "Never",
-#             "articles": latest_articles
-#         })
-
-#     return app
-
-# # 최신 뉴스 데이터를 가져오는 함수
-# def fetch_latest_articles():
-#     """
-#     CJ News 웹사이트에서 최신 보도자료 2개를 스크랩.
-#     """
-#     global latest_articles, last_updated
-#     try:
-#         url = "https://cjnews.cj.net/category/news/%EB%B3%B4%EB%8F%84%EC%9E%90%EB%A3%8C/"
-#         response = requests.get(url)
-#         response.raise_for_status()
-
-#         soup = BeautifulSoup(response.text, 'html.parser')
-#         articles = soup.find_all('article', limit=2)  # 보도자료는 아티클 태그에 포함되어 있다고 가정
-
-#         new_articles = []
-#         for article in articles:
-#             title = article.find('h2').get_text(strip=True)  # 제목 추출
-#             link = article.find('a')['href']  # 링크 추출
-#             summary = article.find('p').get_text(strip=True) if article.find('p') else ""  # 요약 추출
-
-#             new_articles.append({
-#                 "title": title,
-#                 "link": link,
-#                 "summary": summary
-#             })
-
-#         latest_articles = new_articles
-#         last_updated = datetime.now()
-
-#     except Exception as e:
-#         print(f"Error fetching articles: {e}")
-
-# # 매일 데이터를 갱신하는 스케줄러
-# def schedule_fetch():
-#     fetch_latest_articles()
-#     threading.Timer(86400, schedule_fetch).start()  # 24시간(86400초)마다 실행
-
-# # 에러 핸들러 함수
-# def page_not_found(e):
-#     return render_template('404.html'), 404
-
-# def internal_server_error(e):
-#     return render_template('500.html'), 500
+# # 테스트 실행
+# news_items = crawl_naver_news(query="CJ", max_results=2)
+# print(news_items)

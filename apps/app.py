@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_wtf import CSRFProtect
@@ -50,7 +50,6 @@ def create_app():
 
     # with app.app_context():
     #   from apps.crud.models import Department, seed_userinfos  # 모델 임포트
-    #   Department.seed_departments()  # 초기 데이터 삽입
     #   seed_userinfos()
    
     # 에러 핸들러 설정

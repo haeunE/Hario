@@ -155,3 +155,105 @@
       transform: scale(1.05);
   }
 }
+
+/* 뉴스 영역 */
+.news {
+  padding: 60px;
+  background-color: #ffffff; /* 흰색 배경 */
+  border-radius: 8px; /* 모서리 둥글게 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 섬세한 그림자 추가 */
+  margin-top: 30px;
+}
+
+.news h2 {
+  font-size: 28px;
+  font-weight: bold;
+  color: #0047AB; /* CJ Blue */
+  margin-bottom: 20px;
+}
+
+/* 뉴스 리스트 스타일 */
+.news ul {
+  list-style: none;
+  padding: 0;
+}
+
+.news li {
+  display: flex;
+  justify-content: space-between; /* 제목과 본문을 양옆으로 배치 */
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding: 15px;
+  border-bottom: 1px solid #eee; /* 항목 간 구분선 */
+}
+
+.news li:last-child {
+  border-bottom: none; /* 마지막 항목의 구분선 제거 */
+}
+
+/* 뉴스 제목 링크 스타일 */
+.news a {
+  font-size: 22px;
+  font-weight: bold;
+  color: #0047AB; /* CJ Blue */
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.3s ease; /* 부드러운 변환 효과 */
+  padding-right: 20px;
+}
+
+.news a:hover {
+  text-decoration: underline;
+  color: #00A65A; /* 초록색 */
+  transform: scale(1.05); /* 확대 효과 */
+}
+
+/* 뉴스 본문 요약 스타일 */
+.news .summary {
+  font-size: 16px;
+  color: #555; /* 어두운 회색 */
+  line-height: 1.6;
+  margin-top: 20px;
+}
+
+/* 뉴스 이미지 스타일 */
+.news img {
+  max-width: 120px; /* 이미지 크기 조정 */
+  height: auto; /* 비율 유지 */
+  margin-right: 20px; /* 이미지와 텍스트 간 간격 */
+  border-radius: 5px; /* 이미지 모서리 둥글게 */
+}
+
+/* 뉴스 항목 레이아웃 */
+.news-item {
+  display: flex;
+  align-items: flex-start;
+}
+
+.news-item .image {
+  flex-shrink: 0; /* 이미지 크기 고정 */
+  margin-right: 20px;
+}
+
+.news-item .content {
+  flex-grow: 1; /* 내용이 남은 공간을 차지 */
+}
+
+.news-item .content .title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #0047AB; /* CJ Blue */
+  margin-bottom: 10px;
+}
+
+.news-item .content .summary {
+  font-size: 16px;
+  color: #666; /* 회색 */
+  margin-bottom: 10px;
+}
+
+/* 뉴스 항목 클릭 시 강조 */
+.news-item:hover {
+  background-color: #f9f9f9; /* 배경색 변경 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 섬세한 그림자 */
+  cursor: pointer; /* 포인터 커서로 변경 */
+}
