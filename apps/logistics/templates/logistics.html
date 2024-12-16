@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistics Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>품목 별 운송 비율 및 운송량</h1>
+        </header>
+
+        <!-- 파이형 그래프 -->
+        <section id="pie-graphs">
+            <h2>품목 별 운송 비율</h2>
+            <div class="pie-graph-container">
+                {% for pie_img in pie_plot_urls %}
+                    <div class="pie-graph">
+                        <img src="data:image/png;base64,{{ pie_img }}" alt="Pie Chart">
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- 선형 그래프 -->
+        <section id="line-graphs">
+            <h2>품목 별 운송량</h2>
+            <div class="line-graph-container">
+                {% for line_img in line_plot_urls %}
+                    <div class="line-graph">
+                        <img src="data:image/png;base64,{{ line_img }}" alt="Line Chart">
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2024 Logistics Dashboard</p>
+        </footer>
+    </div>
+</body>
+</html>

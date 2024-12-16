@@ -33,8 +33,8 @@ def create_app():
   login_manager.init_app(app) # 사용자 인증 활성화
 
   # 로그인되지 않은 사용자가 접근 시 리다이렉트할 페이지
-  login_manager.login_view = "auth.login"
-  login_manager.login_message = "로그인 후 사용 가능합니다."
+  # login_manager.login_view = "auth.login"
+  # login_manager.login_message = "로그인 후 사용 가능합니다."
 
   #========================= 블루프린트 설정 ==============================
 
@@ -46,6 +46,9 @@ def create_app():
 
   from apps.crud import views as crud_views
   app.register_blueprint(crud_views.crud)
+  
+  from apps.logistics import views as delivery_views
+  app.register_blueprint(delivery_views.logistics, url_prefix='/logistics')
 
   #========================== 에러 핸들러 설정 ============================
   app.register_error_handler(404, page_not_found)
