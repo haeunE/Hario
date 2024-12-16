@@ -28,28 +28,19 @@
                 CJ
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">코로나 실황</a></li>
-                <li><a class="dropdown-item" href="#">노력</a></li>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                주식
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">1</a></li>
-                <li><a class="dropdown-item" href="#">2</a></li>
-                <li><a class="dropdown-item" href="#">3</a></li>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                미정
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">1</a></li>
-                <li><a class="dropdown-item" href="#">2</a></li>
+                <li><a class="dropdown-item" href="#">현역</a></li>
+                <li><a class="dropdown-item" href="#">성장</a></li>
                 <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">주식</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                코로나
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">현황</a></li>
+                <li><a class="dropdown-item" href="#">우리의 노력</a></li>
                 <li><a class="dropdown-item" href="#">3</a></li>
               </ul>
             </li>
@@ -58,8 +49,9 @@
                 하글하글
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="{{url_for('board.index')}}">직장인</a></li>
-                <li><a class="dropdown-item" href="{{url_for('board.index')}}">구직자</a></li>
+                <li><a class="dropdown-item" href="{{url_for('board.index', section=1)}}">직장인 게시판</a></li>
+                <li><a class="dropdown-item" href="{{url_for('board.index', section=2)}}">구직자 게시판</a></li>
+                <li><a class="dropdown-item" href="{{url_for('board.index', section=3)}}">전체 게시판</a></li>
               </ul>
             </li>
 

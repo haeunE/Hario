@@ -8,12 +8,18 @@ board = Blueprint('board', __name__, template_folder='templates', static_folder=
 
 @board.route("/")
 def index():
+  section = request.args.get('section', type=int)
+  
+  if section == 1:
+    boards = Board.query.filter_by(selection=1).order_by(Board.created_at.desc()).all()  # 최신 게시글이 위로 오도록 정렬
+  elif section == 2:
+    boards = Board.query.filter_by(selection=2).order_by(Board.created_at.desc()).all()  # 최신 게시글이 위로 오도록 정렬
+  else:
+    boards = Board.query.filter_by(selection=3).order_by(Board.created_at.desc()).all()  # 최신 게시글이 위로 오도록 정렬
 
-  # 직장인, 취준생 같은 html 사용해서 따로 정보 전달
+  return render_template("board/index.html", boards=boards)
 
-  # 부서 별로 선택하는 기능 넣어야 함
-
-  return render_template("board/index.html")
+  
 
 
 @board.route("/new", methods=["GET", "POST"])
@@ -36,5 +42,4 @@ def new():
     db.session.commit()
     return redirect(url_for("board.index"))
 
-
-  return render_template("board/new.html", form = form, user = current_user)
+  return render_template("board/new.html", form=form, user=current_user)

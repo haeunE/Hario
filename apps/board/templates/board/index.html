@@ -4,16 +4,20 @@
 <link rel="stylesheet" href="{{url_for('board.static', filename='css/index.css')}}">
 {% endblock %}
 
-<!--  -->
 {% block content %}
 <div class="col-md-10 d-flex justify-content-end">
-  <a href="{{url_for('board.new')}}" class="btn btn-secondary">게시물 등록</a>
   <select class="form-select" aria-label="Default select example">
-    <option selected>Open this select menu</option>
-    <option value="1">One</option>
-    <option value="2">Two</option>
-    <option value="3">Three</option>
+    <option selected>부서를 선택해주세요</option>
+    <option value="1">대한통운</option>
+    <option value="2">제일제당</option>
+    <option value="3">프레시웨이</option>
+    <option value="4">ENM</option>
+    <option value="5">CGV</option>
+    <option value="6">스튜디오드래곤</option>
+    <option value="7">CJ 씨푸드</option>
+    <option value="8">CJ 바이오사이언스</option>
   </select>
+  <a href="{{url_for('board.new')}}" class="btn btn-secondary">게시물 등록</a>
 </div>
 
 <div>
@@ -30,11 +34,13 @@
     </thead>
     {% for board in boards %}
     <tbody>
-        <th>{board.id}</th>
-        <th>{board.title}</th>
-        <th>{board.user.username}</th>
-        <th>{board.created_at}</th>
-        <th></th>
+        <th>{{board.id}}</th>
+        <th>{{board.subject}}</th>
+        <th>{{board.user.username}}</th>
+        <th>{{board.created_at}}</th>
+        <th>
+          <a href="" class="btn btn-warning">수정</a>
+        </th>
       </tr>
     </tbody>
     {% endfor %}
