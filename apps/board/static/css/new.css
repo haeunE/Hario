@@ -1,0 +1,65 @@
+/* 기본 폼 스타일 */
+.new-board form {
+  max-width: 600px;
+  margin: 50px auto 0;
+  padding: 20px;
+  background-color: #FCF2E8; /* 사용자의 배경색 */
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+/* 라벨 스타일 */
+.new-board form p, form label {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #0047AB; /* CJ Blue */
+}
+
+/* 입력 필드 스타일 */
+.new-board form input[type="text"], form select, form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 16px;
+  border: 1px solid #E0E0E0;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* 입력 필드 포커스 스타일 */
+.new-board form input[type="text"]:focus, form select:focus, form textarea:focus {
+  border-color: #0047AB; /* CJ Blue */
+  outline: none;
+}
+
+/* 에러 메시지 스타일 */
+.new-board form p[style="color: red;"] {
+  margin-top: -12px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: #E61E2E; /* CJ Red */
+}
+
+/* 제출 버튼 스타일 */
+.new-board form button {
+  background-color: #FF6600; /* CJ Orange */
+  color: #FFFFFF;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.new-board form button:hover {
+  background-color: #E55A00;
+}
+
+/* 전체 선택 메뉴 스타일 */
+.new-board select.board-select {
+  font-size: 14px;
+  padding: 8px;
+  margin-bottom: 16px;
+}
