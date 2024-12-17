@@ -55,8 +55,17 @@ def detail(board_id):
 @board.route("/update/<int:board_id>", methods=["GET", "POST"])
 def update(board_id):
   board = Board.query.get_or_404(board_id)
+  form = BoardForm()
 
-  return render_template("board/update.html", board=board)
+  if form.validate_on_submit():
+    board.subject = form.subject.data
+    board.content = form.content.data
+    
+    db.session.add(board)
+    db.session.commit()
+    return redirect(url_for("board.detail", board_id=board_id))
+
+  return render_template("board/update.html", board=board, form=form, user=current_user)
 
 
 
