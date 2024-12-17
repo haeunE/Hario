@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}게시물상세보기{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{url_for('board.static', filename='css/detail.css')}}">
+{% endblock %}
+
+{% block content %}
+  <div class="board-detail">
+    <div>
+      <label>제목</label>
+      <input type="text" value="{{board.subject}}" readonly>
+    </div>
+    <div>
+      <label>작성자</label>
+      <input type="text" value="{{board.user.username}}" readonly>
+    </div>
+    <div>
+      <label>작성일자</label>
+      <input type="text" value="{{board.created_at}}" readonly>
+    </div>
+    <div>
+      <label>내용</label>
+      <textarea rows="10" readonly>{{board.content}}</textarea>
+    </div>
+    <div class="board-detail-btns">
+      <!-- 글 수정 -->
+      <div class="board-update-btn">
+        {% if current_user.id == board.user.id %}
+        <a href="{{url_for('board.update', board_id=board.id)}}" class="btn btn-warning">수정</a>
+        {% else %}
+        <button class="btn btn-warning" disabled>수정</button>
+        {% endif %}
+      </div>
+      <!-- 글 삭제 -->
+      <div class="board-delete-btn">
+        <form action="{{url_for('board.delete', board_id=board.id, board_sel=board.selection)}}" method="post">
+          <!-- 토큰 -->
+          <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+          {% if current_user.id == board.user.id %}
+          <input class="btn btn-danger" type="submit" value="삭제">
+          {% else %}
+          <input class="btn btn-danger" type="submit" value="삭제" disabled>
+          {% endif %}
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block js %}
+{% endblock %}
