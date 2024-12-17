@@ -5,8 +5,10 @@ from flask_wtf import CSRFProtect
 from apps.config import config
 import os
 from flask_login import LoginManager
-from .graphtest import graphtest
-from .graphtest import register_dash  # graph.py에서 정의한 함수 불러오기
+from .graph import graph
+from .graph.graph import init_dash,korea_covid
+
+
 
 #config_key
 config_key = os.environ.get('FLASK_CONFIG_KEY')
@@ -24,6 +26,16 @@ def create_app():
   #======================== 초기 앱 설정 ==============================
    # Flask 앱 인스턴스 생성
   app = Flask(__name__)
+  dash_app = init_dash(app)
+  covid_app = korea_covid(app)
+
+
+  for view_func in dash_app.server.view_functions:
+        if view_func.startswith('/graph/company/'):
+            csrf.exempt(dash_app.server.view_functions[view_func])
+  for view_func in covid_app.server.view_functions:
+        if view_func.startswith('/graph/covid/'):
+            csrf.exempt(covid_app.server.view_functions[view_func])
 
   # 애플리케이션 설정 로드(local로)
   app.config.from_object(config[config_key])
@@ -49,11 +61,10 @@ def create_app():
   from apps.crud import views as crud_views
   app.register_blueprint(crud_views.crud)
 
-  from apps.graphtest import views as graphtest_views
-  app.register_blueprint(graphtest_views.hire, url_prefix='/graphtest')
+  from apps.graph import views as graph_views
+  app.register_blueprint(graph_views.graph, url_prefix='/graph')
+  
 
-
-  register_dash(graphtest)
 
   #========================== 에러 핸들러 설정 ============================
   app.register_error_handler(404, page_not_found)
