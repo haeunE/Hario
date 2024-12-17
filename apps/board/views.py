@@ -6,21 +6,21 @@ from apps.app import db
 
 board = Blueprint('board', __name__, template_folder='templates', static_folder='static')
 
-@board.route("/<int:selection>")
+@board.route("/<int:selection>", methods=["GET"])
 def index(selection):
-  is_show = False
+    department_id = request.args.get("department_id")
 
-  if selection == 1:
-    boards = Board.query.filter_by(selection=1).order_by(Board.created_at.desc()).all()  # 최신 게시글이 위로 오도록 정렬
-    # 부서별로 선택하면 보이게
-    is_show = True 
+    if department_id:
+        boards = Board.query.filter_by(department_id=department_id).order_by(Board.created_at.desc()).all()
+    else:
+        if selection == 1:
+            boards = Board.query.filter_by(selection=1).order_by(Board.created_at.desc()).all()
+        elif selection == 2:
+            boards = Board.query.filter_by(selection=2).order_by(Board.created_at.desc()).all()
+        else:
+            boards = Board.query.filter_by(selection=3).order_by(Board.created_at.desc()).all()
 
-  elif selection == 2:
-    boards = Board.query.filter_by(selection=2).order_by(Board.created_at.desc()).all()  # 최신 게시글이 위로 오도록 정렬
-  else:
-    boards = Board.query.filter_by(selection=3).order_by(Board.created_at.desc()).all()  # 최신 게시글이 위로 오도록 정렬
-
-  return render_template("board/index.html", boards=boards, is_show=is_show)
+    return render_template("board/index.html", boards=boards, selection=selection)
 
   
 @board.route("/new", methods=["GET", "POST"])

@@ -7,22 +7,40 @@
 {% block content %}
 
 <div class="board-index-top">
- {% if is_show %}
-  <form>
-    <select class="form-select" aria-label="Default select example">
-      <option selected>부서를 선택해주세요</option>
-      <option value="1">대한통운</option>
-      <option value="2">제일제당</option>
-      <option value="3">프레시웨이</option>
-      <option value="4">ENM</option>
-      <option value="5">CGV</option>
-      <option value="6">스튜디오드래곤</option>
-      <option value="7">CJ 씨푸드</option>
-      <option value="8">CJ 바이오사이언스</option>
-    </select>
-  </form>
- {% endif %}
-  <a href="{{url_for('board.new')}}" class="btn btn-secondary">게시물 등록</a>
+  <div class="board-selection">
+    {% if selection == 1 %}
+      <h3>직장인 게시판</h3>
+    {% elif selection == 2%}
+      <h3>구직자 게시판</h3>
+    {% else %}
+      <h3>모두 게시판</h3>
+    {% endif %}
+  </div>
+
+  <div class="board-index-company">
+    {% if selection == 1 %}
+     <form action="{{url_for('board.index', selection=1)}}" method="get">
+      <select name="department_id" class="form-select" aria-label="Default select example" onchange="this.form.submit()">
+         <option selected>부서를 선택해주세요</option>
+         <option value="1">대한통운</option>
+         <option value="2">제일제당</option>
+         <option value="3">프레시웨이</option>
+         <option value="4">ENM</option>
+         <option value="5">CGV</option>
+         <option value="6">스튜디오드래곤</option>
+         <option value="7">CJ 씨푸드</option>
+         <option value="8">CJ 바이오사이언스</option>
+       </select>
+     </form>
+    {% endif %}
+     <a href="{{url_for('board.new')}}" class="btn btn-secondary">게시물 등록</a>
+  </div>
+</div>
+
+<div class="board-list">
+  <a href="{{url_for('board.index', selection=1)}}">직장인게시판</a>
+  <a href="{{url_for('board.index', selection=2)}}">구직자게시판</a>
+  <a href="{{url_for('board.index', selection=3)}}">모두게시판</a>
 </div>
 
 {% if boards %}
@@ -34,18 +52,16 @@
         <th>제목</th>
         <th>작성자</th>
         <th>작성일시</th>
-        <th></th>
       </tr>
     </thead>
     {% for board in boards %}
     <tbody>
         <th>{{board.id}}</th>
-        <th>{{board.subject}}</th>
+        <th>
+          <a href="{{url_for('board.detail', board_id = board.id)}}">{{board.subject}}</a>  
+        </th>
         <th>{{board.user.username}}</th>
         <th>{{board.created_at}}</th>
-        <th>
-          <a href="{{url_for('board.detail', board_id = board.id)}}" class="btn btn-warning">상세보기</a>
-        </th>
       </tr>
     </tbody>
     {% endfor %}
@@ -57,4 +73,5 @@
 {% endblock %}
 
 {% block js%}
+<script src="{{url_for('board.static', filename='js/index.js')}}"></script>
 {% endblock %}

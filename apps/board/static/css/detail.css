@@ -1,10 +1,17 @@
 /* detail.css */
+@font-face {
+  font-family: 'YESMyoungjo-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_13@1.0/YESMyoungjo-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 
 /* 전체 배경과 텍스트 스타일 */
 body {
-  background-color: #FCF2E8; /* 배경색을 #FCF2E8로 설정 */
+  background-color: #FFFFFF; /* 배경색을 #FCF2E8로 설정 */
   color: #000000; /* 기본 텍스트 색상 */
-  font-family: 'Arial', sans-serif;
+  font-family: 'YESMyoungjo-Regular', Arial, sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -12,12 +19,12 @@ body {
 
 /* 게시물 상세보기 영역 */
 .board-detail {
-  background-color: #FFFFFF; /* 배경을 하얀색으로 설정 */
   border-radius: 10px;
   max-width: 600px;
   margin: 50px auto 0;
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid black;
 }
 
 /* 제목, 작성자, 작성일자, 내용 등 입력란 스타일 */

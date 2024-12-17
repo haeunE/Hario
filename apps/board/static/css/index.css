@@ -1,102 +1,180 @@
-/* index.css */
-
 /* 전체 배경과 텍스트 스타일 */
 body {
-  background-color: #FCF2E8; /* 배경색을 하얀색으로 설정 */
   color: #000000; /* 기본 텍스트 색상 */
-  font-family: 'Arial', sans-serif;
+  font-family: 'YESMyoungjo-Regular', Arial, sans-serif;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
-/* 게시물 목록 상단 영역 */
+/* 게시물 상단 영역 */
 .board-index-top {
   display: flex;
+  justify-content: space-between; /* 버튼과 제목 사이 여백 */
   align-items: center;
-  justify-content: flex-end; /* 오른쪽 정렬 */
-  margin: 20px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #E0E0E0;
+  background-color: #FFFFFF; /* 상단 영역 흰색 배경 */
 }
 
-.board-index-top .form-select {
+.board-selection h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: black; 
+}
+
+.board-index-company form {
+  display: inline-block;
+  margin-right: 15px;
+}
+
+.board-index-company .form-select {
   width: 250px;
-  border: 1px solid #0047AB; /* CJ Blue 테두리 */
-  color: #0047AB; /* CJ Blue */
-  margin-right: 10px;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #0047AB; /* CJ Blue */
+  border-radius: 4px;
+  color: #0047AB; /* 텍스트 색상 */
+  background-color: #FFFFFF; /* 흰색 배경 */
 }
 
-.board-index-top .btn-secondary {
-  background-color: #E61E2E; /* CJ Red */
-  color: #FFFFFF;
+.board-index-company .form-select:focus {
+  outline: none;
+  border-color: #E61E2E; /* CJ Orange 포커스 */
+}
+
+.board-index-company .btn-secondary {
+  background-color: #FCF2E8; /* CJ Orange */
+  color: black;
   border: none;
   padding: 10px 20px;
-  margin-right: 50px;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
 }
 
-.board-index-top .btn-secondary:hover {
+.board-index-company .btn-secondary:hover {
   background-color: #0047AB; /* CJ Blue */
-  color: #FFFFFF;
+  color: white;
 }
 
-/* 게시물 목록 콘텐츠 */
+/* 게시물 목록 네비게이션 */
+.board-list {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.board-list a {
+  margin: 0 15px;
+  color: #0047AB; /* CJ Blue */
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.board-list a:hover {
+  color: black;
+  text-decoration: underline;
+  text-decoration-color: #FE6232;
+}
+
+/* 게시물 테이블 스타일 */
 .board-index-content {
+  width: 90%; /* 화면의 90%만 차지 */
+  margin: 0 auto; /* 가운데 정렬 */
   margin-top: 30px;
-  font-size: 1.1em;
-  width: 90%; /* 게시물 목록이 화면의 90%만 차지하게 설정 */
-  margin: 0 auto; /* 중앙 정렬 */
+  background-color: #FFFFFF; /* 흰색 배경 */
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid black;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 테이블에 그림자 추가 */
 }
 
-/* 테이블 스타일 */
-.board-index-table {
-  border-collapse: collapse;
+.table {
   width: 100%;
-  background-color: #FFFFFF; /* 테이블 배경 흰색 */
-}
-
-.board-index-table th, .board-index-table td {
-  border: 1px solid #ddd; /* 테두리 */
-  padding: 10px;
+  border-collapse: collapse;
+  margin: 0 auto;
+  font-size: 1rem;
   text-align: center;
 }
 
-.board-index-table th {
+.table-dark {
   background-color: #0047AB; /* CJ Blue */
   color: #FFFFFF; /* 헤더 텍스트 색상 */
-  padding: 15px;
 }
 
-.board-index-table tbody tr:nth-child(odd) {
-  background-color: #FF6600; /* CJ Orange: 홀수 행 강조 */
-  color: #FFFFFF; /* 텍스트 색상 */
+.table th, .table td {
+  padding: 12px 15px;
+  border: 1px solid #E0E0E0;
 }
 
-.board-index-table tbody tr:hover {
-  background-color: #0047AB; /* CJ Blue: 호버 시 강조 */
+.table tbody tr:nth-child(odd) {
+  background-color: #FF6600; /* CJ Orange: 홀수 행 */
   color: #FFFFFF;
 }
 
-.board-index-table td {
-  padding: 12px;
+.table tbody tr:nth-child(even) {
+  background-color: #FFFFFF; /* 짝수 행 */
 }
 
-/* 상세보기 버튼 스타일 */
-.board-index-table a {
-  background-color: #0047AB; /* CJ Blue */
+.table tbody tr:hover {
+  background-color: #0047AB; /* CJ Blue: 호버 */
   color: #FFFFFF;
-  padding: 8px 15px;
-  text-decoration: none;
+}
+
+.table .btn-warning {
+  background-color: darksalmon; /* CJ Orange */
+  color: #FFFFFF;
+  border: none;
+  padding: 8px 12px;
+  font-size: 0.9rem;
   border-radius: 4px;
+  cursor: pointer;
 }
 
-.board-index-table a:hover {
-  background-color: #FF6600; /* CJ Orange */
-  color: #FFFFFF;
+.table .btn-warning:hover {
+  background-color: coral;
 }
 
-/* 게시물 내용이 없을 때 문구 */
-.board-index-no-boards {
-  font-size: 1.2em;
-  color: #000000;
+/* 게시물이 없을 때 메시지 */
+.no-boards {
   text-align: center;
   margin-top: 20px;
+  font-size: 1.2rem;
+  color: #E61E2E; /* CJ Red */
+}
+
+/* 게시물 테이블 링크 스타일 */
+.board-index-content table a {
+  color: #000000; /* 기본 검은색 */
+  text-decoration: none; /* 밑줄 제거 */
+  font-weight: normal; /* 기본 폰트 두께 */
+}
+
+.board-index-content table a:hover {
+  color: #E61E2E; /* hover 시 빨간색 */
+  text-decoration: underline; /* hover 시 밑줄 추가 */
+}
+
+
+/* 반응형 처리 */
+@media (max-width: 768px) {
+  .board-index-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .board-index-company {
+    margin-top: 10px;
+  }
+
+  .table th, .table td {
+    font-size: 0.85rem;
+    padding: 8px 10px;
+  }
+
+  .board-list a {
+    margin: 0 10px;
+    font-size: 0.9rem;
+  }
 }

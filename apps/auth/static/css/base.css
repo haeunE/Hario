@@ -4,7 +4,10 @@
   font-weight: normal;
   font-style: normal;
 }
-
+body{
+  width: 80%;
+  margin: auto;
+}
 /* 특정 페이지에만 적용 */
 .page-hario {
   color: #000000; /* 텍스트 기본 색상 */
