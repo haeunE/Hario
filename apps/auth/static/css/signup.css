@@ -8,6 +8,13 @@
   font-style: normal;
 }
 
+body {
+  font-family: 'YESMyoungjo-Regular', Arial, sans-serif;
+  background-color: #FFFFFF ; /* 페이지 배경색 */
+  margin: 0;
+  padding: 0;
+}
+
 /* 고유번호 확인 폼 */
 .uni_num_check {
   background-color: #FFFFFF; /* 배경색 */

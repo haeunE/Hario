@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}게시물 등록{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('board.static', filename='css/new.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="new-board">
+  <form action="{{ url_for('board.new') }}" method="post">
+    {{ form.csrf_token }}
+    
+    <div>
+      <p>게시판 선택</p>
+      {% if user.userinfo.department_id == 99 %}
+      <select class="board-select" name="board_type" aria-label="게시판 선택">
+        <option value="2">구직자 게시판</option>
+        <option value="3">전체 게시판</option>
+      </select>
+      {% else %}
+      <select class="board-select" name="board_type" aria-label="게시판 선택">
+        <option value="1">직장인 게시판</option>
+        <option value="2">구직자 게시판</option>
+        <option value="3">전체 게시판</option>
+      </select>
+      {% endif %}
+    </div>
+
+    <div>
+      {{ form.subject.label }}
+      {{ form.subject(class_="form-control", placeholder="제목을 입력하세요") }}
+      {% for error in form.subject.errors %}
+        <p style="color: red;">{{ error }}</p>
+      {% endfor %}
+    </div>
+
+    <div>
+      {{ form.content.label }}
+      {{ form.content(class_="form-control", placeholder="내용을 입력하세요") }}
+      {% for error in form.content.errors %}
+        <p style="color: red;">{{ error }}</p>
+      {% endfor %}
+    </div>
+
+    <div>
+      {{ form.submit(class_="btn btn-primary") }}
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

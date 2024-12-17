@@ -170,4 +170,8 @@ def delete():
     User.query.filter_by(id = current_user.id).delete()
     db.session.commit()
 
+    if(current_user.userinfo.department_id == 99):
+        Userinfo.query.filter_by(id = current_user.userinfo.id).delete()
+        db.session.commit()
+
     return redirect(url_for("crud.index"))
