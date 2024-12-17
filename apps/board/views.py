@@ -6,22 +6,23 @@ from apps.app import db
 
 board = Blueprint('board', __name__, template_folder='templates', static_folder='static')
 
-@board.route("/")
-def index():
-  section = request.args.get('section', type=int)
-  
+@board.route("/<int:section>")
+def index(section):
+  is_show = False
+
   if section == 1:
     boards = Board.query.filter_by(selection=1).order_by(Board.created_at.desc()).all()  # 최신 게시글이 위로 오도록 정렬
+    # 부서별로 선택하면 보이게
+    is_show = True 
+
   elif section == 2:
     boards = Board.query.filter_by(selection=2).order_by(Board.created_at.desc()).all()  # 최신 게시글이 위로 오도록 정렬
   else:
     boards = Board.query.filter_by(selection=3).order_by(Board.created_at.desc()).all()  # 최신 게시글이 위로 오도록 정렬
 
-  return render_template("board/index.html", boards=boards)
+  return render_template("board/index.html", boards=boards, is_show=is_show)
 
   
-
-
 @board.route("/new", methods=["GET", "POST"])
 def new():
   form = BoardForm()
@@ -43,3 +44,22 @@ def new():
     return redirect(url_for("board.index"))
 
   return render_template("board/new.html", form=form, user=current_user)
+
+@board.route("/detail/<int:board_id>", methods=["GET", "POST"])
+def detail(board_id):
+  board = Board.query.get_or_404(board_id)
+
+  return render_template("board/detail.html", board=board)
+
+
+@board.route("/update/<int:board_id>", methods=["GET", "POST"])
+def update(board_id):
+  board = Board.query.get_or_404(board_id)
+
+  return render_template("board/update.html", board=board)
+
+
+
+@board.route("/delete/<int:board_id>", methods=["POST"])
+def delete(board_id):
+  return redirect(url_for("board.index"))

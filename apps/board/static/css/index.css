@@ -1,0 +1,102 @@
+/* index.css */
+
+/* 전체 배경과 텍스트 스타일 */
+body {
+  background-color: #FCF2E8; /* 배경색을 하얀색으로 설정 */
+  color: #000000; /* 기본 텍스트 색상 */
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 게시물 목록 상단 영역 */
+.board-index-top {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* 오른쪽 정렬 */
+  margin: 20px;
+}
+
+.board-index-top .form-select {
+  width: 250px;
+  border: 1px solid #0047AB; /* CJ Blue 테두리 */
+  color: #0047AB; /* CJ Blue */
+  margin-right: 10px;
+}
+
+.board-index-top .btn-secondary {
+  background-color: #E61E2E; /* CJ Red */
+  color: #FFFFFF;
+  border: none;
+  padding: 10px 20px;
+  margin-right: 50px;
+}
+
+.board-index-top .btn-secondary:hover {
+  background-color: #0047AB; /* CJ Blue */
+  color: #FFFFFF;
+}
+
+/* 게시물 목록 콘텐츠 */
+.board-index-content {
+  margin-top: 30px;
+  font-size: 1.1em;
+  width: 90%; /* 게시물 목록이 화면의 90%만 차지하게 설정 */
+  margin: 0 auto; /* 중앙 정렬 */
+}
+
+/* 테이블 스타일 */
+.board-index-table {
+  border-collapse: collapse;
+  width: 100%;
+  background-color: #FFFFFF; /* 테이블 배경 흰색 */
+}
+
+.board-index-table th, .board-index-table td {
+  border: 1px solid #ddd; /* 테두리 */
+  padding: 10px;
+  text-align: center;
+}
+
+.board-index-table th {
+  background-color: #0047AB; /* CJ Blue */
+  color: #FFFFFF; /* 헤더 텍스트 색상 */
+  padding: 15px;
+}
+
+.board-index-table tbody tr:nth-child(odd) {
+  background-color: #FF6600; /* CJ Orange: 홀수 행 강조 */
+  color: #FFFFFF; /* 텍스트 색상 */
+}
+
+.board-index-table tbody tr:hover {
+  background-color: #0047AB; /* CJ Blue: 호버 시 강조 */
+  color: #FFFFFF;
+}
+
+.board-index-table td {
+  padding: 12px;
+}
+
+/* 상세보기 버튼 스타일 */
+.board-index-table a {
+  background-color: #0047AB; /* CJ Blue */
+  color: #FFFFFF;
+  padding: 8px 15px;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.board-index-table a:hover {
+  background-color: #FF6600; /* CJ Orange */
+  color: #FFFFFF;
+}
+
+/* 게시물 내용이 없을 때 문구 */
+.board-index-no-boards {
+  font-size: 1.2em;
+  color: #000000;
+  text-align: center;
+  margin-top: 20px;
+}

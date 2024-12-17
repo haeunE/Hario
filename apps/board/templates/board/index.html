@@ -5,24 +5,29 @@
 {% endblock %}
 
 {% block content %}
-<div class="col-md-10 d-flex justify-content-end">
-  <select class="form-select" aria-label="Default select example">
-    <option selected>부서를 선택해주세요</option>
-    <option value="1">대한통운</option>
-    <option value="2">제일제당</option>
-    <option value="3">프레시웨이</option>
-    <option value="4">ENM</option>
-    <option value="5">CGV</option>
-    <option value="6">스튜디오드래곤</option>
-    <option value="7">CJ 씨푸드</option>
-    <option value="8">CJ 바이오사이언스</option>
-  </select>
+
+<div class="board-index-top">
+ {% if is_show %}
+  <form>
+    <select class="form-select" aria-label="Default select example">
+      <option selected>부서를 선택해주세요</option>
+      <option value="1">대한통운</option>
+      <option value="2">제일제당</option>
+      <option value="3">프레시웨이</option>
+      <option value="4">ENM</option>
+      <option value="5">CGV</option>
+      <option value="6">스튜디오드래곤</option>
+      <option value="7">CJ 씨푸드</option>
+      <option value="8">CJ 바이오사이언스</option>
+    </select>
+  </form>
+ {% endif %}
   <a href="{{url_for('board.new')}}" class="btn btn-secondary">게시물 등록</a>
 </div>
 
-<div>
+{% if boards %}
+<div class="board-index-content">
   <table class="table">
-    {% if boards %}
     <thead>
       <tr class="table-dark">
         <th>번호</th>
@@ -39,7 +44,7 @@
         <th>{{board.user.username}}</th>
         <th>{{board.created_at}}</th>
         <th>
-          <a href="" class="btn btn-warning">수정</a>
+          <a href="{{url_for('board.detail', board_id = board.id)}}" class="btn btn-warning">상세보기</a>
         </th>
       </tr>
     </tbody>
