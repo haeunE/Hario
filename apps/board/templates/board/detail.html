@@ -23,6 +23,16 @@
       <label>내용</label>
       <textarea rows="10" readonly>{{board.content}}</textarea>
     </div>
+    <div>
+      <form action="{{url_for('board.recommend', board_id=board.id)}}" method="post" class="recommend-form">
+        <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+        <button type="submit" class="thumbs-up-button">
+          👍
+          추천
+        </button>
+      </form>      
+      <p>추천 수 : {{ board.recommender | length }}</p>
+    </div>
     <div class="board-detail-btns">
       <!-- 글 수정 -->
       <div class="board-update-btn">
