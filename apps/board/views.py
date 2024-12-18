@@ -11,7 +11,7 @@ def index(selection):
     department_id = request.args.get("department_id")
 
     if department_id:
-        boards = Board.query.filter_by(department_id=department_id).order_by(Board.created_at.desc()).all()
+        boards = Board.query.filter_by(department_id=department_id, selection=1).order_by(Board.created_at.desc()).all()
     else:
         if selection == 1:
             boards = Board.query.filter_by(selection=1).order_by(Board.created_at.desc()).all()
@@ -21,11 +21,10 @@ def index(selection):
             boards = Board.query.filter_by(selection=3).order_by(Board.created_at.desc()).all()
 
     return render_template("board/index.html", boards=boards, selection=selection)
-
   
 @board.route("/new", methods=["GET", "POST"])
 def new():
-  form = BoardForm()
+  form = BoardForm() 
 
   if form.validate_on_submit():
     board = Board(
