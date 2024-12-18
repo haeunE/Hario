@@ -49,8 +49,8 @@ def create_app():
     # #========================== department 초기 값 설정 ============================
 
     # with app.app_context():
-    #   from apps.crud.models import Department, seed_userinfos  # 모델 임포트
-    #   seed_userinfos()
+    #   from apps.crud.models import Department, seed_initial_data  # 모델 임포트
+    #   seed_initial_data()
    
     # 에러 핸들러 설정
     app.register_error_handler(404, page_not_found)

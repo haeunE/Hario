@@ -103,3 +103,25 @@ body {
   background-color: #f0f0f0; /* 비활성화된 삭제 버튼 색상 */
   color: #aaa; /* 비활성화된 버튼 텍스트 색상 */
 }
+
+.recommend-form {
+  display: flex;
+  justify-content: center; /* 가로로 가운데 정렬 */
+  align-items: center; /* 세로로 가운데 정렬 */
+ 
+}
+
+.thumbs-up-button {
+  font-size: 1.5rem; /* 버튼 크기 설정 */
+  border: 2px solid black;
+  border-radius: 10%;
+  background-color: transparent; /* 배경색 투명 */
+  cursor: pointer; /* 클릭 가능한 커서 */
+  padding: 10px;
+  color: #FE6232; /* 원하는 색상 */
+  transition: transform 0.3s ease; /* 클릭 시 애니메이션 효과 */
+}
+
+.thumbs-up-button:hover {
+  transform: scale(1.2); /* 호버 시 크기 확대 */
+}

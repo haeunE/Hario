@@ -110,8 +110,16 @@ class Board(db.Model):
   department_id = db.Column(db.Integer, db.ForeignKey("department.id", ondelete="CASCADE"), nullable=False)
   department = db.relationship("Department", backref=db.backref("boards"))
 
+  # 조회수
+  views = db.Column(db.Integer, default=0, nullable=False)
+
   # 추천 기능 관계 설정 - 다대다
   recommender = db.relationship("User", secondary="recommend", backref=db.backref("recommender_list"))
+
+    # 게시글에 조회수를 증가시키는 메소드
+  def increment_views(self):
+    self.views += 1
+    db.session.commit()
 
 
 
