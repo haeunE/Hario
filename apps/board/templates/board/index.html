@@ -52,16 +52,23 @@
         <th>제목</th>
         <th>작성자</th>
         <th>작성일시</th>
+        <th>추천</th>
+        <th>조회수</th>
       </tr>
     </thead>
     {% for board in boards %}
     <tbody>
-        <th>{{board.id}}</th>
+        <th>{{boards|length - loop.index0}}</th>
         <th>
           <a href="{{url_for('board.detail', board_id = board.id)}}">{{board.subject}}</a>  
+          {% if board.is_new %}
+          <span class="label label-new">NEW</span>
+          {% endif %}
         </th>
         <th>{{board.user.username}}</th>
         <th>{{board.created_at}}</th>
+        <th>{{board.recommender|length}}</th>
+        <th>{{board.views}}</th>
       </tr>
     </tbody>
     {% endfor %}
