@@ -47,8 +47,8 @@ def create_app():
   from apps.crud import views as crud_views
   app.register_blueprint(crud_views.crud)
   
-  from apps.logistics import views as delivery_views
-  app.register_blueprint(delivery_views.logistics, url_prefix='/logistics')
+  from apps.logistics import views as logistics_views
+  app.register_blueprint(logistics_views.logistics, url_prefix='/logistics')
 
   #========================== 에러 핸들러 설정 ============================
   app.register_error_handler(404, page_not_found)

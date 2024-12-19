@@ -1,0 +1,15 @@
+/* .pie-graphs-periods {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    flex-wrap: wrap;
+} */
+
+.pie-graphs-periods .img {
+    justify-content: space-around;
+}
+
+
+h1, h2 {
+text-align: center;
+}

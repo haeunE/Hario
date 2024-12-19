@@ -1,5 +1,5 @@
 from flask import Flask
-from .views import logistics  # views에서 logistics 블루프린트 가져오기
+from .views import logistics
 
 app = Flask(__name__)
 

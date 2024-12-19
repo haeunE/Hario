@@ -1,44 +1,98 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logistics Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>CJ대한통운 운송 추이</title>
+    <link rel="stylesheet" href="{{ url_for('logistics.static', filename='logistics.css') }}">
 </head>
+
 <body>
     <div class="container">
         <header>
-            <h1>품목 별 운송 비율 및 운송량</h1>
+            <h1>CJ대한통운 운송 추이</h1>
         </header>
 
-        <!-- 파이형 그래프 -->
-        <section id="pie-graphs">
-            <h2>품목 별 운송 비율</h2>
+        <!-- 전체 기간 파이형 그래프 (범례 표시) -->
+        <section id="pie-graphs-all">
+            <h2>전체 기간 (2018~2024) 품목 별 운송 비율</h2>
             <div class="pie-graph-container">
-                {% for pie_img in pie_plot_urls %}
-                    <div class="pie-graph">
-                        <img src="data:image/png;base64,{{ pie_img }}" alt="Pie Chart">
-                    </div>
-                {% endfor %}
+                <div class="pie-graph">
+                    <img src="data:image/png;base64,{{ pie_plot_urls[0] }}" alt="전체 기간 (2018~2024) 품목 별 운송 비율">
+                </div>
             </div>
         </section>
 
-        <!-- 선형 그래프 -->
-        <section id="line-graphs">
-            <h2>품목 별 운송량</h2>
+        <section id="bar-graphs-periods">
+            <h2>코로나 기간 별 운송량 (막대 그래프)</h2>
+            <div class="bar-graph-container">
+                <img src="data:image/png;base64,{{ bar_plot_urls }}" alt="코로나 기간별 운송량 막대 그래프">
+            </div>
+        </section>
+        
+
+        <!-- 코로나 기간 별 파이형 그래프 (범례 생략) -->
+        <!-- <section id="pie-graphs-periods">
+            <h2>코로나 기간 별 운송 비율</h2>
+            <div class="pie-graph-container">
+                {% for pie_img in pie_plot_urls[1:] %}
+                <div class="pie-graph">
+                    <img src="data:image/png;base64,{{ pie_img }}" alt="코로나 기간 별 운송 비율">
+                </div>
+                {% endfor %}
+            </div>
+        </section> -->
+
+        <!-- 전체 기간 선형 그래프 -->
+        <section id="line-graphs-all">
+            <h2>전체 기간 품목 별 운송량</h2>
             <div class="line-graph-container">
-                {% for line_img in line_plot_urls %}
-                    <div class="line-graph">
-                        <img src="data:image/png;base64,{{ line_img }}" alt="Line Chart">
-                    </div>
-                {% endfor %}
+                <div class="line-graph">
+                    <img src="data:image/png;base64,{{ line_plot_urls[0] }}" alt="전체 기간 품목 별 운송량">
+                </div>
             </div>
         </section>
 
-        <footer>
-            <p>© 2024 Logistics Dashboard</p>
-        </footer>
+        <!-- 코로나 기간 별 선형 그래프 -->
+        <!-- <section id="line-graphs-periods">
+            <h2>코로나 기간 별 운송량</h2>
+            <div class="line-graph-container">
+                {% for line_img in line_plot_urls[1:] %}
+                <div class="line-graph">
+                    <img src="data:image/png;base64,{{ line_img }}" alt="코로나 기간 Line Chart">
+                </div>
+                {% endfor %}
+            </div>
+        </section> -->
+
+        <!-- 요일별 운송량 선형 그래프 -->
+        <section id="weekday-line-graphs">
+            <h2>요일별 운송량 추이</h2>
+            <div class="line-graph-container">
+                <div class="line-graph">
+                    <img src="data:image/png;base64,{{ weekday_line_plot_urls[0] }}" alt="요일별 운송량">
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>지역 별 대한통운 이용량</h2>
+            <div class="map-graph-container">
+
+                <div class="logistics-volume-map">
+
+                    <h3>송하인 구별 운송량</h3>
+                    <iframe src="{{ url_for('logistics.static', filename='images/term.html') }}" width="100%" height="500"></iframe>
+
+                    <h3>수하인 구별 운송량</h3>
+                    <iframe src="{{ url_for('logistics.static', filename='images/term.html') }}" width="100%" height="500"></iframe>
+
+                </div>
+
+            </div>
+        </section>
     </div>
 </body>
+
 </html>
