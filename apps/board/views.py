@@ -7,13 +7,18 @@ from apps.app import db
 board = Blueprint('board', __name__, template_folder='templates', static_folder='static')
 
 @board.route("/<int:selection>", methods=["GET"])
+@login_required
 def index(selection):
     department_id = request.args.get("department_id")
 
+    if selection == 1 and current_user.userinfo.department_id == 99:
+        return render_template("board/permission_denied.html")
+       
     if department_id:
         boards = Board.query.filter_by(department_id=department_id).order_by(Board.created_at.desc()).all()
     else:
         if selection == 1:
+          # current_user의 current_user.userinfo.department_id == 99일때 권한 없음 띄우는 페이지
             boards = Board.query.filter_by(selection=1).order_by(Board.created_at.desc()).all()
         elif selection == 2:
             boards = Board.query.filter_by(selection=2).order_by(Board.created_at.desc()).all()
@@ -24,6 +29,7 @@ def index(selection):
 
   
 @board.route("/new", methods=["GET", "POST"])
+@login_required
 def new():
   form = BoardForm()
 
@@ -46,6 +52,7 @@ def new():
   return render_template("board/new.html", form=form, user=current_user)
 
 @board.route("/detail/<int:board_id>", methods=["GET", "POST"])
+@login_required
 def detail(board_id):
   board = Board.query.get_or_404(board_id)
 
@@ -53,6 +60,7 @@ def detail(board_id):
 
 
 @board.route("/update/<int:board_id>", methods=["GET", "POST"])
+@login_required
 def update(board_id):
   board = Board.query.get_or_404(board_id)
   form = BoardForm()
@@ -70,6 +78,7 @@ def update(board_id):
 
 
 @board.route("/delete/<int:board_id>/<int:board_sel>", methods=["POST"])
+@login_required
 def delete(board_id, board_sel):
   Board.query.filter_by(id=board_id).delete()
   db.session.commit()
