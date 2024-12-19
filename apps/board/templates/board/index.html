@@ -21,7 +21,7 @@
     {% if selection == 1 %}
      <form action="{{url_for('board.index', selection=1)}}" method="get">
       <select name="department_id" class="form-select" aria-label="Default select example" onchange="this.form.submit()">
-         <option selected>부서를 선택해주세요</option>
+         <option value="0" selected>부서를 선택해주세요</option>
          <option value="1">대한통운</option>
          <option value="2">제일제당</option>
          <option value="3">프레시웨이</option>
@@ -58,8 +58,9 @@
     </thead>
     {% for board in boards %}
     <tbody>
-        <th>{{boards|length - loop.index0}}</th>
-        <th>
+      <th>
+        {{ pagination.page_start_number - loop.index0 }}
+      <th>
           <a href="{{url_for('board.detail', board_id = board.id)}}">{{board.subject}}</a>  
           {% if board.is_new %}
           <span class="label label-new">NEW</span>
@@ -77,6 +78,26 @@
   <p>등록된 게시글이 없습니다. 등록해 주세요</p>
   {% endif %}  
 </div>
+
+<div class="pagination">
+  {% if pagination.has_prev_block %}
+  <li>
+    <a href="{{ url_for('board.index', selection=selection, department_id=request.args.get('department_id'), page=pagination.start_page - 1) }}">&lt;&lt;</a>
+  </li>
+  {% endif %}
+  {% for num in range(pagination.start_page, pagination.end_page + 1) %}
+  <li>
+    <a href="{{ url_for('board.index', selection=selection, department_id=request.args.get('department_id'), page=num) }}">{{ num }}</a>
+  </li>
+  {% endfor %}
+  {% if pagination.has_next_block %}
+  <li>
+    <a href="{{ url_for('board.index', selection=selection, department_id=request.args.get('department_id'), page=pagination.end_page + 1) }}">&gt;&gt;</a>
+  </li>
+  {% endif %}
+</div>
+
+
 {% endblock %}
 
 {% block js%}

@@ -11,7 +11,7 @@
     {{form.csrf_token}}
     <div>
       <p>게시판 선택</p>
-      {% if user.userinfo.department_id == 99 %}
+      {% if user.role.value == 'seeker' %}
       <select class="board-select" name="board_type" aria-label="게시판 선택" disabled>
         <option value="2">구직자 게시판</option>
         <option value="3">모두 게시판</option>

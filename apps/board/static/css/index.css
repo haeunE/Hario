@@ -166,6 +166,47 @@ body {
   animation: blink 5s infinite; 
 }
 
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pagination li {
+  margin: 0 5px;
+}
+
+.pagination a {
+  display: inline-block;
+  padding: 10px 15px;
+  font-size: 1rem;
+  color: #0047AB; /* 파란색 */
+  text-decoration: none;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.pagination a:hover {
+  background-color: #0047AB;
+  color: white;
+}
+
+.pagination a:active {
+  background-color: #ff6600;
+  color: white;
+}
+
+.pagination .active {
+  background-color: #0047AB;
+  color: white;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+
 @keyframes blink {
   0%, 100% {
       opacity: 1; /* 완전히 보임 */
