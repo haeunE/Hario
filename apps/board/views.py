@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request
+from flask import Blueprint, render_template, redirect, url_for, request, jsonify
 from flask_login import login_required, current_user
 from apps.board.forms import BoardForm
 from apps.crud.models import User, Board, Recommend
@@ -90,7 +90,7 @@ def detail(board_id):
   board.increment_views()
   return render_template("board/detail.html", board=board)
 
-
+# 수정이랑 추천시에는 views값이 증가되면 안됨 -> decrement_views메서드 사용
 @board.route("/update/<int:board_id>", methods=["GET", "POST"])
 @login_required
 def update(board_id):
@@ -100,7 +100,8 @@ def update(board_id):
   if form.validate_on_submit():
     board.subject = form.subject.data
     board.content = form.content.data
-    
+    board.decrement_views()
+
     db.session.add(board)
     db.session.commit()
     return redirect(url_for("board.detail", board_id=board_id))
@@ -109,22 +110,30 @@ def update(board_id):
 
 
 
-@board.route("/delete/<int:board_id>/<int:board_sel>", methods=["POST"])
+@board.route("/delete/<int:board_id>", methods=["DELETE"])
 @login_required
-def delete(board_id, board_sel):
-  Board.query.filter_by(id=board_id).delete()
-  db.session.commit()
-  return redirect(url_for("board.index", selection=board_sel))
+def delete(board_id):
+    board = Board.query.filter_by(id=board_id).first()
+
+    db.session.delete(board)
+    db.session.commit()
+
+
+    return jsonify({"message": "게시물이 삭제되었습니다."}), 200
+
 
 # 추천
 @board.route("/recommend/<int:board_id>", methods=["POST"])
 def recommend(board_id):
    recommand_entry = Recommend.query.filter_by(user_id=current_user.id, board_id=board_id).first()
+   board = Board.query.get_or_404(board_id)
    if recommand_entry:
+      board.decrement_views()
       db.session.delete(recommand_entry)
       db.session.commit()
    else:
       new_recommend = Recommend(user_id=current_user.id, board_id=board_id)
+      board.decrement_views()
       db.session.add(new_recommend)
       db.session.commit()
    return redirect(url_for("board.detail", board_id=board_id))
