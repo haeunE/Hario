@@ -116,10 +116,25 @@ class Board(db.Model):
   # 추천 기능 관계 설정 - 다대다
   recommender = db.relationship("User", secondary="recommend", backref=db.backref("recommender_list"))
 
-    # 게시글에 조회수를 증가시키는 메소드
+  # 게시글에 조회수를 증가시키는 메소드
   def increment_views(self):
     self.views += 1
     db.session.commit()
+
+  # 페이지 이전, 이후
+  def get_pre_board(self):
+      return(
+          Board.query.filter(Board.selection == self.selection, Board.id < self.id)
+          .order_by(Board.id.desc())
+          .first()
+      ) 
+  def get_next_board(self):
+      return(
+          Board.query.filter(Board.selection == self.selection, Board.id > self.id)
+          .order_by(Board.id.asc())
+          .first()
+      )
+
 
 
 
@@ -168,7 +183,6 @@ def seed_initial_data():
         users = [
             {"username": "admin", "password": "admin123", "role": UserRole.ADMIN, "userinfo_id": 1},
             {"username": "worker1", "password": "worker123", "role": UserRole.WORKER, "userinfo_id": 2},
-            {"username": "seeker1", "password": "seeker123", "role": UserRole.SEEKER, "userinfo_id": 3},
         ]
         for user_data in users:
             user = User(username=user_data["username"], role=user_data["role"], userinfo_id=user_data["userinfo_id"])

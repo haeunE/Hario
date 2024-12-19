@@ -15,24 +15,52 @@ def index(selection):
 
     if selection == 1 and current_user.userinfo.department_id == 99:
         return render_template("board/permission_denied.html")
-       
-    if department_id:
-        boards = Board.query.filter_by(department_id=department_id, selection=1).order_by(Board.created_at.desc()).all()
+
+    # 필터링 처리
+    if department_id and int(department_id) != 0:
+        query = Board.query.filter(Board.department_id == department_id, Board.selection == 1).order_by(Board.id.desc())
     else:
         if selection == 1:
-          # current_user의 current_user.userinfo.department_id == 99일때 권한 없음 띄우는 페이지
-            boards = Board.query.filter_by(selection=1).order_by(Board.created_at.desc()).all()
+            query = Board.query.filter(Board.selection == 1).order_by(Board.id.desc())
         elif selection == 2:
-            boards = Board.query.filter_by(selection=2).order_by(Board.created_at.desc()).all()
+            query = Board.query.filter(Board.selection == 2).order_by(Board.id.desc())
         else:
-            boards = Board.query.filter_by(selection=3).order_by(Board.created_at.desc()).all()
+            query = Board.query.filter(Board.selection == 3).order_by(Board.id.desc())
+
 
     # 최신 게시글 2개에 'is_new' 설정
-    # enumerate : 반복 가능한 객체(예: 리스트, 튜플 등)를 순회하면서 인덱스와 값을 동시에 반환하는 함수
+    boards = query.all()  # 쿼리 객체로 유지하면서 all() 호출
+    # 컬럼 총 개수
+    board_total = query.count()
+
     for idx, board in enumerate(boards):
         board.is_new = idx < 2  # 상위 2개 게시글만 is_new=True
 
-    return render_template("board/index.html", boards=boards, selection=selection)
+    # 페이징 처리
+    page = request.args.get('page', type=int, default=1)
+    boards = query.paginate(page=page, per_page=10)  # paginate() 호출
+
+    block_size = 10
+    current_block = (page - 1)//block_size + 1
+
+    start_page = (current_block - 1)*block_size + 1
+    end_page = min(current_block*block_size, boards.pages)
+
+    has_prev_block = start_page > 1
+    has_next_block = end_page < boards.pages
+
+    page_start_number = board_total - (page - 1) * 10
+    
+    pagination = {
+      "current_block" : current_block,
+      "start_page" : start_page,
+      "end_page" : end_page,
+      "has_prev_block" : has_prev_block,
+      "has_next_block" : has_next_block,
+      "page_start_number": page_start_number,
+    }
+
+    return render_template("board/index.html", boards=boards.items, selection=selection, pagination=pagination)
   
 @board.route("/new", methods=["GET", "POST"])
 @login_required
@@ -48,8 +76,6 @@ def new():
       department_id = current_user.userinfo.department_id
     )
 
-    print(board.selection)
-    print(board.department_id)
 
     db.session.add(board)
     db.session.commit()
@@ -93,7 +119,6 @@ def delete(board_id, board_sel):
 # 추천
 @board.route("/recommend/<int:board_id>", methods=["POST"])
 def recommend(board_id):
-   board = Board.query.filter_by(id=board_id).first()
    recommand_entry = Recommend.query.filter_by(user_id=current_user.id, board_id=board_id).first()
    if recommand_entry:
       db.session.delete(recommand_entry)
@@ -103,3 +128,18 @@ def recommend(board_id):
       db.session.add(new_recommend)
       db.session.commit()
    return redirect(url_for("board.detail", board_id=board_id))
+
+
+@board.route('/dummy')
+def make_dummy():
+  for i in range(100):
+    board = Board(
+      subject = f'임시제목{50+i}',
+      content = f'임시내용{i+50}',
+      user_id = 1,
+      selection = 1,
+      department_id = 1
+    )
+    db.session.add(board)
+    db.session.commit()
+  
