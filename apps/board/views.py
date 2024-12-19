@@ -61,6 +61,7 @@ def new():
 @login_required
 def detail(board_id):
   board = Board.query.get_or_404(board_id)
+  board.increment_views()
   return render_template("board/detail.html", board=board)
 
 
