@@ -6,7 +6,6 @@
   font-style: normal;
 }
 
-
 /* 전체 배경과 텍스트 스타일 */
 body {
   background-color: #FFFFFF; /* 배경색을 #FCF2E8로 설정 */
@@ -16,7 +15,6 @@ body {
   padding-bottom: 100px;
   box-sizing: border-box;
 }
-
 
 /* 게시물 상세보기 영역 */
 .board-detail {
@@ -59,7 +57,7 @@ body {
 }
 
 /* 수정, 삭제 버튼 스타일 */
-.board-detail-btns{
+.board-detail-btns {
   display: flex;
   gap: 10px;
 }
@@ -109,7 +107,6 @@ body {
   display: flex;
   justify-content: center; /* 가로로 가운데 정렬 */
   align-items: center; /* 세로로 가운데 정렬 */
- 
 }
 
 .thumbs-up-button {
@@ -127,6 +124,12 @@ body {
   transform: scale(1.1); /* 호버 시 크기 확대 */
   background-color: #E61E2E;
   color: white;
+}
+
+.active-btn {
+  transform: scale(1.1) !important;
+  background-color: #E61E2E !important;
+  color: white !important;
 }
 
 .board-detail-move {
@@ -164,4 +167,182 @@ body {
 
 .move-btn:active {
   transform: scale(0.95);  /* 클릭 시 버튼 축소 효과 */
+}
+
+/* 댓글 */
+/* 전체 댓글 영역 */
+.comment-all {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+/* 댓글 입력 폼 */
+.comment-new {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.comment-new form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.comment-new input[type="text"] {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 85%; /* 버튼과 함께 가로로 배치되도록 width 설정 */
+  margin-right: 10px;
+}
+
+.comment-new button {
+  padding: 10px 20px;
+  background-color: #FE6232;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.comment-new button:hover {
+  background-color: #e04c22;
+}
+
+/* 에러 메시지 스타일 */
+.comment-msg {
+  color: red;
+  font-weight: bold;
+  text-align: left; /* 왼쪽 정렬 */
+  margin-left: 20px;
+  margin-bottom: 15px;
+}
+
+/* 댓글이 없는 경우 메시지 스타일 */
+.comment-list p {
+  text-align: center;
+  font-size: 18px;
+  color: #555;
+  margin-top: 20px;
+}
+
+/* 댓글 수 표시 */
+.comment-counts {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-top: 20px;
+}
+
+/* 댓글 목록 */
+.comment-list {
+  width: 100%;
+  margin: 20px auto;
+  background-color: #FFFFFF; /* 배경 색상 */
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 */
+  max-width: 800px; /* 최대 너비 설정 */
+}
+
+/* 댓글 헤더 */
+.comment-header {
+  display: grid;
+  grid-template-columns: 3fr 2fr 2fr 1fr 1fr; /* 컬럼 크기 설정 */
+  background-color: hsl(215, 48%, 50%); /* 헤더 배경색 (CJ Blue) */
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+/* 각 항목의 너비를 조절 */
+.comment-header-item {
+  text-align: center;
+  padding: 5px;
+}
+
+/* 댓글 항목 */
+.comment-items {
+  display: grid;
+  grid-template-columns: 3fr 2fr 2fr 1fr 1fr; /* 동일한 그리드 설정 */
+  padding: 5px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+  vertical-align: top;
+}
+
+/* 각 항목의 스타일 */
+.comment-items div {
+  padding: 5px;
+  text-align: center;
+  vertical-align: middle;
+  overflow: hidden;  /* 내용이 넘치지 않도록 처리 */
+}
+
+/* 댓글 내용 스타일 */
+.comment-content-show, .comment-user-show, .comment-date-show {
+  text-align: left;  /* 왼쪽 정렬 */
+  word-wrap: break-word; /* 긴 텍스트 줄 바꿈 */
+  white-space: normal;  /* 텍스트가 여러 줄로 나누어지도록 */
+  overflow-wrap: break-word; /* 단어가 줄을 넘지 않도록 */
+  word-break: break-word; /* 긴 단어가 잘리거나 넘치지 않도록 */
+  max-width: 100%;  /* 댓글 내용의 최대 너비 설정 */
+  display: inline-block; /* 기본적인 inline-block 스타일로 설정 */
+  word-wrap: break-word; /* 긴 단어가 넘치지 않도록 줄 바꿈 */
+}
+
+
+/* 댓글 수정/저장/삭제 버튼 */
+.comment-update-btn, .comment-save-btn, .comment-delete-btn {
+  padding: 8px 15px;
+  font-size: 0.9em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: white; /* 텍스트 색상 */
+  border: none;
+  text-align: center;
+}
+
+.comment-update-btn {
+  background-color: #FF6600; /* CJ Orange */
+}
+
+.comment-update-btn:hover {
+  background-color: #e04c22; /* 어두운 오렌지 */
+}
+
+.comment-save-btn {
+  background-color: #0047AB; /* CJ Blue */
+}
+
+.comment-save-btn:hover {
+  background-color: #003488; /* 어두운 파란색 */
+}
+
+.comment-delete-btn {
+  background-color: #E61E2E; /* CJ Red */
+}
+
+.comment-delete-btn:hover {
+  background-color: #c4402e; /* 어두운 빨간색 */
+}
+
+/* 수정/저장/삭제 버튼을 위한 애니메이션 효과 */
+.comment-update-btn, .comment-save-btn, .comment-delete-btn {
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.comment-update-btn:hover, .comment-save-btn:hover, .comment-delete-btn:hover {
+  transform: scale(1.05); /* 버튼 호버 시 확대 효과 */
 }

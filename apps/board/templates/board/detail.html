@@ -26,7 +26,7 @@
     <div>
       <form action="{{url_for('board.recommend', board_id=board.id)}}" method="post" class="recommend-form">
         <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
-        <button type="submit" class="thumbs-up-button">
+        <button type="submit" class="thumbs-up-button {% if current_user in board.recommender %}active-btn{% endif %}">
           ❤️
           추천
         </button>
@@ -44,13 +44,12 @@
       </div>
       <!-- 글 삭제 -->
       <div class="board-delete-btn">
-        <form action="{{url_for('board.delete', board_id=board.id, board_sel=board.selection)}}" method="post">
           <!-- 토큰 -->
           <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
           {% if current_user.id == board.user.id %}
-          <input class="btn btn-danger" type="submit" value="삭제">
+          <input class="btn btn-danger board-delete" type="submit" data-board-id="{{board.id}}" data-board-selection="{{board.selection}}" value="삭제">
           {% else %}
-          <input class="btn btn-danger" type="submit" value="삭제" disabled>
+          <input class="btn btn-danger board-delete" type="submit" data-board-id="{{board.id}}" data-board-selection="{{board.selection}}" value="삭제" disabled>
           {% endif %}
         </div>
       </div>
@@ -70,8 +69,62 @@
         {% endif %}
       </div>   
     </div>
-    
+    <div class="comment-all">
+      <div class="comment-new">
+        <form action="{{url_for('board.comment_new', board_id=board.id)}}" method="post">
+          <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+          <input type="text" name="content" id="comment-content" placeholder="댓글을 입력해 주세요" data-board-id="{{board.id}}">
+          <button id="comment-new-btn">등록</button>
+        </form>
+      </div>
+      {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+          <p class="comment-msg">{{message}}</p>
+        {% endfor %}
+      {% endwith %}    
+      <h5 class="comment-counts">댓글[{{board.comments|length}}]</h5>
+      {% if board.comments %}
+      <div class="comment-list">
+        <div class="comment-header">        
+          <div class="comment-header-item">내용</div>
+          <div class="comment-header-item">작성자</div>
+          <div class="comment-header-item">작성일자</div>
+          <div class="comment-header-item"></div>
+          <div class="comment-header-item"></div>
+        </div>
+        {% for comment in board.comments|reverse %}
+        <div class="comment-items">
+          {% if current_user.id == comment.user.id %}
+            <div class="comment-item comment-content-show">{{comment.content}}</div>
+            <!-- 토큰 -->
+            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+            <input class="new-content" type="text" name="new-content" 
+            data-comment-id="{{comment.id}}" value="{{comment.content}}" style="display: none;">
+          {% else %}
+            <div class="comment-item comment-content-show">{{comment.content}}</div>
+          {% endif %}
+          <div class="comment-item comment-user-show">{{comment.user.username}}</div>
+          <div class="comment-item comment-date-show">{{comment.created_at}}</div>
+
+          <!-- 댓글작성자가 수정 누르면 저장, 삭제 버튼 보임 -->
+          {% if current_user.id == comment.user.id %}
+            <div class="comment-item">
+              <button class="comment-update-btn" data-comment-id="{{comment.id}}">수정</button>
+              <button class="comment-save-btn" data-comment-id="{{comment.id}}" style="display: none;">저장</button>
+            </div>
+            <div class="comment-item">
+              <button class="comment-delete-btn" data-comment-id="{{comment.id}}" style="display: none;">삭제</button>
+            </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p> 댓글이 없습니다. 댓글을 등록해 주세요.</p>
+      {% endif %}
+  </div>
 {% endblock %}
 
 {% block js %}
+  <script src="{{url_for('board.static', filename='js/detail.js')}}"></script>
 {% endblock %}

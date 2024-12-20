@@ -85,14 +85,14 @@
   {% endblock %}
 
    <!-- 위로 올라가는 버튼 -->
-   <button id="scrollToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+   <button id="scrollToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Scroll to top">
     <i class="fa fa-arrow-up"></i>
   </button>
   
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  {% block js %}{% endblock %}
 
+  {% block js %}{% endblock %}
   <script>
     // 스크롤 업 버튼 제어
     const scrollToTopButton = document.getElementById("scrollToTop");
@@ -104,11 +104,6 @@
       } else {
         scrollToTopButton.style.display = "none";
       }
-    };
-
-    // 버튼 클릭 시 페이지 상단으로 스크롤
-    scrollToTopButton.onclick = function() {
-      window.scrollTo({ top: 0, behavior: "smooth" });
     };
   </script>
 

@@ -90,51 +90,64 @@ body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 테이블에 그림자 추가 */
 }
 
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 0 auto;
-  font-size: 1rem;
+.board-index-content {
+  padding: 20px;
+}
+
+.board-header{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  background-color: #000000;
+}
+.board-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  background-color: white;
+  
+}
+
+.board-header-item, .board-item {
+  width: 15%;
+  padding: 10px;
   text-align: center;
 }
 
-.table-dark {
-  background-color: #0047AB; /* CJ Blue */
-  color: #FFFFFF; /* 헤더 텍스트 색상 */
+.board-header-item {
+  font-weight: bold;
+  color: white;
 }
 
-.table th, .table td {
-  padding: 12px 15px;
-  border: 1px solid #E0E0E0;
+.board-row {
+  border-bottom: 1px solid #ddd;
 }
 
-.table tbody tr:nth-child(odd) {
-  background-color: #FF6600; /* CJ Orange: 홀수 행 */
-  color: #FFFFFF;
+.board-item a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #333;
 }
 
-.table tbody tr:nth-child(even) {
-  background-color: #FFFFFF; /* 짝수 행 */
+.board-item a:hover {
+  color: #FE6232;
+  text-decoration: underline; 
 }
 
-.table tbody tr:hover {
-  background-color: #0047AB; /* CJ Blue: 호버 */
-  color: #FFFFFF;
+.label-new {
+  background-color: #FE6232;
+  color: #fff;
+  padding: 2px 5px;
+  font-size: 12px;
+  margin-left: 5px;
 }
 
-.table .btn-warning {
-  background-color: darksalmon; /* CJ Orange */
-  color: #FFFFFF;
-  border: none;
-  padding: 8px 12px;
-  font-size: 0.9rem;
-  border-radius: 4px;
-  cursor: pointer;
+.board-none p {
+  text-align: center;
+  font-size: 16px;
+  color: #999;
 }
 
-.table .btn-warning:hover {
-  background-color: coral;
-}
 
 /* 게시물이 없을 때 메시지 */
 .no-boards {
@@ -165,46 +178,51 @@ body {
   margin-left: 5px;
   animation: blink 5s infinite; 
 }
-
+/* Pagination 컨테이너 스타일 */
 .pagination {
   display: flex;
-  justify-content: center;
+  justify-content: center; /* 중앙 정렬 */
   margin: 20px 0;
   padding: 0;
-  list-style: none;
+  list-style: none; /* 리스트 스타일 제거 */
 }
 
+/* Pagination 아이템 간 간격 */
 .pagination li {
   margin: 0 5px;
 }
 
+/* 페이지 링크 기본 스타일 */
 .pagination a {
   display: inline-block;
-  padding: 10px 15px;
-  font-size: 1rem;
+  padding: 10px 15px; /* 여백 설정 */
+  font-size: 1rem; /* 글자 크기 */
   color: #0047AB; /* 파란색 */
-  text-decoration: none;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  transition: all 0.3s ease;
+  text-decoration: none; /* 밑줄 제거 */
+  border: 1px solid #ddd; /* 외곽선 */
+  border-radius: 4px; /* 둥근 모서리 */
+  transition: all 0.3s ease; /* 부드러운 전환 효과 */
 }
 
+/* 마우스 호버 시 효과 */
 .pagination a:hover {
-  background-color: #0047AB;
-  color: white;
+  background-color: #0047AB; /* 파란색 배경 */
+  color: white; /* 흰색 글씨 */
 }
 
+/* 클릭(활성화)된 상태 */
 .pagination a:active {
-  background-color: #ff6600;
-  color: white;
+  background-color: #011838; /* 더 어두운 파란색 배경 */
+  color: white; /* 흰색 글씨 */
 }
 
-.pagination .active {
-  background-color: #0047AB;
-  color: white;
-  font-weight: bold;
-  pointer-events: none;
+.pagination .active, .active-page {
+  background-color: #0047AB !important; /* 파란색 배경 */
+  color: #FFFFFF !important; /* 흰색 글씨 */
+  font-weight: bold !important;
+  pointer-events: none !important;
 }
+
 
 
 @keyframes blink {
