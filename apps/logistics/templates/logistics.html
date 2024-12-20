@@ -30,7 +30,7 @@
                 <img src="data:image/png;base64,{{ bar_plot_urls }}" alt="코로나 기간별 운송량 막대 그래프">
             </div>
         </section>
-        
+
 
         <!-- 코로나 기간 별 파이형 그래프 (범례 생략) -->
         <!-- <section id="pie-graphs-periods">
@@ -54,17 +54,6 @@
             </div>
         </section>
 
-        <!-- 코로나 기간 별 선형 그래프 -->
-        <!-- <section id="line-graphs-periods">
-            <h2>코로나 기간 별 운송량</h2>
-            <div class="line-graph-container">
-                {% for line_img in line_plot_urls[1:] %}
-                <div class="line-graph">
-                    <img src="data:image/png;base64,{{ line_img }}" alt="코로나 기간 Line Chart">
-                </div>
-                {% endfor %}
-            </div>
-        </section> -->
 
         <!-- 요일별 운송량 선형 그래프 -->
         <section id="weekday-line-graphs">
@@ -80,16 +69,24 @@
             <h2>지역 별 대한통운 이용량</h2>
             <div class="map-graph-container">
 
-                <div class="logistics-volume-map">
-
-                    <h3>송하인 구별 운송량</h3>
-                    <iframe src="{{ url_for('logistics.static', filename='images/term.html') }}" width="100%" height="500"></iframe>
-
-                    <h3>수하인 구별 운송량</h3>
-                    <iframe src="{{ url_for('logistics.static', filename='images/term.html') }}" width="100%" height="500"></iframe>
-
+                <div class="col-md-6">
+                    <h3>송하인 운송량 지도</h3>
+                    <iframe src="{{ sender_map }}" width="100%" height="600px"></iframe>
+                </div>
+                <div class="col-md-6">
+                    <h3>수하인 운송량 지도</h3>
+                    <iframe src="{{ receiver_map }}" width="100%" height="600px"></iframe>
                 </div>
 
+                <div class="logistics-volume-map">
+                    <h3>송하인 구별 운송량</h3>
+                    <iframe src="{{ url_for('logistics.static', filename='images/term.html') }}" width="100%"
+                        height="500"></iframe>
+
+                    <h3>수하인 구별 운송량</h3>
+                    <iframe src="{{ url_for('logistics.static', filename='images/term.html') }}" width="100%"
+                        height="500"></iframe>
+                </div>
             </div>
         </section>
     </div>

@@ -1,10 +1,8 @@
 import pandas as pd
 import matplotlib
-import matplotlib.colors as mcolors
-import matplotlib.pyplot as plt
-import numpy as np
-
 matplotlib.use('Agg')
+
+# 엑셀 파일 선처리 작업
 
 file_paths = [
     'apps/logistics/logi_before.csv',
@@ -17,7 +15,6 @@ column_remove = [
     '송하인_시명', '송하인_시코드', '송하인_구명', '송하인_구코드',
     '수하인_시명', '수하인_시코드', '수하인_구명', '수하인_구코드'
 ]
-
 
 # CSV 파일들을 읽고, 모든 값이 0인 행을 제외
 dfs = []
