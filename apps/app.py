@@ -45,6 +45,9 @@ def create_app():
 
     from apps.board import views as board_views
     app.register_blueprint(board_views.board, url_prefix='/board')
+
+    from apps.react import views as react_views
+    app.register_blueprint(react_views.react, url_prefix='/react')
        
     # #========================== department 초기 값 설정 ============================
 
