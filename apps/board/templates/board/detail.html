@@ -6,17 +6,17 @@
 {% endblock %}
 
 {% block content %}
-  <div class="board-detail">
-    <div>
-      <label>제목</label>
-      <input type="text" value="{{board.subject}}" readonly>
-    </div>
-    <div>
-      <label>작성자</label>
-      <input type="text" value="{{board.user.username}}" readonly>
-    </div>
-    <div>
-      <label>작성일자</label>
+<div class="board-detail">
+  <div>
+    <label>제목</label>
+    <input type="text" value="{{board.subject}}" readonly>
+  </div>
+  <div>
+    <label>작성자</label>
+    <input type="text" value="{{board.user.username}}" readonly>
+  </div>
+  <div>
+    <label>작성일자</label>
       <input type="text" value="{{board.created_at}}" readonly>
     </div>
     <div>
@@ -27,7 +27,7 @@
       <form action="{{url_for('board.recommend', board_id=board.id)}}" method="post" class="recommend-form">
         <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
         <button type="submit" class="thumbs-up-button">
-          👍
+          ❤️
           추천
         </button>
       </form>      
@@ -52,10 +52,25 @@
           {% else %}
           <input class="btn btn-danger" type="submit" value="삭제" disabled>
           {% endif %}
+        </div>
       </div>
+      <div class="board-detail-move">
+        {% if board.get_pre_board() %}
+            <a href="{{ url_for('board.detail', board_id=board.get_pre_board().id) }}" class="move-btn">&lt;</a>
+        {% else %}
+            <span class="move-btn disabled">&lt;</span>
+        {% endif %}
+        
+        <a href="{{ url_for('board.index', selection=board.selection) }}" class="move-btn">목록</a>
+        
+        {% if board.get_next_board() %}
+            <a href="{{ url_for('board.detail', board_id=board.get_next_board().id) }}" class="move-btn">&gt;</a>
+        {% else %}
+            <span class="move-btn disabled">&gt;</span>
+        {% endif %}
+      </div>   
     </div>
-  </div>
-
+    
 {% endblock %}
 
 {% block js %}

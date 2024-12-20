@@ -13,9 +13,10 @@ body {
   color: #000000; /* 기본 텍스트 색상 */
   font-family: 'YESMyoungjo-Regular', Arial, sans-serif;
   margin: 0;
-  padding: 0;
+  padding-bottom: 100px;
   box-sizing: border-box;
 }
+
 
 /* 게시물 상세보기 영역 */
 .board-detail {
@@ -73,13 +74,13 @@ body {
 
 /* 수정 버튼 (CJ Orange) */
 .board-update-btn .btn-warning {
-  background-color: #FF6600; /* CJ Orange */
+  background-color: #FF6600; 
   color: #FFFFFF;
   border: none;
 }
 
 .board-update-btn .btn-warning:hover {
-  background-color: #0047AB; /* CJ Blue */
+  background-color: #8b3a03ef; 
 }
 
 /* 삭제 버튼 (CJ Red) */
@@ -90,7 +91,7 @@ body {
 }
 
 .board-delete-btn .btn-danger:hover {
-  background-color: #0047AB; /* CJ Blue */
+  background-color: #6e0909; /* CJ Blue */
 }
 
 /* 비활성화된 버튼 스타일 */
@@ -112,16 +113,55 @@ body {
 }
 
 .thumbs-up-button {
-  font-size: 1.5rem; /* 버튼 크기 설정 */
+  font-size: 1rem; /* 버튼 크기 설정 */
   border: 2px solid black;
   border-radius: 10%;
   background-color: transparent; /* 배경색 투명 */
   cursor: pointer; /* 클릭 가능한 커서 */
   padding: 10px;
-  color: #FE6232; /* 원하는 색상 */
+  color: black; /* 원하는 색상 */
   transition: transform 0.3s ease; /* 클릭 시 애니메이션 효과 */
 }
 
 .thumbs-up-button:hover {
-  transform: scale(1.2); /* 호버 시 크기 확대 */
+  transform: scale(1.1); /* 호버 시 크기 확대 */
+  background-color: #E61E2E;
+  color: white;
+}
+
+.board-detail-move {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;  /* 버튼 간 간격 */
+  padding: 15px;
+  border-radius: 8px;  /* 둥근 모서리 */
+}
+
+.move-btn {
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;  /* 텍스트 색상 */
+  background-color: #0047AB;  /* 버튼 배경색 (파란색) */
+  border-radius: 5px;  /* 둥근 버튼 */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+
+.move-btn:hover {
+  background-color: #112a4d;  /* 호버 시 주황색 */
+  transform: scale(1.1);  /* 호버 시 약간 확대 */
+}
+
+.move-btn.disabled {
+  background-color: #E0E0E0;  /* 비활성화된 버튼 회색 */
+  color: #888888;  /* 텍스트 색상 회색 */
+  cursor: not-allowed;  /* 클릭 불가 커서 */
+}
+
+.move-btn:active {
+  transform: scale(0.95);  /* 클릭 시 버튼 축소 효과 */
 }
