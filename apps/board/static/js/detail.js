@@ -35,7 +35,12 @@ const commentObject ={
     const content = $(`[data-comment-id="${commentId}"]`).val();
 
     this.commentUpdate(commentId, content);
-    this.toggleEdit(commentId, false)
+    this.toggleEdit(commentId, false);
+   }),
+   $('.comment-delete-btn').on('click', (e)=>{
+    e.preventDefault()
+    const commentId = e.target.dataset.commentId;
+    this.commentDelete(commentId);
    })
   },
 
@@ -62,6 +67,10 @@ const commentObject ={
       alert('수정할 내용을 넣어주세요.');
       return;
     }
+
+    if(!confirm('수정 하시겠습니까?'))
+      return;
+
     $.ajax({
       type : 'PUT',
       url : '/board/comment/update/' + commentId,
@@ -72,6 +81,23 @@ const commentObject ={
       },
     }).done(function(response){
       alert('수정되었습니다.');
+      location.reload();
+    }).fail(function(error){
+      console.log(error);
+    });
+  },
+
+  commentDelete : function(commentId){
+    if(!confirm('삭제 하시겠습니까?'))
+      return;
+    $.ajax({
+      type : 'DELETE',
+      url : '/board/comment/delete/' + commentId,
+      headers: {
+        'X-CSRFToken': $('input[name="csrf_token"]').val()  // CSRF 토큰 추가
+      },
+    }).done(function(response){
+      alert('삭제되었습니다.');
       location.reload();
     }).fail(function(error){
       console.log(error);

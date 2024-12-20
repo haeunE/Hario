@@ -119,9 +119,7 @@ def update(board_id):
 @board.route("/delete/<int:board_id>", methods=["DELETE"])
 @login_required
 def delete(board_id):
-    board = Board.query.filter_by(id=board_id).first()
-
-    db.session.delete(board)
+    Board.query.filter_by(id=board_id).delete()
     db.session.commit()
 
 
@@ -185,3 +183,10 @@ def comment_update(comment_id):
    db.session.commit()
 
    return jsonify({"message": "댓글이 수정되었습니다."}), 200
+
+@board.route("/comment/delete/<int:comment_id>", methods=["DELETE"])
+def comment_delete(comment_id):
+   Comment.query.filter_by(id=comment_id).delete()
+   db.session.commit()
+
+   return jsonify({"message":"댓글이 삭제 되었습니다."}), 200

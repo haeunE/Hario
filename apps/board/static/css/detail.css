@@ -302,3 +302,47 @@ body {
 }
 
 
+/* 댓글 수정/저장/삭제 버튼 */
+.comment-update-btn, .comment-save-btn, .comment-delete-btn {
+  padding: 8px 15px;
+  font-size: 0.9em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: white; /* 텍스트 색상 */
+  border: none;
+  text-align: center;
+}
+
+.comment-update-btn {
+  background-color: #FF6600; /* CJ Orange */
+}
+
+.comment-update-btn:hover {
+  background-color: #e04c22; /* 어두운 오렌지 */
+}
+
+.comment-save-btn {
+  background-color: #0047AB; /* CJ Blue */
+}
+
+.comment-save-btn:hover {
+  background-color: #003488; /* 어두운 파란색 */
+}
+
+.comment-delete-btn {
+  background-color: #E61E2E; /* CJ Red */
+}
+
+.comment-delete-btn:hover {
+  background-color: #c4402e; /* 어두운 빨간색 */
+}
+
+/* 수정/저장/삭제 버튼을 위한 애니메이션 효과 */
+.comment-update-btn, .comment-save-btn, .comment-delete-btn {
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.comment-update-btn:hover, .comment-save-btn:hover, .comment-delete-btn:hover {
+  transform: scale(1.05); /* 버튼 호버 시 확대 효과 */
+}
