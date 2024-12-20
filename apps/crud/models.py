@@ -121,10 +121,6 @@ class Board(db.Model):
         self.views += 1
         db.session.commit()
 
-    def decrement_views(self):
-        self.views -=1
-        db.session.commit()  
-
     # 페이지 이전, 이후
     def get_pre_board(self):
         return(

@@ -22,3 +22,62 @@ $('.board-delete').on('click', (e) => {
 });
 
 // 댓글 js
+const commentObject ={
+  init:function(){
+   $('.comment-update-btn').on('click',(e)=>{
+    e.preventDefault()
+    const commentId = e.target.dataset.commentId;
+    this.toggleEdit(commentId, true);
+   }),
+   $('.comment-save-btn').on('click', (e)=>{
+    e.preventDefault()
+    const commentId = e.target.dataset.commentId;
+    const content = $(`[data-comment-id="${commentId}"]`).val();
+
+    this.commentUpdate(commentId, content);
+    this.toggleEdit(commentId, false)
+   })
+  },
+
+  toggleEdit : function(commentId, editMode){
+    const commentItem = $(`[data-comment-id="${commentId}"]`);  
+    if(editMode){
+      commentItem.closest('.comment-items').find('.comment-content-show').hide();
+      commentItem.closest('.comment-items').find('.comment-update-btn').hide();
+      commentItem.closest('.comment-items').find('.new-content').show();
+      commentItem.closest('.comment-items').find('.comment-save-btn').show();
+      commentItem.closest('.comment-items').find('.comment-delete-btn').show();
+    }else{
+      commentItem.closest('.comment-items').find('.comment-content-show').show();
+      commentItem.closest('.comment-items').find('.comment-update-btn').show();
+      commentItem.closest('.comment-items').find('.new-content').hide();
+      commentItem.closest('.comment-items').find('.comment-save-btn').hide();
+      commentItem.closest('.comment-items').find('.comment-delete-btn').hide();
+    }
+  },
+
+  commentUpdate : function(commentId, content){
+
+    if(!content){
+      alert('수정할 내용을 넣어주세요.');
+      return;
+    }
+    $.ajax({
+      type : 'PUT',
+      url : '/board/comment/update/' + commentId,
+      data : JSON.stringify({content:content}),
+      contentType : 'application/json; charset=uft-8',
+      headers: {
+        'X-CSRFToken': $('input[name="csrf_token"]').val()  // CSRF 토큰 추가
+      },
+    }).done(function(response){
+      alert('수정되었습니다.');
+      location.reload();
+    }).fail(function(error){
+      console.log(error);
+    });
+  }
+  
+}
+
+commentObject.init()

@@ -272,7 +272,7 @@ body {
 }
 
 /* 댓글 항목 */
-.comment-item {
+.comment-items {
   display: grid;
   grid-template-columns: 3fr 2fr 2fr 1fr 1fr; /* 동일한 그리드 설정 */
   padding: 5px;
@@ -282,7 +282,7 @@ body {
 }
 
 /* 각 항목의 스타일 */
-.comment-item div {
+.comment-items div {
   padding: 5px;
   text-align: center;
   vertical-align: middle;
@@ -302,9 +302,3 @@ body {
 }
 
 
-/* 댓글 작성자, 작성일자 */
-.comment-item .user,
-.comment-item .date {
-  font-size: 0.9em;
-  color: #555;
-}

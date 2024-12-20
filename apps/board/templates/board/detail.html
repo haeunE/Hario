@@ -92,13 +92,30 @@
           <div class="comment-header-item"></div>
           <div class="comment-header-item"></div>
         </div>
-        {% for comment in board.comments %}
-        <div class="comment-item">
-          <div class="comment-item comment-content-show">{{comment.content}}</div>
+        {% for comment in board.comments|reverse %}
+        <div class="comment-items">
+          {% if current_user.id == comment.user.id %}
+            <div class="comment-item comment-content-show">{{comment.content}}</div>
+            <!-- 토큰 -->
+            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+            <input class="new-content" type="text" name="new-content" 
+            data-comment-id="{{comment.id}}" value="{{comment.content}}" style="display: none;">
+          {% else %}
+            <div class="comment-item comment-content-show">{{comment.content}}</div>
+          {% endif %}
           <div class="comment-item comment-user-show">{{comment.user.username}}</div>
           <div class="comment-item comment-date-show">{{comment.created_at}}</div>
-          <div class="comment-item"></div>
-          <div class="comment-item"></div>
+
+          <!-- 댓글작성자가 수정 누르면 저장, 삭제 버튼 보임 -->
+          {% if current_user.id == comment.user.id %}
+            <div class="comment-item">
+              <button class="comment-update-btn" data-comment-id="{{comment.id}}">수정</button>
+              <button class="comment-save-btn" data-comment-id="{{comment.id}}" style="display: none;">저장</button>
+            </div>
+            <div class="comment-item">
+              <button class="comment-delete-btn" data-comment-id="{{comment.id}}" style="display: none;">삭제</button>
+            </div>
+          {% endif %}
         </div>
         {% endfor %}
       </div>

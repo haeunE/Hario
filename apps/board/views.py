@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash
+from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash, session
 from flask_login import login_required, current_user
 from apps.board.forms import BoardForm
 from apps.crud.models import User, Board, Recommend, Comment
@@ -87,10 +87,17 @@ def new():
 @login_required
 def detail(board_id):
   board = Board.query.get_or_404(board_id)
-  board.increment_views()
+  view_key = f"viewed_{board_id}"
+
+  if request.method == "GET":
+     # 세션에서 해당 게시글을 조회했는지 확인
+        if not session.get(view_key):
+            board.increment_views()  # 조회수 증가
+            session[view_key] = True  # 세션에 조회 기록 저장
+
   return render_template("board/detail.html", board=board)
 
-# 수정이랑 추천시에는 views값이 증가되면 안됨 -> decrement_views메서드 사용
+
 @board.route("/update/<int:board_id>", methods=["GET", "POST"])
 @login_required
 def update(board_id):
@@ -100,7 +107,6 @@ def update(board_id):
   if form.validate_on_submit():
     board.subject = form.subject.data
     board.content = form.content.data
-    board.decrement_views()
 
     db.session.add(board)
     db.session.commit()
@@ -140,12 +146,10 @@ def recommend(board_id):
    recommand_entry = Recommend.query.filter_by(user_id=current_user.id, board_id=board_id).first()
    board = Board.query.get_or_404(board_id)
    if recommand_entry:
-      board.decrement_views()
       db.session.delete(recommand_entry)
       db.session.commit()
    else:
       new_recommend = Recommend(user_id=current_user.id, board_id=board_id)
-      board.decrement_views()
       db.session.add(new_recommend)
       db.session.commit()
    return redirect(url_for("board.detail", board_id=board_id))
@@ -159,7 +163,6 @@ def comment_new(board_id):
 
    if not content or content.strip == "":
       flash("댓글 내용을 넣어 등록해 주세요", "error")
-      board.decrement_views()
       return redirect(url_for("board.detail", board_id=board_id))
 
    comment = Comment(
@@ -167,9 +170,18 @@ def comment_new(board_id):
       user = current_user,
       board = board
    )
-   board.decrement_views()
    db.session.add(comment)
    db.session.commit()
 
    return redirect(url_for("board.detail", board_id=board_id))
   
+@board.route("/comment/update/<int:comment_id>", methods=["PUT"])
+def comment_update(comment_id):
+   data = request.get_json()
+   comment = Comment.query.get_or_404(comment_id)
+   comment.content = data.get('content')
+
+   db.session.add(comment)
+   db.session.commit()
+
+   return jsonify({"message": "댓글이 수정되었습니다."}), 200
