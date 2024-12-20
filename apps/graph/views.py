@@ -9,3 +9,7 @@ def company():
 @graph.route('/covid')
 def covid():
     return render_template('graph/covid.html')
+
+@graph.route('/stock')
+def stock():
+    return render_template("graph/stock.html")

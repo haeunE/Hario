@@ -7,8 +7,7 @@ from apps.config import config
 import os
 from flask_login import LoginManager
 from .graph import graph
-from .graph.graph import init_dash,korea_covid
-from apps.crud.models import seed_initial_data
+from .graph.graph import company_dash,korea_covid,stock_dash
 
 
 # config_key
@@ -27,8 +26,9 @@ def create_app():
   #======================== 초기 앱 설정 ==============================
    # Flask 앱 인스턴스 생성
   app = Flask(__name__)
-  dash_app = init_dash(app)
+  dash_app = company_dash(app)
   covid_app = korea_covid(app)
+  stock_app = stock_dash(app)
 
 
   for view_func in dash_app.server.view_functions:
@@ -37,8 +37,11 @@ def create_app():
   for view_func in covid_app.server.view_functions:
         if view_func.startswith('/graph/covid/'):
             csrf.exempt(covid_app.server.view_functions[view_func])
+  for view_func in stock_app.server.view_functions:
+        if view_func.startswith('/graph/stock/'):
+            csrf.exempt(stock_app.server.view_functions[view_func])
 
-    # 애플리케이션 설정 로드(local로)
+  # 애플리케이션 설정 로드(local로)
   app.config.from_object(config[config_key])
 
   # 확장모듈 초기화
@@ -71,8 +74,8 @@ def create_app():
     # #========================== department 초기 값 설정 ============================
 
   # with app.app_context():
-  #   from apps.crud.models import Department, seed_userinfos  # 모델 임포트
-  #   seed_userinfos()
+  #   from apps.crud.models import seed_initial_data  # 모델 임포트
+  #   seed_initial_data()
 
   # 에러 핸들러 설정
   app.register_error_handler(404, page_not_found)

@@ -1,19 +1,22 @@
 import dash
-from dash import dcc, html
+from dash import dcc, html, Input, Output
 import plotly.express as px
 import pandas as pd
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
-from apps.graph.preprocess.pre_covid import day_covid,covid_monthly
+from apps.graph.preprocess.pre_covid import covid_monthly
 from apps.graph.preprocess.pre_company import all_sales,company_colors,company_data,company_code
+from apps.graph.preprocess.pre_stock import cj_day_stock,company_colors
+from apps.graph.preprocess.save_graph import save_sessionfig
+import plotly.io as pio
 
 
-def init_dash(app):
+def company_dash(app):
 
     # Dash 애플리케이션 초기화
     graph = dash.Dash(__name__, server=app, url_base_pathname='/graph/company/', external_stylesheets=[dbc.themes.BOOTSTRAP])
     # graph.enable_dev_tools(debug=True)
-
+    r, g, b = 255, 0, 0  # 빨간색
     # Plotly Express를 사용하여 시각화 생성
     # take_fig = px.scatter( all_sales[all_sales['회사명'] == 'CJ프레시웨이'], x='분기', y='매출액', color='회사명', title='회사별 매출액', trendline="lowess", trendline_options=dict(frac=0.35), marginal_y="histogram")
     take_fig = px.scatter(
@@ -57,6 +60,16 @@ def init_dash(app):
         line=dict(dash='solid', color=color, width=2),
         marker=dict(symbol='square', size=10)
     ))
+    # '사망자수_차이' 추가 (보조 y축 사용)
+    profit_fig.add_trace(go.Scatter(
+        x=covid_monthly['년월'],
+        y=covid_monthly['사망자수_차이'],
+        mode='lines',
+        name='사망자수 차이',  # 레이블
+        line=dict(dash='solid', color=f'rgba({r}, {g}, {b}, 0.5)', width=2),  # 선 색상 설정
+        # marker=dict(color='blue', size=8),  # 마커 색상 설정
+        yaxis='y2'  # 보조 y축으로 설정
+    ))
 
     # 그래프 레이아웃 설정
     profit_fig.update_layout(
@@ -64,18 +77,15 @@ def init_dash(app):
         xaxis_title='분기',
         yaxis_title='이익 (원)',
         template='plotly_white',
-        legend_title='회사명'
+        legend_title='회사명',
+        yaxis2=dict(
+            title='사망자수 차이',  # 보조 y축 제목
+            overlaying='y',  # 기본 y축과 겹치도록 설정
+            side='right'  # 보조 y축을 오른쪽에 표시
+        )
     )
     # affiliate_count_fig = px.bar(all_sales, x='회사', y='Count', title='회사별 카운트', color='회사', text='Count', orientation='h')
 
-    profit_fig.add_trace(go.Scatter(
-        x=covid_monthly['년월'],
-        y=covid_monthly['사망자수_차이'],
-        mode='lines+markers',  # 선과 마커 표시
-        name='사망자수 차이',  # 레이블
-        line=dict(color='red', width=2),  # 선 색상 설정
-        marker=dict(color='blue', size=8)  # 마커 색상 설정
-    ))
 
     growth_all_fig = px.bar(
         all_sales,
@@ -193,15 +203,16 @@ def init_dash(app):
                 line=dict(dash='solid', color=color, width=2),
                 marker=dict(symbol='square', size=10)
             ))
-
-            profit_fig.add_trace(go.Scatter(
-                x=covid_monthly['년월'],
-                y=covid_monthly['사망자수_차이'],
-                mode='lines+markers',  # 선과 마커 표시
-                name='사망자수 차이',  # 레이블
-                line=dict(color='red', width=2),  # 선 색상 설정
-                marker=dict(color='blue', size=8)  # 마커 색상 설정
-            ))
+        # '사망자수_차이' 추가 (보조 y축 사용)
+        profit_fig.add_trace(go.Scatter(
+            x=covid_monthly['년월'],
+            y=covid_monthly['사망자수_차이'],
+            mode='lines',
+            name='사망자수 차이',  # 레이블
+            line=dict(dash='solid', color=f'rgba({r}, {g}, {b}, 0.5)', width=2),  # 선 색상 설정
+            # marker=dict(color='blue', size=8),  # 마커 색상 설정
+            yaxis='y2'  # 보조 y축으로 설정
+        ))
 
         # 그래프 레이아웃 설정
         profit_fig.update_layout(
@@ -209,8 +220,14 @@ def init_dash(app):
             xaxis_title='분기',
             yaxis_title='이익 (원)',
             template='plotly_white',
-            legend_title='회사명'
+            legend_title='회사명',
+            yaxis2=dict(
+                title='사망자수 차이',  # 보조 y축 제목
+                overlaying='y',  # 기본 y축과 겹치도록 설정
+                side='right'  # 보조 y축을 오른쪽에 표시
+            )
         )
+
         
 
         growth_fig = px.violin(
@@ -229,11 +246,15 @@ def init_dash(app):
     return graph
 
 def korea_covid(app):
-
+    # 그래프 저장 함수 호출 (앱 실행 시 딱 한 번 실행)
+    save_sessionfig()
+    
     graph = dash.Dash(__name__, server=app,url_base_pathname='/graph/covid/', external_stylesheets=[dbc.themes.BOOTSTRAP])
-
+    # limited_dates = day_covid['날짜'].unique()[::3]
     # Plotly 그래프
-    session_fig = px.bar(day_covid, title="한국 코로나 집계", color=day_covid.index, animation_frame="날짜", text_auto='.2s')
+    # session_fig = px.bar(day_covid, title="한국 코로나 집계", color=day_covid.index, animation_frame="날짜", text_auto='.2s')
+    # 저장된 그래프 로드
+    session_fig = pio.read_json("apps/graph/static/session_fig.json")
     # 애니메이션 속도 조정
     session_fig.update_layout(
         xaxis_title='분류',
@@ -275,4 +296,159 @@ def korea_covid(app):
             ),
         ], fluid=True)
     ])
+    return graph
+
+def stock_dash(app):
+    graph = dash.Dash(__name__, server=app,url_base_pathname='/graph/stock/', external_stylesheets=[dbc.themes.BOOTSTRAP])
+    # 모든 회사 이름을 가져오기
+    # 모든 회사 이름을 가져오기
+    company_names = cj_day_stock['Name'].unique()
+    
+    # 앱 레이아웃 설정
+    graph.layout = html.Div([
+        html.H3("2018 ~ 2023 주가"),
+        html.Br(),
+        # 드롭다운 메뉴 (회사 선택)
+        dcc.Dropdown(
+            id='company-dropdown',
+            options=[{'label': company, 'value': company} for company in company_names],
+            value=company_names[0],  # 기본값은 첫 번째 회사
+            style={'width': '50%'}
+        ),
+        html.Br(),
+        # 날짜 범위 슬라이더
+        dcc.RangeSlider(
+            id='date-range-slider',
+            min=cj_day_stock['Date'].min().year,
+            max=cj_day_stock['Date'].max().year,
+            step=1,
+            marks={year: str(year) for year in range(cj_day_stock['Date'].min().year, cj_day_stock['Date'].max().year + 1)},
+            value=[cj_day_stock['Date'].min().year, cj_day_stock['Date'].max().year],
+            pushable=True
+        ),
+        
+        # 그래프 출력 영역
+        dcc.Graph(id='candlestick-graph'),
+        dcc.Graph(id='bar-or-pie-graph'),
+        dcc.Graph(id='trendline-graph')
+    ])
+
+    # 콜백 설정: 드롭다운 선택에 따른 캔들스틱 그래프 및 비율 그래프 업데이트
+    @graph.callback(
+        [Output('candlestick-graph', 'figure'),
+         Output('bar-or-pie-graph', 'figure'),
+         Output('trendline-graph', 'figure')],
+        [Input('company-dropdown', 'value'),
+         Input('date-range-slider', 'value')]
+    )
+    def update_graph(selected_company, selected_years):
+        start_year, end_year = selected_years
+        filtered_data = cj_day_stock[(cj_day_stock['Name'] == selected_company) &
+                                     (cj_day_stock['Date'].dt.year >= start_year) &
+                                     (cj_day_stock['Date'].dt.year <= end_year)]
+        
+        # 캔들스틱 차트 생성
+        fig_candlestick = go.Figure(
+            data=[go.Candlestick(
+                x=filtered_data['Date'],
+                open=filtered_data['Open'],
+                high=filtered_data['High'],
+                low=filtered_data['Low'],
+                close=filtered_data['Close'],
+                name=selected_company,
+                increasing_line_color='red',
+                decreasing_line_color='blue'
+            )]
+        )
+        
+
+        # 레이아웃 설정
+        fig_candlestick.update_layout(
+            title=f"{selected_company} 주가 그래프 ({start_year}-{end_year})",
+            xaxis_title='Date',
+            yaxis_title='Price',
+            showlegend=False  # 범례 숨기기
+        )
+
+        # 상승 캔들과 하락 캔들 계산
+        rising_candles = len(filtered_data[filtered_data['Close'] > filtered_data['Open']])
+        falling_candles = len(filtered_data[filtered_data['Close'] < filtered_data['Open']])
+
+        # 막대그래프 또는 파이차트 데이터 생성
+        fig_type = 'pie'  # 예시: 막대그래프
+        fig_bar_or_pie = px.pie(
+            names=['Rising Candles', 'Falling Candles'],
+            values=[rising_candles, falling_candles],
+            title=f"증가 vs 하강 비율 ({start_year}-{end_year})"
+        )
+        
+        # 그래프에 따라 막대그래프나 파이그래프를 설정
+        if fig_type == 'bar':
+            fig_bar_or_pie = go.Figure(
+                data=[go.Bar(
+                    x=['Rising Candles', 'Falling Candles'],
+                    y=[rising_candles, falling_candles],
+                    marker=dict(color=['red', 'blue'])
+                )]
+            )
+            fig_bar_or_pie.update_layout(
+                title=f"증가 vs 하강 비율 ({start_year}-{end_year})",
+                xaxis_title="Type",
+                yaxis_title="Count"
+            )
+
+        # LOWESS 추세선 추가
+        fig_lowess = px.scatter(
+            filtered_data,
+            x='Date',
+            y='Close',
+            color='Name',
+            title=f'Daily Close Price of {selected_company} with LOWESS Trendline',
+            trendline="lowess",  # LOWESS 추세선
+            trendline_options=dict(frac=0.4),
+            color_discrete_map=company_colors  # 색상 맵 설정
+        )
+
+        # 롤링 추세선 추가
+        fig_rolling = px.scatter(
+            filtered_data,
+            x='Date',
+            y='Close',
+            color='Name',
+            trendline="rolling",  # 롤링 추세선
+            trendline_options=dict(window=20),
+            color_discrete_map=company_colors  # 색상 맵 설정
+        )
+
+        # 새로운 데이터 객체를 생성하여 두 그래프의 데이터를 결합
+        trendline_fig = go.Figure()
+
+        # LOWESS 추세선 추가
+        for trace in fig_lowess.data:
+            if trace.mode == 'lines':
+                trendline_fig.add_trace(trace)
+
+        # 롤링 추세선 추가
+        for trace in fig_rolling.data:
+            if trace.mode == 'lines':
+                trendline_fig.add_trace(trace)
+
+        # 원본 데이터를 scatter로 추가
+        for trace in fig_lowess.data:
+            if trace.mode == 'markers':
+                trendline_fig.add_trace(trace)
+
+        # 레이아웃 업데이트
+        trendline_fig.update_layout(
+            title=f'{selected_company} 이동평균선 ({start_year}-{end_year})',
+            xaxis_title='Date',
+            yaxis_title='Close Price',
+            showlegend=True
+        )
+
+        trendline_fig.data = [t for t in trendline_fig.data if t.mode == "lines"]
+        trendline_fig.update_traces(showlegend=True)
+
+        return fig_candlestick, fig_bar_or_pie, trendline_fig
+    
     return graph

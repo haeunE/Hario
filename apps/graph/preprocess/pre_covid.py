@@ -41,6 +41,7 @@ merged_covid['완치자수'] = merged_covid['완치자수'].astype(int)
 
 day_covid = merged_covid.set_index('날짜').T
 day_covid.index.name = '집계'
+print(day_covid.head())
 
 melted_data = day_covid.reset_index().melt(id_vars='집계', var_name='날짜', value_name='값')
 
