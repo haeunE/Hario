@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, redirect, url_for, request, jsonify
+from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash
 from flask_login import login_required, current_user
 from apps.board.forms import BoardForm
-from apps.crud.models import User, Board, Recommend
+from apps.crud.models import User, Board, Recommend, Comment
 from apps.app import db
 
 from datetime import datetime, timedelta
@@ -60,7 +60,7 @@ def index(selection):
       "page_start_number": page_start_number,
     }
 
-    return render_template("board/index.html", boards=boards.items, selection=selection, pagination=pagination)
+    return render_template("board/index.html", boards=boards.items, selection=selection, pagination=pagination, page=page)
   
 @board.route("/new", methods=["GET", "POST"])
 @login_required
@@ -121,6 +121,18 @@ def delete(board_id):
 
     return jsonify({"message": "게시물이 삭제되었습니다."}), 200
 
+@board.route('/dummy')
+def make_dummy():
+  for i in range(100):
+    board = Board(
+      subject = f'임시제목{50+i}',
+      content = f'임시내용{i+50}',
+      user_id = 1,
+      selection = 1,
+      department_id = 1
+    )
+    db.session.add(board)
+    db.session.commit()
 
 # 추천
 @board.route("/recommend/<int:board_id>", methods=["POST"])
@@ -138,17 +150,26 @@ def recommend(board_id):
       db.session.commit()
    return redirect(url_for("board.detail", board_id=board_id))
 
+# 댓글
+@board.route("/comment/new/<int:board_id>", methods=["POST"])
+def comment_new(board_id):
+   board = Board.query.get_or_404(board_id)
 
-@board.route('/dummy')
-def make_dummy():
-  for i in range(100):
-    board = Board(
-      subject = f'임시제목{50+i}',
-      content = f'임시내용{i+50}',
-      user_id = 1,
-      selection = 1,
-      department_id = 1
-    )
-    db.session.add(board)
-    db.session.commit()
+   content = request.form.get("content") 
+
+   if not content or content.strip == "":
+      flash("댓글 내용을 넣어 등록해 주세요", "error")
+      board.decrement_views()
+      return redirect(url_for("board.detail", board_id=board_id))
+
+   comment = Comment(
+      content = content,
+      user = current_user,
+      board = board
+   )
+   board.decrement_views()
+   db.session.add(comment)
+   db.session.commit()
+
+   return redirect(url_for("board.detail", board_id=board_id))
   

@@ -45,39 +45,38 @@
 
 {% if boards %}
 <div class="board-index-content">
-  <table class="table">
-    <thead>
-      <tr class="table-dark">
-        <th>번호</th>
-        <th>제목</th>
-        <th>작성자</th>
-        <th>작성일시</th>
-        <th>추천</th>
-        <th>조회수</th>
-      </tr>
-    </thead>
-    {% for board in boards %}
-    <tbody>
-      <th>
-        {{ pagination.page_start_number - loop.index0 }}
-      <th>
-          <a href="{{url_for('board.detail', board_id = board.id)}}">{{board.subject}}</a>  
-          {% if board.is_new %}
-          <span class="label label-new">NEW</span>
-          {% endif %}
-        </th>
-        <th>{{board.user.username}}</th>
-        <th>{{board.created_at}}</th>
-        <th>{{board.recommender|length}}</th>
-        <th>{{board.views}}</th>
-      </tr>
-    </tbody>
-    {% endfor %}
-  </table>
-  {% else %}
-  <p>등록된 게시글이 없습니다. 등록해 주세요</p>
-  {% endif %}  
+  <div class="board-header">
+    <div class="board-header-item">번호</div>
+    <div class="board-header-item">제목</div>
+    <div class="board-header-item">작성자</div>
+    <div class="board-header-item">작성일시</div>
+    <div class="board-header-item">추천</div>
+    <div class="board-header-item">조회수</div>
+  </div>
+  
+  {% for board in boards %}
+  <div class="board-row">
+    <div class="board-item">
+      {{ pagination.page_start_number - loop.index0 }}
+    </div>
+    <div class="board-item">
+      <a href="{{ url_for('board.detail', board_id=board.id) }}">{{ board.subject }}</a>
+      {% if board.is_new %}
+      <span class="label label-new">NEW</span>
+      {% endif %}
+    </div>
+    <div class="board-item">{{ board.user.username }}</div>
+    <div class="board-item">{{ board.created_at }}</div>
+    <div class="board-item">{{ board.recommender|length }}</div>
+    <div class="board-item">{{ board.views }}</div>
+  </div>
+  {% endfor %}
+  
+{% else %}
+  <p class="board-none">등록된 게시글이 없습니다. 등록해 주세요</p>
+{% endif %}
 </div>
+
 
 <div class="pagination">
   {% if pagination.has_prev_block %}
@@ -87,7 +86,10 @@
   {% endif %}
   {% for num in range(pagination.start_page, pagination.end_page + 1) %}
   <li>
-    <a href="{{ url_for('board.index', selection=selection, department_id=request.args.get('department_id'), page=num) }}">{{ num }}</a>
+    <a href="{{ url_for('board.index', selection=selection, department_id=request.args.get('department_id'), page=num) }}" 
+    class="page-link {% if page == num %}active-page{% endif %}">
+    {{ num }}
+    </a>
   </li>
   {% endfor %}
   {% if pagination.has_next_block %}

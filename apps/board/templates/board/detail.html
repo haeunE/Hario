@@ -26,7 +26,7 @@
     <div>
       <form action="{{url_for('board.recommend', board_id=board.id)}}" method="post" class="recommend-form">
         <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
-        <button type="submit" class="thumbs-up-button">
+        <button type="submit" class="thumbs-up-button {% if current_user in board.recommender %}active-btn{% endif %}">
           ❤️
           추천
         </button>
@@ -69,7 +69,43 @@
         {% endif %}
       </div>   
     </div>
-    
+    <div class="comment-all">
+      <div class="comment-new">
+        <form action="{{url_for('board.comment_new', board_id=board.id)}}" method="post">
+          <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+          <input type="text" name="content" id="comment-content" placeholder="댓글을 입력해 주세요" data-board-id="{{board.id}}">
+          <button id="comment-new-btn">등록</button>
+        </form>
+      </div>
+      {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+          <p class="comment-msg">{{message}}</p>
+        {% endfor %}
+      {% endwith %}    
+      <h5 class="comment-counts">댓글[{{board.comments|length}}]</h5>
+      {% if board.comments %}
+      <div class="comment-list">
+        <div class="comment-header">        
+          <div class="comment-header-item">내용</div>
+          <div class="comment-header-item">작성자</div>
+          <div class="comment-header-item">작성일자</div>
+          <div class="comment-header-item"></div>
+          <div class="comment-header-item"></div>
+        </div>
+        {% for comment in board.comments %}
+        <div class="comment-item">
+          <div class="comment-item comment-content-show">{{comment.content}}</div>
+          <div class="comment-item comment-user-show">{{comment.user.username}}</div>
+          <div class="comment-item comment-date-show">{{comment.created_at}}</div>
+          <div class="comment-item"></div>
+          <div class="comment-item"></div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p> 댓글이 없습니다. 댓글을 등록해 주세요.</p>
+      {% endif %}
+  </div>
 {% endblock %}
 
 {% block js %}

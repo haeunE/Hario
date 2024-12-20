@@ -20,3 +20,5 @@ $('.board-delete').on('click', (e) => {
     console.log(error);
   });
 });
+
+// 댓글 js
