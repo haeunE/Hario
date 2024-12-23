@@ -193,6 +193,8 @@ def seed_initial_data():
         users = [
             {"username": "admin", "password": "admin123", "role": UserRole.ADMIN, "userinfo_id": 1},
             {"username": "worker1", "password": "worker123", "role": UserRole.WORKER, "userinfo_id": 2},
+            {"username": "worker", "password": "123", "role": UserRole.WORKER, "userinfo_id": 3},
+            {"username": "아이디", "password": "123", "role": UserRole.WORKER, "userinfo_id": 4},
         ]
         for user_data in users:
             user = User(username=user_data["username"], role=user_data["role"], userinfo_id=user_data["userinfo_id"])

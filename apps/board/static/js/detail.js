@@ -46,6 +46,9 @@ const commentObject ={
 
   toggleEdit : function(commentId, editMode){
     const commentItem = $(`[data-comment-id="${commentId}"]`);  
+    // 수정 취소 시 원래 내용 복원
+    const originalContent = commentItem.closest('.comment-items').find('.comment-content-show').text().trim();
+
     if(editMode){
       commentItem.closest('.comment-items').find('.comment-content-show').hide();
       commentItem.closest('.comment-items').find('.comment-update-btn').hide();
@@ -58,6 +61,8 @@ const commentObject ={
       commentItem.closest('.comment-items').find('.new-content').hide();
       commentItem.closest('.comment-items').find('.comment-save-btn').hide();
       commentItem.closest('.comment-items').find('.comment-delete-btn').hide();
+
+      commentItem.closest('.comment-items').find('.new-content').val(originalContent);
     }
   },
 
@@ -107,3 +112,25 @@ const commentObject ={
 }
 
 commentObject.init()
+
+document.addEventListener('DOMContentLoaded', function(){
+  const pageLinks = document.querySelectorAll('.page-link');
+  
+  // 현재 페이지를 data 속성에서 가져옴
+  const currentPage = parseInt(document.getElementById('pagination-container').dataset.currentPage);
+
+  pageLinks.forEach(link => {
+    const linkPage = parseInt(new URL(link.href).searchParams.get('page'));
+
+    if (linkPage === currentPage) {
+      link.classList.add('active-page');
+    }
+
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      pageLinks.forEach(l => l.classList.remove('active-page'));
+      this.classList.add('active-page');
+      window.location.href = this.href;
+    });
+  });
+});

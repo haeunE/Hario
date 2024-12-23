@@ -203,7 +203,7 @@ body {
 
 .comment-new button {
   padding: 10px 20px;
-  background-color: #FE6232;
+  background-color: #bdd754;
   color: white;
   border: none;
   border-radius: 4px;
@@ -213,7 +213,7 @@ body {
 }
 
 .comment-new button:hover {
-  background-color: #e04c22;
+  background-color: #83953a;
 }
 
 /* 에러 메시지 스타일 */
@@ -346,3 +346,48 @@ body {
 .comment-update-btn:hover, .comment-save-btn:hover, .comment-delete-btn:hover {
   transform: scale(1.05); /* 버튼 호버 시 확대 효과 */
 }
+
+/* Pagination 컨테이너 스타일 */
+.pagination {
+  display: flex;
+  justify-content: center; /* 중앙 정렬 */
+  margin: 20px 0;
+  padding: 0;
+  list-style: none; /* 리스트 스타일 제거 */
+}
+
+/* Pagination 아이템 간 간격 */
+.pagination li {
+  margin: 0 5px;
+}
+
+/* 페이지 링크 기본 스타일 */
+.pagination a {
+  display: inline-block;
+  padding: 10px 15px; /* 여백 설정 */
+  font-size: 1rem; /* 글자 크기 */
+  color: #0047AB; /* 파란색 */
+  text-decoration: none; /* 밑줄 제거 */
+  border: 1px solid #ddd; /* 외곽선 */
+  border-radius: 4px; /* 둥근 모서리 */
+  transition: all 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+/* 마우스 호버 시 효과 */
+.pagination a:hover {
+  background-color: #0047AB; /* 파란색 배경 */
+  color: white; /* 흰색 글씨 */
+}
+
+/* 클릭(활성화)된 상태 */
+.pagination a:active {
+  background-color: #011838; /* 더 어두운 파란색 배경 */
+  color: white; /* 흰색 글씨 */
+}
+
+.page-link.active-page {
+  background-color: #0047AB !important;
+  color: #FFFFFF !important;
+  font-weight: bold !important;
+}
+
