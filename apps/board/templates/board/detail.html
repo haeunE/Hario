@@ -92,7 +92,7 @@
           <div class="comment-header-item"></div>
           <div class="comment-header-item"></div>
         </div>
-        {% for comment in comments %}
+        {% for comment in board.comments|reverse %}
         <div class="comment-items">
           {% if current_user.id == comment.user.id %}
             <div class="comment-item comment-content-show">{{comment.content}}</div>
@@ -122,32 +122,9 @@
       {% else %}
       <p> 댓글이 없습니다. 댓글을 등록해 주세요.</p>
       {% endif %}
-
-      <div class="pagination">
-        {% if pagination.has_prev_block %}
-        <li>
-          <a href="{{ url_for('board.detail', board_id=board.id, page=pagination.start_page - 1) }}">&lt;&lt;</a>
-        </li>
-        {% endif %}
-        {% for num in range(pagination.start_page, pagination.end_page + 1) %}
-        <li>
-          <div id="pagination-container" data-current-page="{{ page }}" ></div>
-          <a href="{{ url_for('board.detail',  board_id=board.id, page=num) }}" 
-          class="page-link {% if page == num %}active-page{% endif %}">
-          {{ num }}
-          </a>
-        </li>
-        {% endfor %}
-        {% if pagination.has_next_block %}
-        <li>
-          <a href="{{ url_for('board.detail', board_id=board.id, page=pagination.end_page + 1) }}">&gt;&gt;</a>
-        </li>
-        {% endif %}
-      </div>
-
   </div>
 {% endblock %}
 
 {% block js %}
   <script src="{{url_for('board.static', filename='js/detail.js')}}"></script>
-{% endblock %} 
+{% endblock %}

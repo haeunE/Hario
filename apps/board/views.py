@@ -87,7 +87,6 @@ def new():
 @login_required
 def detail(board_id):
   board = Board.query.get_or_404(board_id)
-
   view_key = f"viewed_{board_id}"
 
   if request.method == "GET":
@@ -96,28 +95,7 @@ def detail(board_id):
             board.increment_views()  # 조회수 증가
             session[view_key] = True  # 세션에 조회 기록 저장
 
-  # 페이징 처리
-  page = request.args.get('page', type=int, default=1)
-  comments = Comment.query.filter_by(board_id=board.id).order_by(Comment.id.desc()).paginate(page=page, per_page=10)  # paginate() 호출
-
-  block_size = 10
-  current_block = (page - 1)//block_size + 1
-
-  start_page = (current_block - 1)*block_size + 1
-  end_page = min(current_block*block_size, comments.pages)
-
-  has_prev_block = start_page > 1
-  has_next_block = end_page < comments.pages
-  
-  pagination = {
-    "current_block" : current_block,
-    "start_page" : start_page,
-    "end_page" : end_page,
-    "has_prev_block" : has_prev_block,
-    "has_next_block" : has_next_block
-  }         
-
-  return render_template("board/detail.html", board=board, comments=comments, pagination=pagination)
+  return render_template("board/detail.html", board=board)
 
 
 @board.route("/update/<int:board_id>", methods=["GET", "POST"])
@@ -149,35 +127,15 @@ def delete(board_id):
 
 @board.route('/dummy')
 def make_dummy():
-  for i in range(50):
-    board = Board(
-      subject = f'임시제목{i}',
-      content = f'임시내용{i}',
-      user_id = 4,
-      selection = 1,
-      department_id = 4
-    )
-    db.session.add(board)
-    db.session.commit()
-
-  for i in range(50):
+  for i in range(100):
     board = Board(
       subject = f'임시제목{50+i}',
       content = f'임시내용{i+50}',
-      user_id = 3,
+      user_id = 1,
       selection = 1,
-      department_id = 3
+      department_id = 1
     )
     db.session.add(board)
-    db.session.commit()
-
-  for i in range(50):
-    comment = Comment(
-      content = f'임시내용{i}',
-      user_id = 4,
-      board_id = 100
-    )  
-    db.session.add(comment)
     db.session.commit()
 
 # 추천
