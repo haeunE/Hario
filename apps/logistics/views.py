@@ -1,22 +1,13 @@
 import folium.plugins
-import matplotlib
+import matplotlib, io, os, base64, json, folium, chardet
 matplotlib.use('Agg')
-import io
-import base64
-import folium
-from folium.plugins import HeatMap
-from folium import plugins
-from folium import GeoJson
-from folium.plugins import DualMap
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib import font_manager
-from matplotlib import cm
 import pandas as pd
 import geopandas as gpd
 from flask import Blueprint, render_template
-import chardet
 
 # 한글 폰트 설정 (윈도우 맑은 고딕)
 font_path = "C:/Windows/Fonts/malgun.ttf"
@@ -25,8 +16,15 @@ plt.rcParams['font.family'] = font_prop.get_name()
 plt.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
 
 logistics = Blueprint('logistics', __name__, template_folder='templates', static_folder='static')
+geojson_path = os.path.join('apps', 'logistics', '서울_자치구_경계_2017.geojson')
 
-SHP_FILE_PATH = 'apps/logistics/static/sig.shp' # 서울시 자치구 SHP 파일 경로
+colors = [
+    "#FF5733", "#33FF57", "#5733FF", "#FFD700", "#FF33A8", "#33FFF6", "#FF8C33",
+    "#B833FF", "#33FF99", "#FFC733", "#5733A8", "#A833FF", "#33A8FF", "#FF5733",
+    "#A8FF33", "#33FFB8", "#FF33D7", "#FF6F33", "#5733A8", "#B8FF33", "#33FFAA",
+    "#FF33F6", "#FF3333", "#33FF8C", "#33D7FF"
+]
+
 
 @logistics.route('/')
 def logistics_page():
@@ -42,16 +40,14 @@ def logistics_page():
     pie_item_img, line_item_img, weekday_line_img, columns_item  = logistics_graph(csv_files_all, csv_files_term)
     bar_item_img = logistics_bar_graph(csv_files_term)
     
-    # 송하인, 수하인 지도 생성
-    sender_map, receiver_map = logistics_volume_map(csv_files_term, columns_item )
+    dual_map = logistics_volume_map(csv_files_term, columns_item )    # 송하인, 수하인 지도 생성
     
     return render_template('logistics.html', 
                            pie_plot_urls=pie_item_img, 
                            line_plot_urls=line_item_img, 
                            weekday_line_plot_urls=weekday_line_img,
                            bar_plot_urls=bar_item_img,
-                           sender_map=sender_map,
-                           receiver_map=receiver_map)
+                           dual_map=dual_map)
 
 
 def read_csv(file_path):
@@ -101,7 +97,6 @@ def generate_graph(file_path, title_prefix, columns_item):
     
     
 def logistics_bar_graph(csv_files_term):
-    # bar_item_img = []
     columns_item = [
         '가구/인테리어', '도서/음반', '디지털/가전', '생활/건강', 
         '스포츠/레저', '식품', '출산/육아', '패션의류', '패션잡화', '화장품/미용'
@@ -139,7 +134,7 @@ def plot_pie_graph(data, title):
     colors = plt.cm.Paired(range(len(sorted_data)))
     
     plt.figure(figsize=(6, 6))
-    wedges, texts, autotexts = plt.pie(sorted_data, autopct='%1.1f%%', startangle=90, colors=colors)
+    wedges = plt.pie(sorted_data, autopct='%1.1f%%', startangle=90, colors=colors)
     plt.legend(wedges, sorted_data.index, loc='upper left', bbox_to_anchor=(1, 1), fontsize=10)
 
     plt.tight_layout()
@@ -204,101 +199,150 @@ def plot_weekday_line_graph(csv_files_all, columns_item):
 
     return weekday_volume
 
+# 여기서부터 듀얼맵
 
 def logistics_volume_map(csv_files_term, columns_item):  # 송하인과 수하인 구별로 운송량 집계, 지도에 표시
-    df_all = pd.concat([read_csv(file) for file, _ in csv_files_term], ignore_index=True)
-    df_all.columns = df_all.columns.str.strip()
+    df = pd.concat([read_csv(file) for file, _ in csv_files_term], ignore_index=True)
+    df.columns = df.columns.str.strip()
     
-    df_all['총운송량'] = df_all[columns_item].sum(axis=1)
-    # print(df_all)
+    df['운송량'] = df[columns_item].sum(axis=1)
+    # print(df) 
     
     # 각 행의 품목별 운송량 합산 # 9번 열부터 끝까지 품목별 운송량 합산
-    # df_all['총운송량'] = df_all.iloc[:, 9:].sum(axis=1)
+    # df['운송량'] = df.iloc[:, 9:].sum(axis=1)
 
-    sender_rank = gu_color(df_all, '송하인_구명')    # 송하인 / 수하인 운송량 순위
-    receiver_rank = gu_color(df_all, '수하인_구명')
+    sender_rank = gu_color(df, '송하인_구명')
+    receiver_rank = gu_color(df, '수하인_구명')
+    # print(sender_rank)
+    # print('='*50)    
 
         # 송하인과 수하인 구별 운송량 순위를 반환
     # sender_map = generate_dual_map(sender_rank, receiver_rank, 'sender')
     # receiver_map = generate_dual_map(sender_rank, receiver_rank, 'receiver')
     
-    sender_map, receiver_map = generate_dual_map(sender_rank, receiver_rank)
-    
-    return sender_map, receiver_map
+    # 송하인과 수하인에 대한 듀얼 맵 생성
+    dual_map = generate_dual_map(sender_rank, receiver_rank)
+
+    return dual_map
 
 def gu_color(df, column_rank):   # 각 구별 운송량 집계 및 색상 계산
-    rank = df.groupby(column_rank)[df.columns[8]].sum().reset_index()
-    rank = rank.sort_values(by=df.columns[8], ascending=False).reset_index(drop=True)
-    # 색상 계산: '총운송량'의 비율에 따라 색상 조정
-    rank[df.columns[8]] = rank[df.columns[8]].apply(
-        lambda x: mcolors.to_rgba("#0047AB", alpha=0.1 + (x / rank[df.columns[8]].max()) * 0.9)
-    ) # 컬럼명 수정: 배열 번호로 변경
-    rank.columns = [df.columns[3], df.columns[8]]  #송하인_구명 / 수하인_구명과 '총운송량' 배열 번호로 설정
+    df['운송량'] = df.iloc[:, 9:].sum(axis=1)  
+    
+    # df['운송량'] = df[columns_item].sum(axis=1)  # 품목별 운송량 합산
+    # print(df)
+    rank = df.groupby(column_rank)['운송량'].sum().reset_index()
+    rank = rank.sort_values(by='운송량', ascending=False).reset_index(drop=True)
+    # 색상 계산: '운송량'의 비율에 따라 색상 조정
+    rank['색상'] = rank['운송량'].apply(
+        lambda x: mcolors.to_rgba("#0047AB", alpha=0.1 + (x / rank['운송량'].max()) * 0.9)
+    )
+    rank.columns = [column_rank, '운송량', '색상']
     
     return rank
 
 
-def generate_dual_map(sender_rank, receiver_rank, map_side):
-    SHP_FILE_PATH = 'apps/logistics/static/sig.shp'
-    gdf = gpd.read_file(SHP_FILE_PATH) 
+def generate_dual_map(sender_rank, receiver_rank):
+    with open('apps/logistics/서울_자치구_경계_2017.geojson', 'r', encoding='utf-8') as f:
+        geojson = json.load(f)
+
+    # # 송하인 맵의 운송량 색상을 매핑하는 함수
+    # def sender_geojson():
+    #     for idx, feature in enumerate(geojson['features']):
+    #             gu_name = feature['properties']['SIG_KOR_NM']
+    #             total_volume = sender_rank['운송량']
+    #             color = sender_rank['색상'][idx] # 그냥 색상임
+
+    #             folium.GeoJson(
+    #                 feature,
+    #                 style_function= lambda feature, color=color: {
+    #                 'fillColor': color,
+    #                 'color': '#0047AB',
+    #                 'weight': 2,
+    #                 'fillOpacity': 0.6
+    #                 },
+    #         popup=folium.Popup(f'<p>{gu_name}</p>')
+    #     ).add_to(m.m1)
+    
+    # def receiver_geojson():
+        
     
     m = folium.plugins.DualMap(location=[37.5665, 126.9780], zoom_start=11)  # 서울의 중심 좌표로 듀얼맵 생성
-
-    # 송하인 맵의 운송량 색상을 매핑하는 함수
+    # geo = gdf[gdf['SGG_NM'] == f'서울특별시 {gu_name}']
+        # if not geo.empty:
+            # GeoJson 객체 생성 및 색상 설정
+            # geojson = geo.geometry.__geo_interface__
     def sender_geojson():
-        # 송하인 운송량에 맞게 색상을 매핑
-        for _, row in sender_rank.iterrows():
-            gu_name = row[0]
-            total_volume = row[1]
-            color = mcolors.to_rgba("#0047AB", alpha=0.1 + (total_volume / sender_rank[1].max()) * 0.9)
+        # for _, column in sender_rank.iterrows():
+        #     gu_name = column[0]
+        #     total_volume = column[1]
+        #     color = column[2]
+            # color = mcolors.to_rgba("#0047AB", alpha=0.1 + (total_volume / sender_rank[3].max()) * 0.9) -> sender_rank에서 이미 계산됨
 
-            # 서울시 자치구의 GeoJSON 데이터를 가져와서 운송량에 맞는 색을 입힌다.
-            geo = gdf[gdf['SGG_NM'] == gu_name]
-            if not geo.empty:
+            # geo = gdf[gdf['SGG_NM'] == f'서울특별시 {gu_name}']
+            # if not geo.empty:
                 # GeoJson 객체 생성 및 색상 설정
-                geojson = geo.geometry.__geo_interface__
-                GeoJson(
-                    geojson,
-                    style_function=lambda x, color=color: {
-                        'fillColor': color,
-                        'color': color,
-                        'weight': 1,
-                        'fillOpacity': 0.6
-                    },
-                    popup=f"{gu_name} - {total_volume} 건"
-                ).add_to(m.m1)
+                # geojson = geo.geometry.__geo_interface__
+                
+        for idx, feature in enumerate(geojson['features']):
+            districts_name = feature['properties']['SIG_KOR_NM'] # 구 이름
+            data = sender_rank[sender_rank['송하인_구명'] == districts_name]
+            gu_name = data['송하인_구명'].iloc[0]
+            total_volume = data['운송량'].iloc[0]
+            color = data['색상'].iloc[0]
+            # color = mcolors.to_rgba("#0047AB", alpha=0.1 + (total_volume / sender_rank['운송량'].max()) * 0.9)
+            color = colors[idx] # 나중에 색상 처리하고 변경하셈
+            
+            print("="*50)
+            print(data)
+            
+            folium.GeoJson(
+                feature,
+                style_function=lambda feature, color=color: {
+                    'fillColor': color,
+                    'color': color,
+                    'weight': 1,
+                    'fillOpacity': 0.6
+                },
+                popup=folium.Popup(f"<p>{gu_name} - {total_volume} 건</p>")
+            ).add_to(m.m1)
     
-    # 수하인 맵의 운송량 색상을 매핑하는 함수
+    # # 수하인 맵의 운송량 색상을 매핑하는 함수
     def receiver_geojson():
-        # 수하인 운송량에 맞게 색상을 매핑
-        for _, row in receiver_rank.iterrows():
-            gu_name = row[0]
-            total_volume = row[1]
-            color = mcolors.to_rgba("#0047AB", alpha=0.1 + (total_volume / receiver_rank[1].max()) * 0.9)
+        for _, column in receiver_rank.iterrows():
+            gu_name = column[0]
+            total_volume = column[1]
+            color = column[2]
 
-            # 서울시 자치구의 GeoJSON 데이터를 가져와서 운송량에 맞는 색을 입힌다.
-            geo = gdf[gdf['SGG_NM'] == gu_name]
-            if not geo.empty:
+            # geo = gdf[gdf['SGG_NM'] == f'서울특별시 {gu_name}']
+            
+            # print('=====================================')
+            # print(gu_name)
+            # print(total_volume)
+            # print(color)
+            # print(gdf[gdf['SGG_NM'] == f'서울특별시 {gu_name}'])
+            # print('=====================================')
+
+            
+            # if not geo.empty:
                 # GeoJson 객체 생성 및 색상 설정
-                geojson = geo.geometry.__geo_interface__
-                GeoJson(
-                    geojson,
-                    style_function=lambda x, color=color: {
-                        'fillColor': color,
-                        'color': color,
-                        'weight': 1,
-                        'fillOpacity': 0.6
-                    },
-                    popup=f"{gu_name} - {total_volume} 건"
-                ).add_to(m.m2)
+                # geojson = geo.geometry.__geo_interface__
+            folium.GeoJson(
+                geojson,
+                style_function=lambda feature, color=color: {
+                    'fillColor': color,
+                    'color': color,
+                    'weight': 1,
+                    'fillOpacity': 0.6
+                },
+                popup=f"{gu_name} - {total_volume} 건"
+            ).add_to(m.m2)
     
-    # 송하인 및 수하인 GeoJson 추가
-    if map_side == "sender":
-        sender_geojson()
-    elif map_side == "receiver":
-        receiver_geojson()
-    else:
-        sender_geojson()
-        receiver_geojson()
+    #송하인 및 수하인 GeoJson 추가
+    sender_geojson()
+    receiver_geojson()
 
-    return m.m1._repr_html_(), m.m2._repr_html_()
+    # # HTML로 저장
+    dual_map_file_path = os.path.join('apps/logistics/static/maps', 'dual_map.html')
+    m.save(dual_map_file_path)
+
+    return dual_map_file_path
