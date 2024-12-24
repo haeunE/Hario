@@ -123,6 +123,7 @@
       <p> 댓글이 없습니다. 댓글을 등록해 주세요.</p>
       {% endif %}
 
+      {% set current_page = page or 1 %}
       <div class="pagination">
         {% if pagination.has_prev_block %}
         <li>
@@ -131,9 +132,8 @@
         {% endif %}
         {% for num in range(pagination.start_page, pagination.end_page + 1) %}
         <li>
-          <div id="pagination-container" data-current-page="{{ page }}" ></div>
           <a href="{{ url_for('board.detail',  board_id=board.id, page=num) }}" 
-          class="page-link {% if page == num %}active-page{% endif %}">
+          class="page-link {% if current_page == num|int %}active-page{% endif %}">
           {{ num }}
           </a>
         </li>

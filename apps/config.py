@@ -12,7 +12,7 @@ class BaseConfig:
 
 #로컬환경
 class LocalConfig(BaseConfig):
-  SQLALCHEMY_DATABASE_URI = f'mysql+mysqlconnector://root:0616@localhost:3306/hariodb'
+  SQLALCHEMY_DATABASE_URI = f'mysql+mysqlconnector://root:1234@localhost:3306/hariodb'
   SQLALCHEMY_TRACK_MODIFICATIONS=False #객체 변경사항 감지
   SQLAlCHEMY_ECHO=True #console.log 확인 가능
 
