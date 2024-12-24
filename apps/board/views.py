@@ -117,7 +117,7 @@ def detail(board_id):
     "has_next_block" : has_next_block
   }         
 
-  return render_template("board/detail.html", board=board, comments=comments, pagination=pagination)
+  return render_template("board/detail.html", board=board, comments=comments, pagination=pagination, page=page)
 
 
 @board.route("/update/<int:board_id>", methods=["GET", "POST"])
@@ -147,38 +147,6 @@ def delete(board_id):
 
     return jsonify({"message": "게시물이 삭제되었습니다."}), 200
 
-@board.route('/dummy')
-def make_dummy():
-  for i in range(50):
-    board = Board(
-      subject = f'임시제목{i}',
-      content = f'임시내용{i}',
-      user_id = 4,
-      selection = 1,
-      department_id = 4
-    )
-    db.session.add(board)
-    db.session.commit()
-
-  for i in range(50):
-    board = Board(
-      subject = f'임시제목{50+i}',
-      content = f'임시내용{i+50}',
-      user_id = 3,
-      selection = 1,
-      department_id = 3
-    )
-    db.session.add(board)
-    db.session.commit()
-
-  for i in range(50):
-    comment = Comment(
-      content = f'임시내용{i}',
-      user_id = 4,
-      board_id = 100
-    )  
-    db.session.add(comment)
-    db.session.commit()
 
 # 추천
 @board.route("/recommend/<int:board_id>", methods=["POST"])
@@ -230,5 +198,40 @@ def comment_update(comment_id):
 def comment_delete(comment_id):
    Comment.query.filter_by(id=comment_id).delete()
    db.session.commit()
-
    return jsonify({"message":"댓글이 삭제 되었습니다."}), 200
+
+
+# 더미
+@board.route('/dummy')
+def make_dummy():
+  for i in range(50):
+    board = Board(
+      subject = f'임시제목{i}',
+      content = f'임시내용{i}',
+      user_id = 4,
+      selection = 1,
+      department_id = 4
+    )
+    db.session.add(board)
+    db.session.commit()
+
+  for i in range(50):
+    board = Board(
+      subject = f'임시제목{50+i}',
+      content = f'임시내용{i+50}',
+      user_id = 3,
+      selection = 1,
+      department_id = 3
+    )
+    db.session.add(board)
+    db.session.commit()
+
+  for i in range(50):
+    comment = Comment(
+      content = f'임시내용{i+50}',
+      user_id = 3,
+      board_id = 200
+    )  
+    db.session.add(comment)
+    db.session.commit()
+  
