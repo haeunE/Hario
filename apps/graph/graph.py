@@ -6,9 +6,14 @@ import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 from apps.graph.preprocess.pre_covid import covid_monthly
 from apps.graph.preprocess.pre_company import all_sales,company_colors,company_data,company_code
-from apps.graph.preprocess.pre_stock import cj_day_stock,company_colors
+from apps.graph.preprocess.pre_stock import cj_day_stock,company_colors,cj_live_stock
 from apps.graph.preprocess.save_graph import save_sessionfig
+from apps.graph.preprocess.live_stock import connect
+from apps.graph.preprocess.now_stock import now_stock
 import plotly.io as pio
+import time
+import asyncio
+
 
 
 def company_dash(app):
@@ -451,4 +456,59 @@ def stock_dash(app):
 
         return fig_candlestick, fig_bar_or_pie, trendline_fig
     
+    return graph
+
+def live_stock(app):
+    graph = dash.Dash(__name__, server=app,url_base_pathname='/graph/current/live/', external_stylesheets=[dbc.themes.BOOTSTRAP])
+    # 초기 데이터
+    initial_data = cj_live_stock
+
+
+    # Figure 초기화
+    live_stock_fig = px.line(initial_data, x='Time', y='Now')
+    live_stock_fig.update_layout(yaxis_title="체결가 (원)")
+
+    # 레이아웃 설정
+    graph.layout = html.Div([
+        html.H1("실시간 주식 그래프"),
+        dcc.Graph(id='live-graph', figure=live_stock_fig),
+        dcc.Interval(
+            id='interval-component',
+            # interval=1*1000,  # 1초마다 데이터를 업데이트
+            n_intervals=0
+        )
+    ])
+
+    # 그래프 업데이트 콜백 함수
+    @graph.callback(
+        Output('live-graph', 'figure'),
+        Input('interval-component', 'n_intervals')
+    )
+    def update_graph():
+        
+        try :
+            # 실시간 데이터 가져오기
+            stock_name = cj_live_stock['Stock Name'].iloc[0]  # Series가 아닌 첫 번째 값을 가져옴
+            new_data = asyncio.run(connect(stock_name))
+            print(new_data)
+        except Exception as e:
+            print('Fail Update!')
+            print(e)
+            print('Connect Again!')
+            time.sleep(0.1)
+
+            # 웹소켓 다시 시작
+            # 실시간 데이터 가져오기
+            new_data = asyncio.run(connect(cj_live_stock['Stock Name']))
+
+        # 데이터를 합쳐서 그래프 업데이트
+        # 데이터를 합쳐서 그래프 업데이트
+        updated_data = pd.concat([initial_data, new_data], ignore_index=True)
+
+        
+        # 새로운 그래프 생성
+        live_stock_fig = px.line(updated_data, x='Time', y='Now')
+        live_stock_fig.update_layout(yaxis_title="체결가 (원)")
+
+        return live_stock_fig
     return graph

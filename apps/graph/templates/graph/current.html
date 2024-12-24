@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %} 주식 {% endblock %}
+{% block script %} 
+<script>
+    const socket = io('http://localhost:5000'); // Flask-SocketIO 연결
+  // POST 요청을 보내는 함수
+    async function sendPostRequest(code) {
+        try {
+            const response = await fetch(`/graph/current/${code}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                
+            });
+
+            if (response.ok) {
+                alert(`Button ${code} clicked!`);
+            } else {
+                // 오류 상태 코드와 메시지 출력
+                const errorText = await response.text();
+                console.error(`Failed to process Button ${code}: ${response.status} ${errorText}`);
+                alert(`Failed to process Button ${code}.`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert(`Error occurred with Button ${code}.`);
+        }
+    }
+    // 서버로부터 그래프 업데이트 신호 수신
+    socket.on('update_graph', (data) => {
+        console.log("Updating graph with stock code:", data.stock_code);
+        location.reload(); // 새로고침으로 Dash 그래프 갱신
+    });
+</script>
+{% endblock %}
+{% block content %}
+<div class="container text-center mt-5">
+  <h1>POST Request Buttons</h1>
+  <div class="row mt-4">
+      <!-- Buttons -->
+      <div class="col-12">
+          <div class="d-flex flex-wrap justify-content-center">
+              <!-- Generate 9 buttons -->
+              <!-- Each button calls sendPostRequest function with its ID -->
+              <button class="btn btn-primary m-2" onclick="sendPostRequest('001040')">CJ(주)</button>
+              <button class="btn btn-primary m-2" onclick="sendPostRequest('097950')">CJ제일제당</button>
+              <button class="btn btn-primary m-2" onclick="sendPostRequest('000120')">CJ대한통운</button>
+              <button class="btn btn-primary m-2" onclick="sendPostRequest('051500')">CJ프레시웨이</button>
+              <button class="btn btn-primary m-2" onclick="sendPostRequest('253450')">스튜디오드래곤</button>
+              <button class="btn btn-primary m-2" onclick="sendPostRequest('311690')">CJ바이오사이언스</button>
+              <button class="btn btn-primary m-2" onclick="sendPostRequest('011150')">CJ씨푸드</button>
+              <button class="btn btn-primary m-2" onclick="sendPostRequest('035760')">CJ ENM</button>
+              <button class="btn btn-primary m-2" onclick="sendPostRequest('079160')">CJ CGV</button>
+          </div>
+      </div>
+  </div>
+</div>
+<iframe src="/graph/current/live/" width="100%" height="865.45px" frameborder="0"></iframe>
+<script>
+  // iframe의 크기를 자동으로 조정하는 함수
+  function resizeIframe() {
+    var iframe = document.getElementById('myIframe');
+    // iframe의 크기 구하기
+    var iframeWidth = iframe.offsetWidth;
+    var iframeHeight = iframe.offsetHeight;
+
+    // 크기 출력 (디버그용)
+    console.log('iframe width:', iframeWidth);
+    console.log('iframe height:', iframeHeight);
+
+    // iframe 높이 업데이트 (자동 조정)
+    iframe.style.height = iframeHeight + 'px';
+  }
+
+  // 페이지가 로드되면 크기 조정
+  window.onload = function() {
+    resizeIframe();
+  };
+
+  // 윈도우 리사이즈 이벤트가 발생할 때마다 크기 재조정
+  window.onresize = function() {
+    resizeIframe();
+  };
+</script>
+
+{% endblock %}

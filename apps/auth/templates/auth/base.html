@@ -11,7 +11,7 @@
   {% block css %}{% endblock %}
   <link rel="stylesheet" href="{{url_for('auth.static', filename='css/base.css')}}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+  {% block script %} {% endblock %}
 </head>
 <body >
   <div class="page-hario">
@@ -30,7 +30,7 @@
                 CJ
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">현역</a></li>
+                <li><a class="dropdown-item" href="/graph/current">현역</a></li>
                 <li><a class="dropdown-item" href="/graph/company">성장</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="/graph/stock">주식</a></li>

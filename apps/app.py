@@ -1,13 +1,15 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_wtf import CSRFProtect
 from flask_login import LoginManager
 from apps.config import config
+from apps.access_token import get_access_token,get_approval
 import os
 from flask_login import LoginManager
-from .graph import graph
-from .graph.graph import company_dash,korea_covid,stock_dash
+from .graph.graph import company_dash,korea_covid,stock_dash,live_stock
+from flask_socketio import SocketIO, emit
+from apscheduler.schedulers.background import BackgroundScheduler
 
 
 # config_key
@@ -22,14 +24,38 @@ csrf = CSRFProtect()
 # Flask-Login의 LoginManager 객체 생성
 login_manager = LoginManager()
 
+
 def create_app():
   #======================== 초기 앱 설정 ==============================
-   # Flask 앱 인스턴스 생성
+  
+
   app = Flask(__name__)
   dash_app = company_dash(app)
   covid_app = korea_covid(app)
   stock_app = stock_dash(app)
+  live_app = live_stock(app)
+  socketio = SocketIO(app, async_mode='eventlet')  # 비동기 모드를 설정
+  
+  # Access Token 초기화
+  if os.environ.get("WERKZEUG_RUN_MAIN")== 'true':
+    get_access_token()
+    get_approval()
+    # 현재 선택된 종목 (기본값)
 
+  # selected_stock_code = None
+  # @app.route('/graph/current/<code>', methods=['POST'])
+  # def update_stock_code(code):
+  #     global selected_stock_code
+  #     selected_stock_code = code  # 선택된 종목 업데이트
+  #     socketio.emit('update_graph', {'stock_code': code})  # 클라이언트에 업데이트 알림
+  #     return jsonify({'message': f"Stock code {code} updated!"})
+
+
+  # 백그라운드에서 자동 업데이트
+  scheduler = BackgroundScheduler()
+  scheduler.add_job(func=get_access_token, trigger='interval', hours=23)
+  scheduler.add_job(func=get_approval, trigger='interval', hours=23)
+  scheduler.start()
 
   for view_func in dash_app.server.view_functions:
         if view_func.startswith('/graph/company/'):
@@ -40,6 +66,9 @@ def create_app():
   for view_func in stock_app.server.view_functions:
         if view_func.startswith('/graph/stock/'):
             csrf.exempt(stock_app.server.view_functions[view_func])
+  for view_func in live_app.server.view_functions:
+        if view_func.startswith('/graph/current/'):
+            csrf.exempt(live_app.server.view_functions[view_func])
 
   # 애플리케이션 설정 로드(local로)
   app.config.from_object(config[config_key])
