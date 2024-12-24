@@ -1,5 +1,5 @@
 import dash
-from dash import dcc, html, Input, Output
+from dash import dcc, html, Input, Output, State
 import plotly.express as px
 import pandas as pd
 import dash_bootstrap_components as dbc
@@ -458,57 +458,157 @@ def stock_dash(app):
     
     return graph
 
-def live_stock(app):
-    graph = dash.Dash(__name__, server=app,url_base_pathname='/graph/current/live/', external_stylesheets=[dbc.themes.BOOTSTRAP])
-    # 초기 데이터
-    initial_data = cj_live_stock
+# def live_stock(app):
+#     graph = dash.Dash(__name__, server=app,url_base_pathname='/graph/current/', external_stylesheets=[dbc.themes.BOOTSTRAP])
+#     # # 초기 데이터
+#     # initial_data = cj_live_stock
+    
 
+#     # # Figure 초기화
+#     # live_stock_fig = px.line(initial_data, x='Time', y='Now')
+#     # live_stock_fig.update_layout(yaxis_title="체결가 (원)")
 
-    # Figure 초기화
-    live_stock_fig = px.line(initial_data, x='Time', y='Now')
-    live_stock_fig.update_layout(yaxis_title="체결가 (원)")
+#     # 레이아웃 설정
+#     graph.layout = html.Div([
+#         html.H1("실시간 주식 그래프"),
+#         dcc.Graph(id='live-graph'),
+#         dcc.Interval(
+#             id='interval-component',
+#             interval=10*1000,  # 1초마다 데이터를 업데이트
+#             n_intervals=0
+#         )
+#     ])
 
-    # 레이아웃 설정
+#     # 그래프 업데이트 콜백 함수
+#     @graph.callback(
+#         Output('live-graph', 'figure'),
+#         Input('interval-component', 'n_intervals')
+#     )
+#     def update_graph(n_intervals):
+#         initial_data = cj_live_stock
+#         try :
+#             # 실시간 데이터 가져오기
+#             stock_name = cj_live_stock['Stock Name'].iloc[0]  # Series가 아닌 첫 번째 값을 가져옴
+#             new_data = asyncio.run(connect(stock_name))
+#             print(new_data)
+#         except Exception as e:
+#             print('Fail Update!')
+#             print(e)
+#             print('Connect Again!')
+#             time.sleep(0.1)
+
+#             # 웹소켓 다시 시작
+#             # 실시간 데이터 가져오기
+#             new_data = asyncio.run(connect(cj_live_stock['Stock Name']))
+
+#         # 데이터를 합쳐서 그래프 업데이트
+#         updated_data = pd.concat([initial_data, new_data], ignore_index=True)
+
+        
+#         # 새로운 그래프 생성
+#         live_stock_fig = px.line(updated_data, x='Time', y='Now')
+#         live_stock_fig.update_layout(yaxis_title="체결가 (원)")
+
+#         return live_stock_fig
+#     return graph
+
+def stock_live(app):
+    # CJ 계열사 종목 코드
+    cj_stocks = {
+        "051500": "CJ프레시웨이",
+        "097950": "CJ제일제당",
+        "253450": "스튜디오드래곤",
+        "311690": "CJ바이오사이언스",
+        "000120": "CJ대한통운",
+        "011150": "CJ씨푸드",
+        "035760": "CJ ENM",
+        "079160": "CJ CGV",
+        "001040": "CJ(주)"
+    }
+    graph = dash.Dash(__name__, server=app,url_base_pathname='/graph/stocklive/', external_stylesheets=[dbc.themes.BOOTSTRAP])
     graph.layout = html.Div([
-        html.H1("실시간 주식 그래프"),
-        dcc.Graph(id='live-graph', figure=live_stock_fig),
+        html.H1("실시간 주식 데이터 대시보드"),
+        
+        html.Div([
+            html.Button(f"{name} ({code})", id=f"btn-{code}", n_clicks=0, className="btn")
+            for code, name in cj_stocks.items()
+        ], style={'display': 'flex', 'gap': '10px', 'marginBottom': '20px'}),
+        
+        dcc.Graph(id="live-graph"),
+        
         dcc.Interval(
-            id='interval-component',
-            # interval=1*1000,  # 1초마다 데이터를 업데이트
+            id="interval-component",
+            interval=30 * 1000,  # 30초마다 업데이트
             n_intervals=0
-        )
+        ),
+        
+        dcc.Store(id="selected-company", data=None),  # 선택된 회사 코드 저장
+        dcc.Store(id="real-time-data", data=[]),  # 실시간 데이터 저장
     ])
 
-    # 그래프 업데이트 콜백 함수
+    # 버튼 클릭 시 회사 코드 저장
     @graph.callback(
-        Output('live-graph', 'figure'),
-        Input('interval-component', 'n_intervals')
+        Output("selected-company", "data"),
+        [Input(f"btn-{code}", "n_clicks") for code in cj_stocks],
+        prevent_initial_call=True
     )
-    def update_graph():
-        
-        try :
+    def select_company(*n_clicks):
+        ctx = dash.callback_context
+        if not ctx.triggered:
+            return None
+        button_id = ctx.triggered[0]["prop_id"].split(".")[0]
+        selected_code = button_id.split("-")[1]
+        return selected_code
+    # 실시간 데이터 가져오기 및 그래프 업데이트
+    @graph.callback(
+        Output("real-time-data", "data"),
+        [Input("interval-component", "n_intervals"),
+        State("selected-company", "data")],
+        prevent_initial_call=True
+    )
+    def fetch_real_time_data(n_intervals, selected_code):
+        if not selected_code:
+            return []
+
+        try:
             # 실시간 데이터 가져오기
-            stock_name = cj_live_stock['Stock Name'].iloc[0]  # Series가 아닌 첫 번째 값을 가져옴
+            stock_name = cj_stocks[selected_code]
             new_data = asyncio.run(connect(stock_name))
-            print(new_data)
+            return new_data  # 실시간 데이터 반환
         except Exception as e:
-            print('Fail Update!')
-            print(e)
-            print('Connect Again!')
-            time.sleep(0.1)
+            print(f"Error fetching real-time data for {selected_code}: {e}")
+            return []
 
-            # 웹소켓 다시 시작
-            # 실시간 데이터 가져오기
-            new_data = asyncio.run(connect(cj_live_stock['Stock Name']))
+    # 그래프 업데이트
+    @graph.callback(
+        Output("live-graph", "figure"),
+        [Input("real-time-data", "data"),
+        State("selected-company", "data")],
+        prevent_initial_call=True
+    )
+    def update_graph(real_time_data, selected_code):
+        if not selected_code:
+            # 기본 메시지 그래프
+            return px.line(title="회사 코드를 선택하세요.")
+        csv_path = 'apps/graph/static/cj_stocks_live.csv'
 
-        # 데이터를 합쳐서 그래프 업데이트
-        # 데이터를 합쳐서 그래프 업데이트
-        updated_data = pd.concat([initial_data, new_data], ignore_index=True)
+        print(selected_code)
 
-        
-        # 새로운 그래프 생성
-        live_stock_fig = px.line(updated_data, x='Time', y='Now')
-        live_stock_fig.update_layout(yaxis_title="체결가 (원)")
+        # CSV 생성 (항상 덮어쓰기)
+        try:
+            now_stock(selected_code)  # 회사 코드를 기반으로 CSV 생성
+        except Exception as e:
+            print(f"Error generating CSV for {selected_code}: {e}")
+            return px.line(title=f"Error: {e}")
 
-        return live_stock_fig
+        # CSV 읽기
+        data = cj_live_stock
+        # 실시간 데이터를 추가
+        if real_time_data:
+            real_time_df = pd.DataFrame(real_time_data)
+            data = pd.concat([data, real_time_df], ignore_index=True)
+
+        # 그래프 생성
+        fig = px.line(data, x="Time", y="Now", title=f"실시간 데이터 - {cj_stocks[selected_code]}")
+        return fig
     return graph

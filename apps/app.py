@@ -7,7 +7,7 @@ from apps.config import config
 from apps.access_token import get_access_token,get_approval
 import os
 from flask_login import LoginManager
-from .graph.graph import company_dash,korea_covid,stock_dash,live_stock
+from .graph.graph import company_dash,korea_covid,stock_dash,stock_live
 from flask_socketio import SocketIO, emit
 from apscheduler.schedulers.background import BackgroundScheduler
 
@@ -33,8 +33,8 @@ def create_app():
   dash_app = company_dash(app)
   covid_app = korea_covid(app)
   stock_app = stock_dash(app)
-  live_app = live_stock(app)
-  socketio = SocketIO(app, async_mode='eventlet')  # 비동기 모드를 설정
+  live_app = stock_live(app)
+  # socketio = SocketIO(app, async_mode='eventlet')  # 비동기 모드를 설정
   
   # Access Token 초기화
   if os.environ.get("WERKZEUG_RUN_MAIN")== 'true':
@@ -67,7 +67,7 @@ def create_app():
         if view_func.startswith('/graph/stock/'):
             csrf.exempt(stock_app.server.view_functions[view_func])
   for view_func in live_app.server.view_functions:
-        if view_func.startswith('/graph/current/'):
+        if view_func.startswith('/graph/stocklive/'):
             csrf.exempt(live_app.server.view_functions[view_func])
 
   # 애플리케이션 설정 로드(local로)

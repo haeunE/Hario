@@ -8,6 +8,7 @@ import os
 import apps.config
 
 def now_stock(code):
+    print(code)
     now = datetime.now(timezone('Asia/Seoul'))
 
     # CSV 파일 저장 경로

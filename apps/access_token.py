@@ -56,4 +56,7 @@ def get_approval():
         time.sleep(0.05)
         res = requests.post(URL, headers=headers, data=json.dumps(body))
         apps.config.approval_key = res.json()["approval_key"]
+        print(f"Approval key: {apps.config.approval_key}")
         return apps.config.approval_key
+    else:
+      print("Using existing key...")
