@@ -9,7 +9,6 @@ import matplotlib.dates as mdates
 from matplotlib import font_manager
 import mplcursors
 
-
 font_path = "C:/Windows/Fonts/malgun.ttf"
 font_prop = font_manager.FontProperties(fname=font_path)
 plt.rcParams['font.family'] = font_prop.get_name()
@@ -87,21 +86,49 @@ def generate_graph(file_path, title_prefix, columns_item):
     line_item = plot_line_graph(df, columns_item, title_prefix)
 
     return bar_item, pie_item, line_item
+
+
+# 전체 기간 품목별 파이형 그래프
+def plot_pie_graph(data, title):
+    sorted_data = data.sort_values(ascending=False)
+    colors = plt.cm.Paired(range(len(sorted_data)))
     
+    plt.figure(figsize=(6, 6))
+    wedges, texts, autotexts = plt.pie(
+        sorted_data, 
+        autopct='%1.1f%%', 
+        startangle=90, 
+        colors=colors, 
+        pctdistance=0.8
+    )
     
+    plt.legend(wedges, sorted_data.index, loc='upper left', bbox_to_anchor=(1, 1), fontsize=10)
+    plt.tight_layout()
+    plt.title(f'{title}')
+
+    pie_img_io = io.BytesIO()
+    plt.savefig(pie_img_io, format='png')
+    pie_img_io.seek(0)
+    pie_item_img = base64.b64encode(pie_img_io.getvalue()).decode()
+    plt.close()
+
+    return pie_item_img    
+
+
+# 코로나 기간 별 운송량 (막대 그래프)
 def logistics_bar_graph(csv_files_term):
     columns_item = [
         '가구/인테리어', '도서/음반', '디지털/가전', '생활/건강', 
         '스포츠/레저', '식품', '출산/육아', '패션의류', '패션잡화', '화장품/미용'
     ]
-    total_volume = pd.DataFrame()    # 모든 기간의 데이터 총합을 구해서 하나의 막대 그래프 이미지 생성
+    total_volume = pd.DataFrame()
 
     for file_path, title_prefix in csv_files_term:
         df = read_csv(file_path)
         df_selected = df[columns_item]
         total_volume[title_prefix] = df_selected.sum()      
 
-    return plot_bar_graph('코로나 기간별 운송량', columns_item, total_volume)
+    return plot_bar_graph('', columns_item, total_volume)
 
 
 def plot_bar_graph(title, columns_item, total_volume):
@@ -113,6 +140,8 @@ def plot_bar_graph(title, columns_item, total_volume):
     ax.set_title(f'{title} 기간별 운송량')
     ax.set_xticklabels(columns_item, rotation=45, ha="right")
     ax.legend(title='기간', bbox_to_anchor=(1, 1), loc='upper left', fontsize=10)
+    
+    # plt.text() - 진행중! 막대 그래프 위에 값 표시 (for문)
 
     bar_img_io = io.BytesIO()    # 그래프 이미지 저장
     plt.savefig(bar_img_io, format='png', bbox_inches='tight')
@@ -123,26 +152,6 @@ def plot_bar_graph(title, columns_item, total_volume):
     return bar_item_img
 
 
-def plot_pie_graph(data, title):
-    sorted_data = data.sort_values(ascending=False)
-    colors = plt.cm.Paired(range(len(sorted_data)))
-    
-    plt.figure(figsize=(6, 6))
-    wedges = plt.pie(sorted_data, autopct='%1.1f%%', startangle=90, colors=colors)
-    plt.legend(wedges, sorted_data.index, loc='upper left', bbox_to_anchor=(1, 1), fontsize=10)
-
-    plt.tight_layout()
-    plt.title(f'{title}')
-
-    pie_img_io = io.BytesIO()
-    plt.savefig(pie_img_io, format='png')
-    pie_img_io.seek(0)
-    pie_item_img = base64.b64encode(pie_img_io.getvalue()).decode()
-    plt.close()
-
-    return pie_item_img
-
-
 def plot_line_graph(df, columns_item, title):
     df_monthly = df[columns_item].resample('ME').sum()
     fig, ax = plt.subplots(figsize=(17, 4))
@@ -151,7 +160,6 @@ def plot_line_graph(df, columns_item, title):
         ax.plot(df_monthly.index, df_monthly[column], label=column)
         
     ax.set_title(title)
-    ax.set_xlabel('기간(년.월)')
     ax.set_ylabel('운송량')
     ax.xaxis.set_major_locator(mdates.MonthLocator(interval=3))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%y.%m'))
@@ -171,17 +179,19 @@ def plot_weekday_line_graph(csv_files_all, columns_item):
     df = read_csv(csv_files_all)
     df['배송년월일'] = pd.to_datetime(df['배송년월일'], format='%Y%m%d')
     df.set_index('배송년월일', inplace=True)
-    df['요일'] = df.index.dayofweek
-    weekday_sum = df.groupby('요일')[columns_item].sum()
+    
+    df['요일'] = df.index.dayofweek  # 요일 계산
+    df_weekday = df[df['요일'] < 5]  # 주말 필터링
+    
+    weekday_sum = df_weekday.groupby('요일')[columns_item].sum()  # 요일별 운송량 집계
     
     fig, ax = plt.subplots(figsize=(7, 4))
     weekday_sum.plot(ax=ax)
 
     ax.set_title('요일별 운송량')
-    ax.set_xlabel('요일')
     ax.set_ylabel('운송량')
-    ax.set_xticks(range(7))
-    ax.set_xticklabels(['월', '화', '수', '목', '금', '토', '일'])
+    ax.set_xticks(range(5))
+    ax.set_xticklabels(['월', '화', '수', '목', '금'])
     ax.legend(loc='upper left', bbox_to_anchor=(1, 1))
     plt.tight_layout()
     
@@ -309,7 +319,7 @@ def generate_dual_map(sender_rank, receiver_rank):
     sender_geojson()
     receiver_geojson()
 
-    dual_map_file_path = os.path.join('apps/logistics/static/maps', 'dual_map.html')
+    dual_map_file_path = os.path.join('apps/logistics/static/images', 'dual_map.html')
     m.save(dual_map_file_path)
 
     return dual_map_file_path
