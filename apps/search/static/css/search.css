@@ -16,12 +16,22 @@ body {
   box-sizing: border-box;
 }
 
-.keyword-show h3 {
-  font-size: 1.5rem; 
-  color: black; 
-  padding: 20px; 
-  margin-top: 20px;
+.board-index-top {
+  display: flex;
+  justify-content: space-between; /* 제목과 버튼 사이 여백 */
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #E0E0E0;
+  background-color: #FFFFFF; /* 상단 영역 흰색 배경 */
 }
+.board-index-top h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #0047AB; 
+  font-weight: bold;
+}
+
 
 .keyword-show-none {
   font-size: 1.5rem;

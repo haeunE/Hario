@@ -7,7 +7,9 @@
 
 {% block content %}
   {% if keyword %}
-    <h3 class="keyword-show">검색어 : {{keyword}}</h3>
+    <div id="keyword-show" class="board-index-top">
+      <h3 class="keyword-show">검색어 : {{keyword}}</h3>
+    </div>
   {% else %}
     <h3 class="keyword-show-none">검색어가 없습니다.</h3>  
   {% endif %}  
@@ -47,7 +49,7 @@
   <div class="pagination">
     {% if pagination.has_prev_block %}
     <li>
-      <a href="{{ url_for('search.search_keyword', page=pagination.start_page - 1) }}">&lt;&lt;</a>
+      <a href="{{ url_for('search.search_keyword',keyword=keyword, page=pagination.start_page - 1) }}">&lt;&lt;</a>
     </li>
     {% endif %}
     {% for num in range(pagination.start_page, pagination.end_page + 1) %}
