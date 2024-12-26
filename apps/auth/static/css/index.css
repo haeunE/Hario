@@ -51,3 +51,270 @@
   max-width: 150px;
   border-radius: 50%;
 }
+
+/* 회사 코로나 극복 스토리 섹션 스타일 */
+.company-story {
+  display: flex;
+  justify-content: center; /* 가로축 중앙 정렬 */
+  align-items: center; /* 세로축 중앙 정렬 */
+  height: 70vh; /* 섹션 전체 높이 설정 */
+  background-color: #f9f9f9; /* 배경색 (선택 사항) */
+  padding: 10px; /* 여백 추가 */
+}
+
+/* 5번째 캐러셀 이미지 스타일 */
+.carousel-inner .carousel-item:nth-child(5) img {
+  margin: auto; /* 이미지 가운데 정렬 */
+  width: 100%; /* 캐러셀 너비에 맞춤 */
+  height: 500px; /* 고정 높이 설정 */
+  object-fit: contain; /* 비율 유지, 여백으로 채움 */
+  background-color: #FCF2E8; /* 여백 배경색 (사용자 배경색에 맞춤) */
+}
+
+/* 나머지 캐러셀 이미지 스타일 */
+.carousel-inner .carousel-item:not(:nth-child(5)) img {
+  margin: auto; /* 이미지 가운데 정렬 */
+  width: 100%; /* 캐러셀 너비에 맞춤 */
+  height: 500px; /* 고정 높이 설정 */
+  object-fit: contain; /* 비율 유지, 여백으로 채움 */
+  background-color: #f9f9f9; /* 여백 배경색 (나머지 이미지에 적용) */
+}
+
+
+/* 캐러셀 자체 크기 조정 */
+#carouselExampleCaptions {
+  max-width: 800px; /* 캐러셀 최대 너비 */
+  width: 100%; /* 반응형 너비 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 선택 사항: 그림자 추가 */
+  border-radius: 8px; /* 선택 사항: 모서리 둥글게 */
+}
+
+.carousel-caption h5 {
+  color: white;
+  font-weight: bold;
+  text-shadow: 
+    1px 1px 3px rgba(0, 0, 0, 0.6), /* 더 진한 그림자 */
+    -1px -1px 3px rgba(0, 0, 0, 0.6); /* 반대 방향의 진한 그림자 */
+}
+
+.carousel-control-prev, .carousel-control-next {
+  background: none; /* 배경을 없앰 */
+  border: none; /* 테두리를 없앰 */
+}
+
+/* 캐러셀 컨트롤 버튼 */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  color: white; 
+}
+
+.carousel-indicators {
+  position: absolute;
+  bottom: -50px; /* 미리보기 이미지가 더 아래에 배치되도록 조정 */
+  left: 55%;
+  right: inherit;
+  transform: translateX(-10%);
+  display: flex;
+  gap: 10px; /* 미리보기 이미지 간의 간격 */
+}
+
+.carousel-indicators button {
+  width: 150px;  /* 미리보기 이미지의 너비를 더 크게 설정 */
+  height: 150px; /* 미리보기 이미지의 높이를 더 크게 설정 */
+  border: 1px solid black;
+  transition: opacity 0.3s;
+}
+
+/* active 클래스를 추가하면 배경색 변경 */
+.carousel-indicators button.active {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.7); /* 선택된 버튼 배경색 */
+}
+
+/* hover 상태에서 버튼의 색상 변경 */
+.carousel-indicators button:hover {
+  background-color: rgba(0, 0, 0, 0.5); /* 호버 시 배경색 */
+}
+
+.carousel-indicators img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 5px; /* 미리보기 이미지에 둥근 모서리 */
+}
+
+.subsidiaries {
+  text-align: center;
+  padding: 20px;
+  background-color: #FFFFFF; /* 흰색 배경 */
+  overflow: hidden; /* 슬라이더 밖 요소 숨김 */
+}
+
+.subsidiaries h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #0047AB; /* CJ Blue - 신뢰와 희망을 상징 */
+}
+
+.subsidiary-slider {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.slider-track {
+  display: flex;
+  gap: 15px;
+  animation: scroll 15s linear infinite; 
+}
+
+@keyframes scroll {
+  0% {
+      transform: translateX(0);
+  }
+  100% {
+      transform: translateX(-50%); /* 트랙의 절반 길이만큼 이동 */
+  }
+}
+
+.subsidiary-item {
+  flex: 0 0 auto;
+  width: 200px; /* 로고 아이템의 너비를 약간 늘려서 여백을 조정 */
+  text-align: center;
+}
+
+.subsidiary-item button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none; /* 테두리 제거 */
+  border: none; /* 테두리 제거 */
+  cursor: pointer;
+  padding: 10px;
+  color: #000000; /* 기본 검은색 텍스트 */
+  transition: color 0.3s, transform 0.3s; /* 텍스트 색상 및 크기 전환 */
+}
+
+.subsidiary-item button:hover {
+  color: #00A65A; /* 초록색 텍스트 */
+  transform: scale(1.1); /* 버튼 확대 효과 */
+}
+
+.subsidiary-item img {
+  width: 100px; /* 이미지 크기를 더 크게 설정 */
+  height: 100px; /* 높이도 동일하게 설정하여 크기 통일 */
+  object-fit: contain; /* 이미지 비율 유지하면서 크기 조정 */
+  margin-bottom: 10px;
+  animation: pulse 2s infinite linear; /* 연속적인 확대 효과 */
+}
+
+@keyframes pulse {
+  0%, 100% {
+      transform: scale(1);
+  }
+  50% {
+      transform: scale(1.05);
+  }
+}
+
+/* 뉴스 영역 */
+.news {
+  padding: 60px;
+  background-color: #ffffff; /* 흰색 배경 */
+  border-radius: 8px; /* 모서리 둥글게 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 섬세한 그림자 추가 */
+  margin-top: 30px;
+}
+
+.news h2 {
+  font-size: 28px;
+  font-weight: bold;
+  color: #0047AB; /* CJ Blue */
+  margin-bottom: 20px;
+}
+
+/* 뉴스 리스트 스타일 */
+.news ul {
+  list-style: none;
+  padding: 0;
+}
+
+.news li {
+  display: flex;
+  justify-content: space-between; /* 제목과 본문을 양옆으로 배치 */
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding: 15px;
+  border-bottom: 1px solid #eee; /* 항목 간 구분선 */
+}
+
+.news li:last-child {
+  border-bottom: none; /* 마지막 항목의 구분선 제거 */
+}
+
+/* 뉴스 제목 링크 스타일 */
+.news a {
+  font-size: 22px;
+  font-weight: bold;
+  color: #0047AB; /* CJ Blue */
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.3s ease; /* 부드러운 변환 효과 */
+  padding-right: 20px;
+}
+
+.news a:hover {
+  text-decoration: underline;
+  color: #00A65A; /* 초록색 */
+  transform: scale(1.05); /* 확대 효과 */
+}
+
+/* 뉴스 본문 요약 스타일 */
+.news .summary {
+  font-size: 16px;
+  color: #555; /* 어두운 회색 */
+  line-height: 1.6;
+  margin-top: 20px;
+}
+
+/* 뉴스 이미지 스타일 */
+.news img {
+  max-width: 120px; /* 이미지 크기 조정 */
+  height: auto; /* 비율 유지 */
+  margin-right: 20px; /* 이미지와 텍스트 간 간격 */
+  border-radius: 5px; /* 이미지 모서리 둥글게 */
+}
+
+/* 뉴스 항목 레이아웃 */
+.news-item {
+  display: flex;
+  align-items: flex-start;
+}
+
+.news-item .image {
+  flex-shrink: 0; /* 이미지 크기 고정 */
+  margin-right: 20px;
+}
+
+.news-item .content {
+  flex-grow: 1; /* 내용이 남은 공간을 차지 */
+}
+
+.news-item .content .title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #0047AB; /* CJ Blue */
+  margin-bottom: 10px;
+}
+
+.news-item .content .summary {
+  font-size: 16px;
+  color: #666; /* 회색 */
+  margin-bottom: 10px;
+}
+
+/* 뉴스 항목 클릭 시 강조 */
+.news-item:hover {
+  background-color: #f9f9f9; /* 배경색 변경 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 섬세한 그림자 */
+  cursor: pointer; /* 포인터 커서로 변경 */
+}

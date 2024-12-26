@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block title %}하리오Home 페이지{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{{url_for('auth.static', filename='css/index.css')}}">
+{% endblock %}
+
+{% block content %}
+
+<!-- 1. 상단 헤더: 회사 소개와 메시지 -->
+  <header class="company-header">
+    <div class="company">
+      <div class="logo">
+        <a href="https://www.cj.net/">
+            <img src="{{url_for('auth.static', filename='img/cjlogo.png')}}" alt="CJ 로고">
+        </a>
+      </div>
+        <div class="company-message">
+            <h1>"도전과 혁신으로 위기를 기회로"</h1>
+            <p>"CJ는 코로나19 팬데믹 속에서도 끊임없는 도전과 변화를 통해 새로운 가능성을 열어갑니다."</p>
+            <h4 class="company-vision">최초, 최고, 차별화</h4>
+      </div>
+    </div>
+    <div class="CEO">
+      <div class="ceo-message">
+          <h2>대표 인사말</h2>
+          <p>"코로나19 팬데믹은 전 세계를 변화시켰습니다. 우리 회사는 위기를 기회로 삼아 새로운 도약을 이루었습니다. 함께 이뤄낸 성과에 감사드리며, 앞으로도 혁신과 성장으로 나아가겠습니다."</p>
+      </div>
+    </div>  
+  </header>
+<!-- 2. 주요 섹션: 회사 코로나 극복 스토리 -->
+<section class="company-story">
+  <div id="carouselExampleCaptions" class="carousel carousel-dark slide">
+    <!-- 인디케이터 (미리보기 이미지) -->
+    <div class="carousel-indicators">
+      <button type="hidden" data-bs-theme="dark" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1" >
+        <img src="{{url_for('auth.static', filename='img/covid19_1.png')}}" alt="Preview 1">
+      </button>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2">
+        <img src="{{url_for('auth.static', filename='img/covid19_2.png')}}" alt="Preview 2">
+      </button>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3">
+        <img src="{{url_for('auth.static', filename='img/covid19_3.png')}}" alt="Preview 3">
+      </button>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3" aria-label="Slide 4">
+        <img src="{{url_for('auth.static', filename='img/covid19_4.png')}}" alt="Preview 4">
+      </button>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="4" aria-label="Slide 5">
+        <img src="{{url_for('auth.static', filename='img/covid19_5.jpg')}}" alt="Preview 5">
+      </button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <a href="https://www.topdaily.kr/articles/87668" target="_blank">
+          <img src="{{url_for('auth.static', filename='img/covid19_1.png')}}" class="d-block w-100" alt="...">
+          <div class="carousel-caption d-none d-md-block">
+          </div>
+        </a>
+      </div>
+      <div class="carousel-item">
+        <a href="https://www.sisaweek.com/news/articleView.html?idxno=151235" target="_blank">
+          <img src="{{url_for('auth.static', filename='img/covid19_2.png')}}" class="d-block w-100" alt="...">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>지난해도 2,400억 적자… CJ CGV ‘야속한 코로나19’</h5>
+          </div>
+        </a>
+      </div>
+      <div class="carousel-item">
+        <a href="https://www.sedaily.com/NewsView/1Z97F1SWVH" target="_blank">
+          <img src="{{url_for('auth.static', filename='img/covid19_3.png')}}" class="d-block w-100" alt="...">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>뚜레쥬르 매각나선 CJ푸드빌, 결국 희망퇴직 단행</h5>
+          </div>
+        </a>
+      </div>
+      <div class="carousel-item">
+        <a href="https://cjnews.cj.net/%EC%BD%94%EB%A1%9C%EB%82%9819%EC%97%90-%EB%8C%80%EC%B2%98%ED%95%98%EB%8A%94-cj%EC%9D%98-%EC%9E%90%EC%84%B8-%EB%89%B4%EB%85%B8%EB%A9%80-%EC%8B%9C%EB%8C%80%EB%A5%BC-%EC%A4%80%EB%B9%84%ED%95%98/" target="_blank">
+          <img src="{{url_for('auth.static', filename='img/covid19_4.png')}}" class="d-block w-100" alt="...">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>코로나19에 대처하는 CJ의 자세 – 뉴노멀 시대를 준비하는 CJ</h5>
+          </div>
+        </a>
+      </div>
+      <div class="carousel-item">
+        <a href="https://brunch.co.kr/@thebuyer/164" target="_blank">
+          <img src="{{url_for('auth.static', filename='img/covid19_5.jpg')}}" class="d-block w-100" alt="...">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>CJ제일제당 쿡킷, 코로나19 이후 월 20% 꾸준히</h5>
+          </div>
+        </a>
+      </div>
+    </div>  
+
+    <!-- 이전/다음 버튼 -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</section>
+
+
+<!-- 3. 뉴스와 최신 정보 -->
+<section class="news">
+  <h2>최신 뉴스</h2>
+  
+  <!-- 조건부로 최종 업데이트 및 뉴스 목록 표시 -->
+  {% if news_items %}
+    <div id="latest-news-container">
+      <ul>
+        {% for item in news_items %}
+        <li>
+          <!-- 제목을 링크로 추가 -->
+          <a href="{{ item.link }}" target="_blank">{{ item.title }}</a>
+          
+          <!-- 본문 요약 표시 -->
+          <p>{{ item.summary if item.summary else "요약 정보가 없습니다." }}</p>
+          
+          <!-- 이미지 표시 -->
+          {% if item.image %}
+            <img src="{{ item.image }}" alt="news image" style="max-width: 200px;"/>
+          {% else %}
+            <p>이미지가 없습니다.</p>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% else %}
+    <p id="last-updated">최종 업데이트: 없음</p>
+    <p>현재 표시할 뉴스가 없습니다.</p>
+  {% endif %}
+</section>
+
+
+
+
+  <!-- 4. 상장 계열사 버튼 섹션 -->
+  <section class="subsidiaries">
+    <div class="subsidiary-slider">
+      <div class="slider-track"></div>
+      <div id="subsidiary-data" 
+          data-cjlogistics="{{ url_for('auth.static', filename='img/cjlogistics.png') }}"
+          data-cheil="{{ url_for('auth.static', filename='img/cheil.png') }}"
+          data-freshway="{{ url_for('auth.static', filename='img/freshway.png') }}"
+          data-cjenm="{{ url_for('auth.static', filename='img/cjenm.png') }}"
+          data-cgv="{{ url_for('auth.static', filename='img/cgv.png') }}"
+          data-studio="{{ url_for('auth.static', filename='img/studio.png') }}"
+          data-seafood="{{ url_for('auth.static', filename='img/seafood.png') }}"
+          data-bioscience="{{ url_for('auth.static', filename='img/bioscience.png') }}">
+      </div>
+    </div>
+  </section>
+  
+  {% block js %}
+  <script src="{{url_for('auth.static', filename='js/index.js')}}" ></script>
+  {% endblock %}
+
+
+{% endblock %}

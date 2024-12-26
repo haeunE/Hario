@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %} 게시물 {%endblock%}
+{% block css %}
+<link rel="stylesheet" href="{{url_for('board.static', filename='css/index.css')}}">
+{% endblock %}
+
+{% block content %}
+
+<div class="board-index-top">
+  <div class="board-selection">
+    {% if selection == 1 %}
+      <h3>직장인 게시판</h3>
+    {% elif selection == 2%}
+      <h3>구직자 게시판</h3>
+    {% else %}
+      <h3>모두 게시판</h3>
+    {% endif %}
+  </div>
+
+  <div class="board-index-company">
+    {% if selection == 1 %}
+     <form action="{{url_for('board.index', selection=1)}}" method="get">
+      <select name="department_id" class="form-select" aria-label="Default select example" onchange="this.form.submit()">
+         <option value="0" selected>부서를 선택해주세요</option>
+         <option value="1">대한통운</option>
+         <option value="2">제일제당</option>
+         <option value="3">프레시웨이</option>
+         <option value="4">ENM</option>
+         <option value="5">CGV</option>
+         <option value="6">스튜디오드래곤</option>
+         <option value="7">CJ 씨푸드</option>
+         <option value="8">CJ 바이오사이언스</option>
+       </select>
+     </form>
+    {% endif %}
+     <a href="{{url_for('board.new')}}" class="btn btn-secondary">게시물 등록</a>
+  </div>
+</div>
+
+<div class="board-list">
+  <a href="{{url_for('board.index', selection=1)}}">직장인게시판</a>
+  <a href="{{url_for('board.index', selection=2)}}">구직자게시판</a>
+  <a href="{{url_for('board.index', selection=3)}}">모두게시판</a>
+</div>
+
+{% if boards %}
+<div class="board-index-content">
+  <div class="board-header">
+    <div class="board-header-item">번호</div>
+    <div class="board-header-item">제목</div>
+    <div class="board-header-item">작성자</div>
+    <div class="board-header-item">작성일시</div>
+    <div class="board-header-item">추천</div>
+    <div class="board-header-item">조회수</div>
+  </div>
+  
+  {% for board in boards %}
+  <div class="board-row">
+    <div class="board-item">
+      {{ pagination.page_start_number - loop.index0 }}
+    </div>
+    <div class="board-item">
+      <a href="{{ url_for('board.detail', board_id=board.id) }}">{{ board.subject }}</a>
+      {% if board.is_new %}
+      <span class="label label-new">NEW</span>
+      {% endif %}
+    </div>
+    <div class="board-item">{{ board.user.username }}</div>
+    <div class="board-item">{{ board.created_at }}</div>
+    <div class="board-item">{{ board.recommender|length }}</div>
+    <div class="board-item">{{ board.views }}</div>
+  </div>
+  {% endfor %}
+  
+{% else %}
+  <p class="board-none">등록된 게시글이 없습니다. 등록해 주세요</p>
+{% endif %}
+</div>
+
+
+<div class="pagination">
+  {% if pagination.has_prev_block %}
+  <li>
+    <a href="{{ url_for('board.index', selection=selection, department_id=request.args.get('department_id'), page=pagination.start_page - 1) }}">&lt;&lt;</a>
+  </li>
+  {% endif %}
+  {% for num in range(pagination.start_page, pagination.end_page + 1) %}
+  <li>
+    <a href="{{ url_for('board.index', selection=selection, department_id=request.args.get('department_id'), page=num) }}" 
+    class="page-link {% if page == num %}active-page{% endif %}">
+    {{ num }}
+    </a>
+  </li>
+  {% endfor %}
+  {% if pagination.has_next_block %}
+  <li>
+    <a href="{{ url_for('board.index', selection=selection, department_id=request.args.get('department_id'), page=pagination.end_page + 1) }}">&gt;&gt;</a>
+  </li>
+  {% endif %}
+</div>
+
+
+{% endblock %}
+
+{% block js%}
+<script src="{{url_for('board.static', filename='js/index.js')}}"></script>
+{% endblock %}
