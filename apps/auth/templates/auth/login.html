@@ -9,7 +9,9 @@
   {% endfor %}
 {% endwith %}  
 
-<form action="{{ url_for('auth.login') }}" method="post" class="login">
+<!-- next, hidden_tag 덕에 전에 url저장하고 로그인 후 전페이지로 돌아감 -->
+<form action="{{ url_for('auth.login', next=next or '') }}" method="post" class="login">
+  {{ form.hidden_tag() }}
   {{form.csrf_token}}
   <div>
     {{ form.username.label }} {{ form.username(placeholder="아이디 입력") }}
