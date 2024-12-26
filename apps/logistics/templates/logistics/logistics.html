@@ -1,18 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}운송량 분석{% endblock %}
+{% block content %}
+
 <!DOCTYPE html>
 <html lang="ko">
 
-<head>
+<!-- <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CJ대한통운 운송 추이</title>
     <link rel="stylesheet" href="{{ url_for('logistics.static', filename='logistics.css') }}">
-</head>
+</head> -->
 
 <body>
+
     <div class="container">
-        <header>
-            <h1>CJ대한통운 운송 추이</h1>
-        </header>
+        <img src="{{ url_for('logistics.static', filename='images/cj_logistics_index.png') }}" width="100%" alt="CJ대한통운">
 
         <!-- 전체 기간 파이형 그래프 (범례 표시) -->
         <section id="pie-graphs-all">
@@ -58,11 +61,39 @@
         <section>
             <h2>지역 별 대한통운 이용량</h2>
             <div class="logistics-volume-map">
-                <iframe src="{{ url_for('logistics.static', filename='images/dual_map.html') }}" width="100%" height="600"
-                    style="border: none;"></iframe>
+                <iframe src="{{ url_for('logistics.static', filename='images/dual_map.html') }}" width="100%"
+                    height="600" style="border: none;"></iframe>
             </div>
+
+            <h5>요약</h5>
+
+            <p>송하인 순위 : {{ sender_text }}</p>
+            <p>수하인 순위 : {{ receiver_text }}</p>
+            <p>수요가 많은 대리점 : {{ combined_text }}</p>
+
         </section>
     </div>
-</body>
 
+    <!-- 위로 올라가는 버튼 -->
+    <button id="scrollToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Scroll to top">
+     <i class="fa fa-arrow-up"></i>
+   </button>
+ 
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+   
+   <script>
+     const scrollToTopButton = document.getElementById("scrollToTop");
+ 
+     window.onscroll = function() {
+       if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+         scrollToTopButton.style.display = "block";
+       } else {
+         scrollToTopButton.style.display = "none";
+       }
+     };
+   </script>
+
+</body>
 </html>
+
+{% endblock %}

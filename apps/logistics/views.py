@@ -15,6 +15,7 @@ plt.rcParams['font.family'] = font_prop.get_name()
 plt.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
 
 logistics = Blueprint('logistics', __name__, template_folder='templates', static_folder='static')
+
 geojson_path = os.path.join('apps', 'logistics', '서울_자치구_경계_2017.geojson')
 
 
@@ -34,7 +35,7 @@ def logistics_page():
     
     dual_map = color_map(csv_files_term, columns_item )
     
-    return render_template('logistics.html', 
+    return render_template('logistics/logistics.html', 
                            pie_plot_urls=pie_item_img, 
                            line_plot_urls=line_item_img, 
                            weekday_line_plot_urls=weekday_line_img,
@@ -236,13 +237,12 @@ def color_map(csv_files_term, columns_item):  # 운송량 집계, 색상 매핑
 
     sender_rank = gu_rank('송하인_구명') 
     receiver_rank = gu_rank('수하인_구명') 
-    
-    # print('='*50)    
-    # print(sender_rank)
-    # print('='*50)    
-    # print(receiver_rank)
-
     dual_map = generate_dual_map(sender_rank, receiver_rank)
+
+    print('================')
+    print(sender_rank)
+    print(receiver_rank)
+    print('================')
 
     return dual_map
 
@@ -319,7 +319,23 @@ def generate_dual_map(sender_rank, receiver_rank):
     sender_geojson()
     receiver_geojson()
 
+    # 지도 요약 - 지역 별 수요 top 3
+    def map_summary():
+        top_sender = sender_rank.nlargest(3, '운송량')[['송하인_구명', '운송량']]
+        top_receiver = receiver_rank.nlargest(3, '운송량')[['수하인_구명', '운송량']]
+        all_volume = sender_rank.copy()
+        all_volume['송수하인_합계'] = sender_rank['운송량'] + receiver_rank['운송량']
+        top_combined = all_volume.nlargest(3, '송수하인_합계')[['송하인_구명', '송수하인_합계']]
+
+        sender_text = "\n".join([f"{i+1}위: {row['송하인_구명']} ({row['운송량']} 건)" for i, row in top_sender.iterrows()])
+        receiver_text = "\n".join([f"{i+1}위: {row['수하인_구명']} ({row['운송량']} 건)" for i, row in top_receiver.iterrows()])
+        combined_text = "\n".join([f"{i+1}위: {row['송하인_구명']} ({row['송수하인_합계']} 건)" for i, row in top_combined.iterrows()])
+
+        return sender_text, receiver_text, combined_text
+
+    sender_text, receiver_text, combined_text = map_summary()
+
     dual_map_file_path = os.path.join('apps/logistics/static/images', 'dual_map.html')
     m.save(dual_map_file_path)
 
-    return dual_map_file_path
+    return dual_map_file_path, sender_text, receiver_text, combined_text
