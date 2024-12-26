@@ -122,19 +122,20 @@ def signup():
     return render_template("signup.html", form=form, info=info, userinfo_exists=userinfo_exists, uniquenum=uniquenum)
 
 
-
 @auth.route("/login", methods=["GET", "POST"])
 def login():
     form = UserForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username = form.username.data).first()
+    next_page = request.args.get('next') or request.form.get('next')  # next 파라미터 가져오기
 
-        if user is not None and user.verify_password(form.password.data):
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user and user.verify_password(form.password.data):
             login_user(user)
-            return redirect(url_for("crud.index"))
-        
+            return redirect(next_page or url_for('board.index', selection=1))  # next 페이지로 이동하거나 기본 페이지로
         flash("아이디 또는 비밀번호가 일치하지 않습니다.")
-    return render_template("login.html", form = form)
+    
+    return render_template("login.html", form=form, next=next_page)
+
 
 @auth.route("/logout")
 @login_required

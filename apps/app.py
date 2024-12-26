@@ -45,6 +45,9 @@ def create_app():
 
     from apps.board import views as board_views
     app.register_blueprint(board_views.board, url_prefix='/board')
+
+    from apps.search import views as search_views
+    app.register_blueprint(search_views.search, url_prefix='/search')
        
     # #========================== department 초기 값 설정 ============================
 

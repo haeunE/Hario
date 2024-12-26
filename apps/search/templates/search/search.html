@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}검색결과{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{url_for('search.static', filename='css/search.css')}}" >
+{% endblock %}
+
+{% block content %}
+  {% if keyword %}
+    <h3 class="keyword-show">검색어 : {{keyword}}</h3>
+  {% else %}
+    <h3 class="keyword-show-none">검색어가 없습니다.</h3>  
+  {% endif %}  
+
+  {% if boards %}
+    <div class="board-index-content">
+      <div class="board-header">
+        <div class="board-header-item">번호</div>
+        <div class="board-header-item">제목</div>
+        <div class="board-header-item">작성자</div>
+        <div class="board-header-item">작성일시</div>
+        <div class="board-header-item">추천</div>
+        <div class="board-header-item">조회수</div>
+      </div>
+      
+      {% for board in boards %}
+      <div class="board-row">
+        <div class="board-item">
+          {{ pagination.page_start_number - loop.index0 }}
+        </div>
+        <div class="board-item">
+          <a href="{{ url_for('board.detail',board_id=board.id, keyword=keyword) }}">{{ board.subject }}</a>
+        </div>
+        <div class="board-item">{{ board.user.username }}</div>
+        <div class="board-item">{{ board.created_at }}</div>
+        <div class="board-item">{{ board.recommender|length }}</div>
+        <div class="board-item">{{ board.views }}</div>
+      </div>
+      {% endfor %}
+    </div>
+      
+    {% else %}
+      <p class="board-none">검색된 게시글이 없습니다.</p>
+    {% endif %}
+
+
+  <div class="pagination">
+    {% if pagination.has_prev_block %}
+    <li>
+      <a href="{{ url_for('search.search_keyword', page=pagination.start_page - 1) }}">&lt;&lt;</a>
+    </li>
+    {% endif %}
+    {% for num in range(pagination.start_page, pagination.end_page + 1) %}
+    <li>
+      <a href="{{ url_for('search.search_keyword', keyword=keyword, page=num) }}" 
+      class="page-link {% if page == num %}active-page{% endif %}">
+      {{ num }}
+      </a>
+    </li>
+    {% endfor %}
+    {% if pagination.has_next_block %}
+    <li>
+      <a href="{{ url_for('search.search_keyword', keyword=keyword, page=pagination.end_page + 1) }}">&gt;&gt;</a>
+    </li>
+    {% endif %}
+  </div>
+
+
+{% endblock %}
+
+{% block js %}
+  <script src="{{url_for('search.static', filename='js/search.js')}}"></script>
+{% endblock %} 
