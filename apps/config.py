@@ -5,8 +5,8 @@ from pathlib import Path
 dir= os.path.dirname(__file__)
 image_dir = Path(__file__).parent.parent
 
-access_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsImF1ZCI6IjRhZGMzMDVhLTVkMzUtNGM3Yy1hOGUxLWY5OWNmN2Y5ZTY2NyIsInByZHRfY2QiOiIiLCJpc3MiOiJ1bm9ndyIsImV4cCI6MTczNTA5NzY0NiwiaWF0IjoxNzM1MDExMjQ2LCJqdGkiOiJQUzk3SzhQT2l2aWFyM1FzYTFTVTlxbkhQZWR3dHFPcTVXNmsifQ.McwmUCbjNP7qFnPzpgrRPkGdtgTWLsyO1D4ph4O1wCIAPjWZ1TPukzLb4nyiXekYZV7nOQwef756M5Nml58RBw'
-approval_key = '350fc715-2f61-4595-b2c9-7c0b721a7b3a'
+access_token = None
+approval_key = None
 
 
 class BaseConfig:

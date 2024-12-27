@@ -7,8 +7,7 @@ import requests
 import asyncio
 import traceback
 import websockets
-from apps.config import approval_key
-
+import apps.config
 # from Crypto.Cipher import AES
 # from Crypto.Util.Padding import unpad
 from base64 import b64decode
@@ -48,7 +47,7 @@ cj_stocks = {
 }
 
 # 국내주식체결처리 출력라이브러리
-def stockspurchase_domestic(data_cnt, data):
+def stockspurchase_domestic(data_cnt, data,name):
     conclu = []  # csv에 넣을 데이터 리스트
     print("============================================")
     print(f'채결수 : {data_cnt}')
@@ -59,7 +58,7 @@ def stockspurchase_domestic(data_cnt, data):
     i = 0
     for cnt in range(data_cnt):  # 넘겨받은 체결데이터 개수만큼 print 한다
         print("### [%d / %d]" % (cnt + 1, data_cnt))
-        conclu.append(['종목',pValue[1],pValue[2],pValue[4],pValue[5],pValue[10],pValue[11],pValue[18],pValue[13],pValue[12]])
+        conclu.append([name,pValue[1],pValue[2],pValue[4],pValue[5],pValue[10],pValue[11],pValue[18],pValue[13],pValue[12]])
         for menu in menustr:
             print("%-13s[%s]" % (menu, pValue[i]))
             i += 1
@@ -70,7 +69,7 @@ def stockspurchase_domestic(data_cnt, data):
 async def connect(stock_name):
   if stock_name in cj_stocks.keys():
     try:
-      global approval_key
+      
 
       url = 'ws://ops.koreainvestment.com:21000' # 실전투자계좌
 
@@ -79,9 +78,10 @@ async def connect(stock_name):
       senddata_list=[]
 
       print("url : ", url)
+      print(apps.config.approval_key)
 
       for i,j,k in code_list:
-        temp = '{"header":{"approval_key": "%s","custtype":"P","tr_type":"%s","content-type":"utf-8"},"body":{"input":{"tr_id":"%s","tr_key":"%s"}}}'%(approval_key,i,j,k)
+        temp = '{"header":{"approval_key": "%s","custtype":"P","tr_type":"%s","content-type":"utf-8"},"body":{"input":{"tr_id":"%s","tr_key":"%s"}}}'%(apps.config.approval_key,i,j,k)
         senddata_list.append(temp)
 
       async with websockets.connect(url, ping_interval=None) as websocket:
@@ -105,7 +105,7 @@ async def connect(stock_name):
             if trid0 == "H0STCNT0":  # 주식체결 데이터 처리
               print("#### 국내주식 체결 ####")
               data_cnt = int(recvstr[2])  # 체결데이터 개수
-              return stockspurchase_domestic(data_cnt, recvstr[3])
+              return stockspurchase_domestic(data_cnt, recvstr[3],stock_name)
               
               # await asyncio.sleep(0.2)
 

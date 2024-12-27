@@ -6,13 +6,16 @@ import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 from apps.graph.preprocess.pre_covid import covid_monthly
 from apps.graph.preprocess.pre_company import all_sales,company_colors,company_data,company_code
-from apps.graph.preprocess.pre_stock import cj_day_stock,company_colors,cj_live_stock
+from apps.graph.preprocess.pre_stock import cj_day_stock,company_colors2
 from apps.graph.preprocess.save_graph import save_sessionfig
 from apps.graph.preprocess.live_stock import connect
 from apps.graph.preprocess.now_stock import now_stock
 import plotly.io as pio
 import time
 import asyncio
+import io
+import json
+from datetime import datetime
 
 
 
@@ -98,7 +101,7 @@ def company_dash(app):
         y='회사명',
         color='회사명',
         orientation='h',
-        title='회사별 10년간 성장률(%)',
+        title='회사별 10년간 성장률 격차(%)',
         color_discrete_map=company_colors
     )
 
@@ -108,6 +111,14 @@ def company_dash(app):
         template='plotly_white',
         legend_title='회사명'
     )
+    # 수직선 추가하기
+    growth_all_fig.add_vline(x=0,line_width=2, line_dash="dash",
+                line_color="#C2151B",
+                annotation_text="0", 
+                annotation_position="top left",
+                annotation_font_size=10,
+                annotation_font_color="#C2151B",
+                annotation_font_family="Times New Roman")
 
     growth_fig = px.violin(
         all_sales[all_sales['회사명'] == 'CJ프레시웨이'],  
@@ -190,9 +201,9 @@ def company_dash(app):
                 x=company_data['분기'],
                 y=company_data['당기순이익'],
                 mode='lines+markers',
-                name=f'{company_name} 당기순이익',
+                name=f'당기순이익',
                 legendgroup=company_name,
-                showlegend=False,
+                # showlegend=False,
                 line=dict(dash='dot', color=color, width=2),
                 marker=dict(symbol='circle', size=10)
             ))
@@ -202,9 +213,9 @@ def company_dash(app):
                 x=company_data['분기'],
                 y=company_data['영업이익'],
                 mode='lines+markers',
-                name=f'{company_name} 영업이익',
+                name=f'영업이익',
                 legendgroup=company_name,
-                showlegend=False,  # 범례 숨기기
+                # showlegend=False,  # 범례 숨기기
                 line=dict(dash='solid', color=color, width=2),
                 marker=dict(symbol='square', size=10)
             ))
@@ -213,7 +224,7 @@ def company_dash(app):
             x=covid_monthly['년월'],
             y=covid_monthly['사망자수_차이'],
             mode='lines',
-            name='사망자수 차이',  # 레이블
+            name='사망자 발생(건)',  # 레이블
             line=dict(dash='solid', color=f'rgba({r}, {g}, {b}, 0.5)', width=2),  # 선 색상 설정
             # marker=dict(color='blue', size=8),  # 마커 색상 설정
             yaxis='y2'  # 보조 y축으로 설정
@@ -225,9 +236,20 @@ def company_dash(app):
             xaxis_title='분기',
             yaxis_title='이익 (원)',
             template='plotly_white',
-            legend_title='회사명',
+            legend=dict(
+                title = "선",
+                x=1.15,  # 범례를 그래프의 오른쪽에 위치시킴
+                y=1,     # 범례의 수직 위치
+                traceorder="normal",  # 범례 항목 순서
+                font=dict(
+                    family="Arial, sans-serif",
+                    size=12,
+                    color="black"
+                ),
+                borderwidth=1
+            ),
             yaxis2=dict(
-                title='사망자수 차이',  # 보조 y축 제목
+                title='사망자 발생(건)',  # 보조 y축 제목
                 overlaying='y',  # 기본 y축과 겹치도록 설정
                 side='right'  # 보조 y축을 오른쪽에 표시
             )
@@ -261,18 +283,11 @@ def korea_covid(app):
     # 저장된 그래프 로드
     session_fig = pio.read_json("apps/graph/static/session_fig.json")
     # 애니메이션 속도 조정
-    session_fig.update_layout(
-        xaxis_title='분류',
-        yaxis_title='인원 수',
-        showlegend=True,
-        font=dict(family="Arial, sans-serif", size=12),
-        title_font=dict(size=24),
-        plot_bgcolor="#f5f5f5",
-        xaxis=dict(autorange=True),  # x축 자동 범위 설정
-        yaxis=dict(autorange=True)   # y축 자동 범위 설정
-    )
 
     monthly_fig = px.line(covid_monthly.loc[3:],x='년월', y=['사망자수차이_전월대비', '완치자수차이_전월대비'],markers=True)
+    # 범례 이름을 원하는 대로 변경
+    monthly_fig.for_each_trace(lambda t: t.update(name=t.name.replace('사망자수차이_전월대비', '전월대비 사망자수')
+                                                .replace('완치자수차이_전월대비', '전월대비 완치자수')))
     monthly_fig.update_layout(
         xaxis_title='월별',
         yaxis_title='차이(%)'  # 그래프 스타일 (선택 사항)
@@ -371,7 +386,7 @@ def stock_dash(app):
         fig_candlestick.update_layout(
             title=f"{selected_company} 주가 그래프 ({start_year}-{end_year})",
             xaxis_title='Date',
-            yaxis_title='Price',
+            yaxis_title='당가',
             showlegend=False  # 범례 숨기기
         )
 
@@ -391,7 +406,7 @@ def stock_dash(app):
         if fig_type == 'bar':
             fig_bar_or_pie = go.Figure(
                 data=[go.Bar(
-                    x=['Rising Candles', 'Falling Candles'],
+                    x=['증가 Candles', '하강 Candles'],
                     y=[rising_candles, falling_candles],
                     marker=dict(color=['red', 'blue'])
                 )]
@@ -411,7 +426,7 @@ def stock_dash(app):
             title=f'Daily Close Price of {selected_company} with LOWESS Trendline',
             trendline="lowess",  # LOWESS 추세선
             trendline_options=dict(frac=0.4),
-            color_discrete_map=company_colors  # 색상 맵 설정
+            color_discrete_map=company_colors2  # 색상 맵 설정
         )
 
         # 롤링 추세선 추가
@@ -422,7 +437,7 @@ def stock_dash(app):
             color='Name',
             trendline="rolling",  # 롤링 추세선
             trendline_options=dict(window=20),
-            color_discrete_map=company_colors  # 색상 맵 설정
+            color_discrete_map=company_colors2  # 색상 맵 설정
         )
 
         # 새로운 데이터 객체를 생성하여 두 그래프의 데이터를 결합
@@ -525,16 +540,46 @@ def stock_live(app):
         "079160": "CJ CGV",
         "001040": "CJ(주)"
     }
-    graph = dash.Dash(__name__, server=app,url_base_pathname='/graph/stocklive/', external_stylesheets=[dbc.themes.BOOTSTRAP])
+    graph = dash.Dash(__name__, server=app, url_base_pathname='/graph/stocklive/', external_stylesheets=[dbc.themes.BOOTSTRAP])
     graph.layout = html.Div([
-        html.H1("실시간 주식 데이터 대시보드"),
+        html.H3("실시간 주식 데이터 대시보드"),
         
+        # 버튼 클릭 시 색상을 변경할 영역
         html.Div([
-            html.Button(f"{name} ({code})", id=f"btn-{code}", n_clicks=0, className="btn")
-            for code, name in cj_stocks.items()
-        ], style={'display': 'flex', 'gap': '10px', 'marginBottom': '20px'}),
+            html.Button(
+                f"{name} ({code})", 
+                id=f"btn-{code}", 
+                n_clicks=0, 
+                className="btn", 
+                style={
+                    'margin': '5px',
+                    'border': '2px solid',  # 테두리 색 지정 (파란색)
+                    'borderRadius': '5px',  # 테두리 둥글게
+                    'padding': '10px 20px',  # 버튼 패딩
+                    'backgroundColor': '#E0DCDD',  # 배경 색 (흰색)
+                    'color': '#3547B3',  # 글자 색 (파란색)
+                    'fontWeight': 'bold'  # 글자 두껍게
+                }
+            ) for code, name in cj_stocks.items()
+        ], style={
+            'display': 'flex',          # Flexbox 사용
+            'gap': '10px',              # 버튼 간 간격
+            'marginBottom': '20px',     # 아래 여백
+            'flexWrap': 'wrap',         # 버튼이 줄 바꿈 되도록 설정
+            'justifyContent': 'center', # 가로 방향 가운데 정렬
+            'alignItems': 'center',     # 세로 방향 가운데 정렬
+            'textAlign': 'center',      # 텍스트 가운데 정렬
+        }),
         
-        dcc.Graph(id="live-graph"),
+        # 로딩 컴포넌트
+        dcc.Loading(
+            id="loading",
+            type="circle",  # 스피너 모양
+            children=[
+                # 그래프 컴포넌트
+                dcc.Graph(id="live-graph")
+            ]
+        ),
         
         dcc.Interval(
             id="interval-component",
@@ -546,69 +591,108 @@ def stock_live(app):
         dcc.Store(id="real-time-data", data=[]),  # 실시간 데이터 저장
     ])
 
-    # 버튼 클릭 시 회사 코드 저장
     @graph.callback(
-        Output("selected-company", "data"),
-        [Input(f"btn-{code}", "n_clicks") for code in cj_stocks],
-        prevent_initial_call=True
+        [Output("selected-company", "data"), Output("real-time-data", "data")],
+        [Input(f"btn-{code}", "n_clicks") for code in cj_stocks] + [Input("interval-component", "n_intervals")],
+        [State("selected-company", "data"), State("real-time-data", "data")],
+        prevent_initial_call=False
     )
-    def select_company(*n_clicks):
+    def update_data(*args):
         ctx = dash.callback_context
         if not ctx.triggered:
-            return None
+            return dash.no_update, dash.no_update
+
         button_id = ctx.triggered[0]["prop_id"].split(".")[0]
-        selected_code = button_id.split("-")[1]
-        return selected_code
-    # 실시간 데이터 가져오기 및 그래프 업데이트
-    @graph.callback(
-        Output("real-time-data", "data"),
-        [Input("interval-component", "n_intervals"),
-        State("selected-company", "data")],
-        prevent_initial_call=True
-    )
-    def fetch_real_time_data(n_intervals, selected_code):
+
+        # 버튼 클릭 시 회사 코드 변경
+        if button_id.startswith("btn-"):
+            selected_code = button_id.split("-")[1]
+            try:
+                now_stock(selected_code)  # 회사 코드를 기반으로 CSV 생성
+                path = 'apps/graph/static/cj_stocks_live.csv'
+                cj_live_stock = pd.read_csv(path)
+                cj_live_stock['Time'] = cj_live_stock['Time'].astype(str).str.zfill(6)
+                cj_live_stock['Time'] = cj_live_stock['Time'].apply(lambda x: datetime.strptime(x, '%H%M%S').time())
+                cj_live_stock = cj_live_stock.sort_values(by='Time').reset_index(drop=True)
+                print("---------------------------------------------")
+                print(cj_live_stock)
+                update_data = cj_live_stock.to_json(orient='records')  # DataFrame
+                print("update_data===========================")
+                print(update_data)
+            except Exception as e:
+                print(f"Error generating CSV for {selected_code}: {e}")
+                return dash.no_update, []  # 오류 발생 시 빈 데이터 반환
+            return selected_code, update_data
+
+        # 일정 시간 간격으로 실시간 데이터 업데이트
+        selected_code = ctx.states.get("selected-company.data", None)
+        print("+"*7)
+        print(selected_code)
         if not selected_code:
-            return []
+            return dash.no_update, []
 
         try:
-            # 실시간 데이터 가져오기
+            # 기존 데이터 가져오기
+            existing_data = ctx.states.get("real-time-data.data", [])
+            print(type(existing_data)) 
+            print("+"*50)
+            if isinstance(existing_data, str):
+                existing_data = json.loads(existing_data)
+            print(existing_data)
+            if existing_data:
+                print(type(existing_data))
+                existing_df = pd.DataFrame(existing_data)
+            else:
+                existing_df = pd.DataFrame(columns=columns)
+
             stock_name = cj_stocks[selected_code]
-            new_data = asyncio.run(connect(stock_name))
-            return new_data  # 실시간 데이터 반환
+            print(stock_name)
+            new_data = asyncio.run(connect(stock_name))  # 비동기 호출
+            print(new_data)
+            # `conclu` 처리
+            columns = [
+                'Stock Name', 'Time', 'Now', 'Contrast', 'Per', 'AskPrice',
+                'BidPrice', 'Strength', 'Trading', 'Execution'
+            ]
+            new_df = pd.DataFrame(new_data, columns=columns)
+            print(new_df)
+            new_df['Time'] = new_df['Time'].astype(str).str.zfill(6)
+            new_df['Time'] = new_df['Time'].apply(lambda x: datetime.strptime(x, '%H%M%S').time())
+            new_df = new_df.sort_values(by='Time').reset_index(drop=True)
+
+            # 새 데이터를 병합
+            updated_df = pd.concat([existing_df, new_df], ignore_index=True)
+            return selected_code, updated_df.to_json(orient='records')
+
         except Exception as e:
             print(f"Error fetching real-time data for {selected_code}: {e}")
-            return []
+            # 기존 데이터 유지
+            return dash.no_update, existing_data if existing_data else []
+
 
     # 그래프 업데이트
     @graph.callback(
         Output("live-graph", "figure"),
-        [Input("real-time-data", "data"),
-        State("selected-company", "data")],
+        [Input("real-time-data", "data")],
+        [State("selected-company", "data")],
         prevent_initial_call=True
     )
     def update_graph(real_time_data, selected_code):
         if not selected_code:
-            # 기본 메시지 그래프
             return px.line(title="회사 코드를 선택하세요.")
-        csv_path = 'apps/graph/static/cj_stocks_live.csv'
 
-        print(selected_code)
-
-        # CSV 생성 (항상 덮어쓰기)
         try:
-            now_stock(selected_code)  # 회사 코드를 기반으로 CSV 생성
+            print("*"*50)
+            print(type(real_time_data))
+            print(real_time_data)
+            if isinstance(real_time_data, str):
+                real_time_data=json.loads(real_time_data)
+            data = pd.DataFrame(real_time_data)
+            print(data)
+            fig = px.line(data, x="Time", y="Now", title=f"실시간 데이터 - {cj_stocks[selected_code]}")
+            return fig
         except Exception as e:
-            print(f"Error generating CSV for {selected_code}: {e}")
-            return px.line(title=f"Error: {e}")
+            print(f"Error updating graph: {e}")
+            return px.line(title=f"{cj_stocks[selected_code]} 체결 정보 로딩중...")
 
-        # CSV 읽기
-        data = cj_live_stock
-        # 실시간 데이터를 추가
-        if real_time_data:
-            real_time_df = pd.DataFrame(real_time_data)
-            data = pd.concat([data, real_time_df], ignore_index=True)
-
-        # 그래프 생성
-        fig = px.line(data, x="Time", y="Now", title=f"실시간 데이터 - {cj_stocks[selected_code]}")
-        return fig
     return graph
