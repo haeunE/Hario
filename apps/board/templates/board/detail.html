@@ -54,19 +54,21 @@
         </div>
       </div>
       <div class="board-detail-move">
-        {% if board.get_pre_board() %}
-            <a href="{{ url_for('board.detail', board_id=board.get_pre_board().id) }}" class="move-btn">&lt;</a>
+        {% if keyword %}
+          <a href="{{ url_for('search.search_keyword', keyword=keyword) }}" class="move-btn">목록</a>
         {% else %}
-            <span class="move-btn disabled">&lt;</span>
-        {% endif %}
-        
-        <a href="{{ url_for('board.index', selection=board.selection) }}" class="move-btn">목록</a>
-        
-        {% if board.get_next_board() %}
-            <a href="{{ url_for('board.detail', board_id=board.get_next_board().id) }}" class="move-btn">&gt;</a>
-        {% else %}
-            <span class="move-btn disabled">&gt;</span>
-        {% endif %}
+          {% if board.get_pre_board() %}
+              <a href="{{ url_for('board.detail', board_id=board.get_pre_board().id) }}" class="move-btn">&lt;</a>
+          {% else %}
+              <span class="move-btn disabled">&lt;</span>
+          {% endif %}       
+          <a href="{{ url_for('board.index', selection=board.selection, board_id=board.id) }}" class="move-btn">목록</a> 
+          {% if board.get_next_board() %}
+              <a href="{{ url_for('board.detail', board_id=board.get_next_board().id) }}" class="move-btn">&gt;</a>
+          {% else %}
+              <span class="move-btn disabled">&gt;</span>
+          {% endif %}
+        {% endif %}  
       </div>   
     </div>
     <div class="comment-all">
@@ -144,7 +146,6 @@
         </li>
         {% endif %}
       </div>
-
   </div>
 {% endblock %}
 

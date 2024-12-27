@@ -7,11 +7,13 @@
 body{
   width: 80%;
   margin: auto;
+  background-color: #f8f9fa;
 }
 /* 특정 페이지에만 적용 */
 .page-hario {
   color: #000000; /* 텍스트 기본 색상 */
   font-family: YESMyoungjo-Regular, sans-serif;
+  padding-top: 1em;
 }
 
 .page-hario h1 {
@@ -19,10 +21,14 @@ body{
   font-size: 2.5rem;
 }
 
+.page-hario h4 {
+  color: black; /* 포인트 컬러 */
+}
+
 /* h1 마우스 오버 시 파란색 밑줄 */
 .page-hario h1:hover {
   text-decoration: underline;
-  text-decoration-color: #FE6232; /* 파란색 밑줄 */
+  text-decoration-color: #FE6232; 
 }
 
 .page-hario .navbar {
@@ -109,6 +115,9 @@ body{
 }
 
 .page-hario .navbar-nav .auth-menu a {
+  color: #FE6232;
+}
+.login .nav-link .dropdown-toggle a{
   color: #FE6232;
 }
 

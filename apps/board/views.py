@@ -1,16 +1,18 @@
 from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash, session
 from flask_login import login_required, current_user
 from apps.board.forms import BoardForm
-from apps.crud.models import User, Board, Recommend, Comment
+from apps.crud.models import Board, Recommend, Comment, UserRole
 from apps.app import db
 
-from datetime import datetime, timedelta
 
 board = Blueprint('board', __name__, template_folder='templates', static_folder='static')
 
 @board.route("/<int:selection>", methods=["GET"])
 @login_required
 def index(selection):
+    if not current_user.is_authenticated:
+      return redirect(url_for('auth.login', next=request.url))  # 로그인 페이지로 이동 및 next에 현재 URL 저장
+    
     department_id = request.args.get("department_id")
 
     if selection == 1 and current_user.userinfo.department_id == 99:
@@ -86,10 +88,18 @@ def new():
 @board.route("/detail/<int:board_id>", methods=["GET", "POST"])
 @login_required
 def detail(board_id):
+  if not current_user.is_authenticated:
+      return redirect(url_for('auth.login', next=request.url))  # 로그인 페이지로 이동 및 next에 현재 URL 저장
+
+  keyword = request.args.get('keyword')
   board = Board.query.get_or_404(board_id)
 
-  view_key = f"viewed_{board_id}"
+  if current_user.role == UserRole.SEEKER:
+    if board.selection == 1 :
+     return render_template("board/permission_denied.html")
 
+
+  view_key = f"viewed_{board_id}"
   if request.method == "GET":
      # 세션에서 해당 게시글을 조회했는지 확인
         if not session.get(view_key):
@@ -117,7 +127,7 @@ def detail(board_id):
     "has_next_block" : has_next_block
   }         
 
-  return render_template("board/detail.html", board=board, comments=comments, pagination=pagination, page=page)
+  return render_template("board/detail.html", board=board, comments=comments, pagination=pagination, page=page, keyword=keyword)
 
 
 @board.route("/update/<int:board_id>", methods=["GET", "POST"])
@@ -151,10 +161,9 @@ def delete(board_id):
 # 추천
 @board.route("/recommend/<int:board_id>", methods=["POST"])
 def recommend(board_id):
-   recommand_entry = Recommend.query.filter_by(user_id=current_user.id, board_id=board_id).first()
-   board = Board.query.get_or_404(board_id)
-   if recommand_entry:
-      db.session.delete(recommand_entry)
+   recommend_entry = Recommend.query.filter_by(user_id=current_user.id, board_id=board_id).first()
+   if recommend_entry:
+      db.session.delete(recommend_entry)
       db.session.commit()
    else:
       new_recommend = Recommend(user_id=current_user.id, board_id=board_id)
@@ -164,12 +173,13 @@ def recommend(board_id):
 
 # 댓글
 @board.route("/comment/new/<int:board_id>", methods=["POST"])
+@login_required
 def comment_new(board_id):
    board = Board.query.get_or_404(board_id)
 
    content = request.form.get("content") 
 
-   if not content or content.strip == "":
+   if not content or content.strip() == "":
       flash("댓글 내용을 넣어 등록해 주세요", "error")
       return redirect(url_for("board.detail", board_id=board_id))
 
@@ -201,37 +211,36 @@ def comment_delete(comment_id):
    return jsonify({"message":"댓글이 삭제 되었습니다."}), 200
 
 
-# 더미
+# 더미 데이터 생성
 @board.route('/dummy')
 def make_dummy():
-  for i in range(50):
-    board = Board(
-      subject = f'임시제목{i}',
-      content = f'임시내용{i}',
-      user_id = 4,
-      selection = 1,
-      department_id = 4
-    )
-    db.session.add(board)
-    db.session.commit()
+    create_boards_and_comments()  # Dummy 데이터 생성 함수 호출
+    return "더미 데이터가 생성되었습니다."
 
-  for i in range(50):
-    board = Board(
-      subject = f'임시제목{50+i}',
-      content = f'임시내용{i+50}',
-      user_id = 3,
-      selection = 1,
-      department_id = 3
-    )
-    db.session.add(board)
-    db.session.commit()
+# 더미 게시글 및 댓글 생성 함수
+def create_boards_and_comments():
+    users = [(4, 50), (3, 50)]
+    
+    for user_id, start_index in users:
+        for i in range(50):
+            board = Board(
+                subject=f'임시제목{start_index + i}',
+                content=f'임시내용{start_index + i}',
+                user_id=user_id,
+                selection=1,
+                department_id=user_id
+            )
+            db.session.add(board)
 
-  for i in range(50):
-    comment = Comment(
-      content = f'임시내용{i+50}',
-      user_id = 3,
-      board_id = 200
-    )  
-    db.session.add(comment)
-    db.session.commit()
-  
+    db.session.commit()  # 한 번에 커밋
+
+    # 댓글 생성
+    for i in range(50):
+        comment = Comment(
+            content=f'임시내용{i+50}',
+            user_id=3,
+            board_id=200
+        )
+        db.session.add(comment)
+
+    db.session.commit()  # 한 번에 커밋

@@ -1,0 +1,206 @@
+/* detail.css */
+@font-face {
+  font-family: 'YESMyoungjo-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_13@1.0/YESMyoungjo-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* 전체 배경과 텍스트 스타일 */
+body {
+  background-color: #FFFFFF; /* 배경색을 #FCF2E8로 설정 */
+  color: #000000; /* 기본 텍스트 색상 */
+  font-family: 'YESMyoungjo-Regular', Arial, sans-serif;
+  margin: 0;
+  padding-bottom: 100px;
+  box-sizing: border-box;
+}
+
+.board-index-top {
+  display: flex;
+  justify-content: space-between; /* 제목과 버튼 사이 여백 */
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #E0E0E0;
+  background-color: #FFFFFF; /* 상단 영역 흰색 배경 */
+}
+.board-index-top h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #0047AB; 
+  font-weight: bold;
+}
+
+
+.keyword-show-none {
+  font-size: 1.5rem;
+  color: black;
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  width: 100%;
+}
+
+
+/* 게시물 테이블 스타일 */
+.board-index-content {
+  width: 90%; /* 화면의 90%만 차지 */
+  margin: 0 auto; /* 가운데 정렬 */
+  margin-top: 30px;
+  background-color: #FFFFFF; /* 흰색 배경 */
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid black;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 테이블에 그림자 추가 */
+}
+
+.board-index-content {
+  padding: 20px;
+}
+
+.board-header{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  background-color: #000000;
+}
+.board-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  background-color: white;
+  
+}
+
+.board-header-item, .board-item {
+  width: 15%;
+  padding: 10px;
+  text-align: center;
+}
+
+.board-header-item {
+  font-weight: bold;
+  color: white;
+}
+
+.board-row {
+  border-bottom: 1px solid #ddd;
+}
+
+.board-item a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #333;
+}
+
+.board-item a:hover {
+  color: #FE6232;
+  text-decoration: underline; 
+}
+
+
+.board-none p {
+  text-align: center;
+  font-size: 16px;
+  color: #999;
+}
+
+
+/* 게시물이 없을 때 메시지 */
+.no-boards {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 1.2rem;
+  color: #E61E2E; /* CJ Red */
+}
+
+/* 게시물 테이블 링크 스타일 */
+.board-index-content table a {
+  color: #000000; /* 기본 검은색 */
+  text-decoration: none; /* 밑줄 제거 */
+  font-weight: normal; /* 기본 폰트 두께 */
+}
+
+.board-index-content table a:hover {
+  color: #E61E2E; /* hover 시 빨간색 */
+  text-decoration: underline; /* hover 시 밑줄 추가 */
+}
+
+/* Pagination 컨테이너 스타일 */
+.pagination {
+  display: flex;
+  justify-content: center; /* 중앙 정렬 */
+  margin: 20px 0;
+  padding: 0;
+  list-style: none; /* 리스트 스타일 제거 */
+}
+
+/* Pagination 아이템 간 간격 */
+.pagination li {
+  margin: 0 5px;
+}
+
+/* 페이지 링크 기본 스타일 */
+.pagination a {
+  display: inline-block;
+  padding: 10px 15px; /* 여백 설정 */
+  font-size: 1rem; /* 글자 크기 */
+  color: #0047AB; /* 파란색 */
+  text-decoration: none; /* 밑줄 제거 */
+  border: 1px solid #ddd; /* 외곽선 */
+  border-radius: 4px; /* 둥근 모서리 */
+  transition: all 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+/* 마우스 호버 시 효과 */
+.pagination a:hover {
+  background-color: #0047AB; /* 파란색 배경 */
+  color: white; /* 흰색 글씨 */
+}
+
+/* 클릭(활성화)된 상태 */
+.pagination a:active {
+  background-color: #011838; /* 더 어두운 파란색 배경 */
+  color: white; /* 흰색 글씨 */
+}
+
+.pagination .active, .active-page {
+  background-color: #0047AB !important; /* 파란색 배경 */
+  color: #FFFFFF !important; /* 흰색 글씨 */
+  font-weight: bold !important;
+  pointer-events: none !important;
+}
+
+
+
+@keyframes blink {
+  0%, 100% {
+      opacity: 1; /* 완전히 보임 */
+  }
+  50% {
+      opacity: 0; /* 사라짐 */
+  }
+}
+
+/* 반응형 처리 */
+@media (max-width: 768px) {
+  .board-index-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .board-index-company {
+    margin-top: 10px;
+  }
+
+  .table th, .table td {
+    font-size: 0.85rem;
+    padding: 8px 10px;
+  }
+
+  .board-list a {
+    margin: 0 10px;
+    font-size: 0.9rem;
+  }
+}
