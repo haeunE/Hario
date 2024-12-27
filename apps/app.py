@@ -71,13 +71,13 @@ def create_app():
         if view_func.startswith('/graph/stocklive/'):
             csrf.exempt(live_app.server.view_functions[view_func])
 
-    from apps.logistics import views as logistics_views
-    app.register_blueprint(logistics_views.logistics, url_prefix='/logistics')
-    
-    from apps.board import views as board_views
-    app.register_blueprint(board_views.board, url_prefix='/board')
-       
-    # #========================== department 초기 값 설정 ============================
+  from apps.logistics import views as logistics_views
+  app.register_blueprint(logistics_views.logistics, url_prefix='/logistics')
+  
+  from apps.board import views as board_views
+  app.register_blueprint(board_views.board, url_prefix='/board')
+      
+  # #========================== department 초기 값 설정 ============================
 
   # with app.app_context():
   #   from apps.crud.models import Department, seed_initial_data  # 모델 임포트
