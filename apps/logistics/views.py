@@ -15,8 +15,8 @@ plt.rcParams['font.family'] = font_prop.get_name()
 plt.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
 
 logistics = Blueprint('logistics', __name__, template_folder='templates', static_folder='static')
-geojson_path = os.path.join('apps', 'logistics', '서울_자치구_경계_2017.geojson')
 
+geojson_path = os.path.join('apps', 'logistics', '서울_자치구_경계_2017.geojson')
 
 @logistics.route('/')
 def logistics_page():
@@ -29,17 +29,79 @@ def logistics_page():
         ('apps/logistics/logi_after.csv', '코로나 이후 (2022.05 ~ 2023.12)')
     ]
     
-    pie_item_img, line_item_img, weekday_line_img, columns_item = logistics_graph(csv_files_all, csv_files_term)
+    columns_item = [
+    '가구/인테리어', '도서/음반', '디지털/가전', '생활/건강', 
+    '스포츠/레저', '식품', '출산/육아', '패션의류', '패션잡화', '화장품/미용'
+    ]
+    
+    pie_item_img, line_item_img, weekday_line_img, columns_item = logistics_graph(csv_files_all, csv_files_term, columns_item)
     bar_item_img = logistics_bar_graph(csv_files_term)
     
-    dual_map = color_map(csv_files_term, columns_item )
+    df_all = read_csv('apps/logistics/logi_all.csv')
+    total_volume_all = df_all[columns_item].sum()  # 전체 품목별 운송량 합계
+
+    # pie_analysis        
+    top_pie_item, top_pie_percent, second_pie_item, second_pie_percent, third_pie_item, third_pie_percent = pie_analysis(total_volume_all)
+   
+    # bar_analysis        
+    top_bar_period, top_bar_item, top_bar_volume = bar_analysis(csv_files_term, columns_item)
     
-    return render_template('logistics.html', 
-                           pie_plot_urls=pie_item_img, 
-                           line_plot_urls=line_item_img, 
-                           weekday_line_plot_urls=weekday_line_img,
-                           bar_plot_urls=bar_item_img,
-                           dual_map=dual_map)
+    # map_analysis        
+    dual_map, top_sender, top_receiver, combined_text = color_map(csv_files_term, columns_item)
+    
+    # line_analysis        
+    top_line_period, top_line_month, top_line_item = line_analysis(csv_files_term, columns_item)
+    
+    
+    # # 분석 결과
+    # top_pie_item, top_pie_percent, second_pie_item, second_pie_percent, third_pie_item, third_pie_percent = get_pie_analysis(csv_files_all, columns_item)
+    # top_bar_period, top_bar_item, top_bar_volume = get_bar_analysis(csv_files_term, columns_item)
+    # max_day, min_day, max_day_volume, min_day_volume, top_item = get_weekday_analysis(csv_files_all, columns_item)
+    # dual_map, top_sender, top_receiver, combined_text = color_map(csv_files_term, columns_item)
+    # top_sender_volume, top_receiver_volume, third_sender, third_sender_volume = get_dual_map_analysis(dual_map)
+
+    # return render_template(
+    #     'logistics/logistics.html',
+    #     pie_plot_urls=pie_item_img, line_plot_urls=line_item_img, bar_plot_urls=bar_item_img,
+    #     weekday_line_plot_urls=weekday_line_img,
+    #     dual_map=dual_map, top_sender=top_sender, top_receiver=top_receiver, combined_text=combined_text,
+    #     top_pie_item=top_pie_item, top_pie_percent=top_pie_percent, second_pie_item=second_pie_item,
+    #     second_pie_percent=second_pie_percent, third_pie_item=third_pie_item, third_pie_percent=third_pie_percent,
+    #     top_bar_period=top_bar_period, top_bar_item=top_bar_item, top_bar_volume=top_bar_volume,
+    #     max_day=max_day, min_day=min_day, max_day_volume=max_day_volume, min_day_volume=min_day_volume,
+    #     top_item=top_item,
+    #     top_sender_volume=top_sender_volume, top_receiver_volume=top_receiver_volume,
+    #     third_sender=third_sender, third_sender_volume=third_sender_volume
+    # )
+
+    return render_template(
+        'logistics/logistics.html', 
+        pie_plot_urls=pie_item_img, 
+        line_plot_urls=line_item_img, 
+        bar_plot_urls=bar_item_img,
+        weekday_line_plot_urls=weekday_line_img,
+        
+        dual_map=dual_map, 
+        top_sender=top_sender, 
+        top_receiver=top_receiver, 
+        combined_text=combined_text,
+        
+        top_pie_item=top_pie_item,
+        top_pie_percent=top_pie_percent,
+        second_pie_item=second_pie_item,
+        second_pie_percent=second_pie_percent,
+        third_pie_item=third_pie_item,
+        third_pie_percent=third_pie_percent,
+        
+        top_bar_period=top_bar_period,
+        top_bar_item=top_bar_item,
+        top_bar_volume=top_bar_volume,
+        
+        top_line_period=top_line_period,
+        top_line_month=top_line_month,
+        top_line_item=top_line_item,
+        
+    )
 
 
 def read_csv(file_path):
@@ -49,12 +111,8 @@ def read_csv(file_path):
     return pd.read_csv(file_path, encoding=encoding) 
 
 
-def logistics_graph(csv_files_all, csv_files_term):
+def logistics_graph(csv_files_all, csv_files_term, columns_item):
     pie_item_img, line_item_img, weekday_line_img = [], [], []
-    columns_item = [
-        '가구/인테리어', '도서/음반', '디지털/가전', '생활/건강', 
-        '스포츠/레저', '식품', '출산/육아', '패션의류', '패션잡화', '화장품/미용'
-    ]
 
     # 전체 기간 그래프 생성 (csv_files_all)
     for file_path, title_prefix in csv_files_all:
@@ -104,7 +162,7 @@ def plot_pie_graph(data, title):
     
     plt.legend(wedges, sorted_data.index, loc='upper left', bbox_to_anchor=(1, 1), fontsize=10)
     plt.tight_layout()
-    plt.title(f'{title}')
+    # plt.title(f'{title}')
 
     pie_img_io = io.BytesIO()
     plt.savefig(pie_img_io, format='png')
@@ -113,6 +171,22 @@ def plot_pie_graph(data, title):
     plt.close()
 
     return pie_item_img    
+
+
+def pie_analysis(total_volume):
+    total = total_volume.sum()  # 전체 운송량 합계
+    
+    top_item = total_volume.index[0]
+    top_item_percentage = round((total_volume.iloc[0] / total) * 100, 1)
+    
+    second_item = total_volume.index[1]
+    second_item_percentage = round((total_volume.iloc[1] / total) * 100, 1)
+    
+    third_item = total_volume.index[2]
+    third_item_percentage = round((total_volume.iloc[2] / total) * 100, 1)
+    
+    return top_item, top_item_percentage, second_item, second_item_percentage, third_item, third_item_percentage
+
 
 
 # 코로나 기간 별 운송량 (막대 그래프)
@@ -152,6 +226,21 @@ def plot_bar_graph(title, columns_item, total_volume):
     return bar_item_img
 
 
+def bar_analysis(csv_files_term, columns_item):
+    total_volume = pd.DataFrame()
+    
+    for file_path, title_prefix in csv_files_term:
+        df = read_csv(file_path)
+        df_selected = df[columns_item]
+        total_volume[title_prefix] = df_selected.sum()
+    
+    top_bar_period = total_volume.sum(axis=0).idxmax()  # 가장 높은 운송량을 기록한 기간
+    top_bar_volume = total_volume.sum(axis=0).max()  # 해당 기간의 운송량
+    top_bar_item = total_volume[top_bar_period].idxmax()  # 해당 기간의 가장 높은 품목
+    
+    return top_bar_period, top_bar_item, top_bar_volume
+
+
 def plot_line_graph(df, columns_item, title):
     df_monthly = df[columns_item].resample('ME').sum()
     fig, ax = plt.subplots(figsize=(17, 4))
@@ -175,6 +264,28 @@ def plot_line_graph(df, columns_item, title):
     return line_item_img
 
 
+def line_analysis(csv_files_term, columns_item):
+    total_volume = pd.DataFrame()
+    
+    for file_path, title_prefix in csv_files_term:
+        df = read_csv(file_path)
+        df_selected = df[columns_item]
+        total_volume[title_prefix] = df_selected.sum()
+    
+    line_total = total_volume.sum(axis=0)
+    
+    top_line_period = line_total.idxmax()  # 최고 운송량을 기록한 기간
+    top_line_volume = line_total.max()  # 해당 기간의 운송량
+    top_line_item = total_volume[top_line_period].idxmax()  # 최고 운송량 품목
+    
+    # low_line_period = line_total.idxmin()  # 최저 운송량을 기록한 기간
+    # low_line_volume = line_total.min()  # 해당 기간의 운송량
+    # low_line_item = total_volume[low_line_period].idxmin()  # 최저 운송량 품목
+    
+    return top_line_period, top_line_item, top_line_volume
+# , low_line_period, low_line_item, low_line_volume
+
+
 def plot_weekday_line_graph(csv_files_all, columns_item):
     df = read_csv(csv_files_all)
     df['배송년월일'] = pd.to_datetime(df['배송년월일'], format='%Y%m%d')
@@ -183,7 +294,7 @@ def plot_weekday_line_graph(csv_files_all, columns_item):
     df['요일'] = df.index.dayofweek  # 요일 계산
     df_weekday = df[df['요일'] < 5]  # 주말 필터링
     
-    weekday_sum = df_weekday.groupby('요일')[columns_item].sum()  # 요일별 운송량 집계
+    weekday_sum = df_weekday.groupby('요일')[columns_item].sum()
     
     fig, ax = plt.subplots(figsize=(7, 4))
     weekday_sum.plot(ax=ax)
@@ -211,8 +322,16 @@ def plot_weekday_line_graph(csv_files_all, columns_item):
 
     return weekday_volume
 
+# def weekday_summary():
+#     # 운송량 합계가 가장 많은 요일
+#     # 운송량 합계가 가장 적은 요일
+#     # 운송량 합계가 가장 많은 품목
+#     # 운송량 합계가 가장 적은 품목
+#     # 요일 별 운송량 합계
+#     return 
 
-# 여기서부터 듀얼맵
+
+# 여기부터 듀얼맵
 
 def color_map(csv_files_term, columns_item):  # 운송량 집계, 색상 매핑
     df = pd.concat([read_csv(file) for file, _ in csv_files_term], ignore_index=True)
@@ -236,12 +355,6 @@ def color_map(csv_files_term, columns_item):  # 운송량 집계, 색상 매핑
 
     sender_rank = gu_rank('송하인_구명') 
     receiver_rank = gu_rank('수하인_구명') 
-    
-    # print('='*50)    
-    # print(sender_rank)
-    # print('='*50)    
-    # print(receiver_rank)
-
     dual_map = generate_dual_map(sender_rank, receiver_rank)
 
     return dual_map
@@ -319,7 +432,25 @@ def generate_dual_map(sender_rank, receiver_rank):
     sender_geojson()
     receiver_geojson()
 
+    sender_text, receiver_text, combined_text = map_analysis(sender_rank, receiver_rank)
+
     dual_map_file_path = os.path.join('apps/logistics/static/images', 'dual_map.html')
     m.save(dual_map_file_path)
 
-    return dual_map_file_path
+    return dual_map_file_path, sender_text, receiver_text, combined_text
+
+
+# 지도 요약 - 지역 별 수요 top 3
+def map_analysis(sender_rank, receiver_rank):
+    
+    all_volume = sender_rank.copy()
+    all_volume['송수하인_합계'] = all_volume['운송량'] + receiver_rank['운송량']
+    
+    top_sender = sender_rank.nlargest(1, '운송량')['송하인_구명'].iloc[0]
+    top_receiver = receiver_rank.nlargest(1, '운송량')['수하인_구명'].iloc[0]
+    
+    # 송수하인 합계 순위
+    top_combined = all_volume.nlargest(3, '송수하인_합계')[['송하인_구명', '송수하인_합계']]
+    combined_text = " - ".join([f"{row['송하인_구명']} ({row['송수하인_합계']} 건)" for _, row in top_combined.iterrows()])
+
+    return top_sender, top_receiver, combined_text
