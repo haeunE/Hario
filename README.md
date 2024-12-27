@@ -17,7 +17,7 @@ Flask, html, css, javaScript, MySQL 이용한 CJ 기업의 Covid19 영향 분석
 - Flask==3.1.0
 - SQLAlchemy==2.0.36
 
-
+## :pushpin: 주요기능
 
 
 # Clone 후 해야할 것
