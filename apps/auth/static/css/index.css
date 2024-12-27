@@ -58,7 +58,7 @@
   justify-content: center; /* 가로축 중앙 정렬 */
   align-items: center; /* 세로축 중앙 정렬 */
   height: 70vh; /* 섹션 전체 높이 설정 */
-  background-color: #f9f9f9; /* 배경색 (선택 사항) */
+  background-color: #f0f0f0; /* 배경색 (선택 사항) */
   padding: 10px; /* 여백 추가 */
 }
 
@@ -220,10 +220,10 @@
 /* 뉴스 영역 */
 .news {
   padding: 60px;
-  background-color: #ffffff; /* 흰색 배경 */
-  border-radius: 8px; /* 모서리 둥글게 */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 섬세한 그림자 추가 */
-  margin-top: 30px;
+  background-color: #f0f0f0; /* 흰색 배경 */
+  /* border-radius: 8px; 모서리 둥글게 */
+  /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 섬세한 그림자 추가 */
+  /* margin-top: 30px; */
 }
 
 .news h2 {
@@ -317,4 +317,10 @@
   background-color: #f9f9f9; /* 배경색 변경 */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 섬세한 그림자 */
   cursor: pointer; /* 포인터 커서로 변경 */
+}
+
+@media (max-width: 1000px) {
+  .carousel-indicators {
+      display: none;
+  }
 }

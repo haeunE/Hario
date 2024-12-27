@@ -5,6 +5,10 @@ from pathlib import Path
 dir= os.path.dirname(__file__)
 image_dir = Path(__file__).parent.parent
 
+access_token = None
+approval_key = None
+
+
 class BaseConfig:
   SECRET_KEY = secrets.token_urlsafe(32)
   WTF_CSRF_SECRET_KEY = secrets.token_urlsafe(32)
