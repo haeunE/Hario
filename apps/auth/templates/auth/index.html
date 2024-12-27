@@ -22,13 +22,29 @@
     </div>
     <div class="CEO">
       <div class="ceo-message">
-          <h2>대표 인사말</h2>
-          <p>"코로나19 팬데믹은 전 세계를 변화시켰습니다. 우리 회사는 위기를 기회로 삼아 새로운 도약을 이루었습니다. 함께 이뤄낸 성과에 감사드리며, 앞으로도 혁신과 성장으로 나아가겠습니다."</p>
+          <h2>소개</h2>
+          <p>"CJ 데이터와 코로나19 관련 데이터를 활용하여, 팬데믹이 우리 생활과 주요 산업에 어떤 영향을 미쳤는지 심도 있게 살펴보고자 합니다.</p>
+          <p>데이터를 통해 변화를 이해하고 앞으로의 방향을 고민할 수 있는 기회를 제공하고자 합니다."</p>
+      </div>
+      <div class="p-3"></div>
+      <div class="ceo-message">
+        <h2 class="p-1">목적</h2>
+        <p class="fs-6">1. 코로나19 팬데믹의 영향 분석</p>
+        <p class="fs-6">2. 산업별 트렌드 파악 및 인사이트 도출</p>
+        <p class="fs-6">3. 데이터 시각화를 통한 대중의 이해 도모</p>
+        <p class="fs-6">4. 향후 예측 및 준비</p>
+        
       </div>
     </div>  
   </header>
 <!-- 2. 주요 섹션: 회사 코로나 극복 스토리 -->
+
 <section class="company-story">
+  <div class="text-center mt-3">
+    <button id="external-prev" class="btn rounded-circle"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-caret-left" viewBox="0 0 16 16">
+      <path d="M10 12.796V3.204L4.519 8zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753"/>
+    </svg></button>
+  </div>
   <div id="carouselExampleCaptions" class="carousel carousel-dark slide">
     <!-- 인디케이터 (미리보기 이미지) -->
     <div class="carousel-indicators">
@@ -89,17 +105,16 @@
         </a>
       </div>
     </div>  
-
-    <!-- 이전/다음 버튼 -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
+    
   </div>
+  <!-- 외부 버튼 -->
+    <div class="text-center mt-3">
+      <button id="external-next" class="btn rounded-circle"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-caret-right" viewBox="0 0 16 16">
+        <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753"/>
+      </svg></button>
+    </div>
+
+  
 </section>
 
 
@@ -157,6 +172,17 @@
   
   {% block js %}
   <script src="{{url_for('auth.static', filename='js/index.js')}}" ></script>
+  <script>
+    document.getElementById('external-prev').addEventListener('click', function() {
+      const carousel = new bootstrap.Carousel(document.getElementById('carouselExampleCaptions'));
+      carousel.prev();
+    });
+
+    document.getElementById('external-next').addEventListener('click', function() {
+      const carousel = new bootstrap.Carousel(document.getElementById('carouselExampleCaptions'));
+      carousel.next();
+    });
+  </script>
   {% endblock %}
 
 

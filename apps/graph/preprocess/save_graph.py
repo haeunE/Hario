@@ -6,7 +6,7 @@ import os
 def save_sessionfig() : 
   if not os.path.exists("apps/graph/static/session_fig.json"):
       # 그래프 생성
-      session_fig = px.bar(day_covid, title="한국 코로나 집계", color=day_covid.index, animation_frame="날짜", text_auto='.2s')
+      session_fig = px.bar(day_covid, color=day_covid.index, animation_frame="날짜", text_auto='.2s')
       session_fig.update_layout(
         height = 700,
         xaxis_title='분류',
