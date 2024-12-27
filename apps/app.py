@@ -99,9 +99,20 @@ def create_app():
 
   from apps.board import views as board_views
   app.register_blueprint(board_views.board, url_prefix='/board')
+
+  from apps.search import views as search_views
+  app.register_blueprint(search_views.search, url_prefix='/search')
+
       
     # #========================== department 초기 값 설정 ============================
 
+    # with app.app_context():
+    #   from apps.crud.models import Department, seed_initial_data  # 모델 임포트
+    #   seed_initial_data()
+   
+    # 에러 핸들러 설정
+  app.register_error_handler(404, page_not_found)
+  app.register_error_handler(500, internal_server_error)
   # with app.app_context():
   #   from apps.crud.models import seed_initial_data  # 모델 임포트
   #   seed_initial_data()

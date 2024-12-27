@@ -13,6 +13,21 @@ body {
   padding: 0;
 }
 
+.board-index-top {
+  display: flex;
+  justify-content: space-between; /* 제목과 버튼 사이 여백 */
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #E0E0E0;
+  background-color: #FFFFFF; /* 상단 영역 흰색 배경 */
+}
+.board-index-top h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #2E7D32; 
+}
+
 /* 고유번호 영역 (반전 색상 적용) */
 .uni-userinfo {
   background-color: #8BC34A; /* 초록색 배경 */
@@ -133,7 +148,7 @@ body {
 }
 
 
-.userdelete input[type="submit"] {
+.userdelete button[type="submit"] {
   background-color: red; /* 기존 색상 변수 사용 */
   color: white;
   border: none;
@@ -143,10 +158,10 @@ body {
   border-radius: 4px;
   width: 100%;
   margin-top: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 40px;
 }
 
-.userdelete input[type="submit"]:hover {
+.userdelete button[type="submit"]:hover {
   background-color: darkred;
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
 }
