@@ -541,55 +541,70 @@ def stock_live(app):
         "001040": "CJ(주)"
     }
     graph = dash.Dash(__name__, server=app, url_base_pathname='/graph/stocklive/', external_stylesheets=[dbc.themes.BOOTSTRAP])
-    graph.layout = html.Div([
-        html.H3("실시간 주식 데이터 대시보드"),
+    graph.layout = html.Div(
+        style={
+            "backgroundColor": "#f8f9fa",  # 배경색 설정 (여기서는 AliceBlue)
+            "height": "auto",
+        },
+        children=[
         
-        # 버튼 클릭 시 색상을 변경할 영역
-        html.Div([
-            html.Button(
-                f"{name} ({code})", 
-                id=f"btn-{code}", 
-                n_clicks=0, 
-                className="btn", 
+            html.H3("실시간 주식 데이터 대시보드"),
+            
+            # 버튼 클릭 시 색상을 변경할 영역
+            html.Div([
+                html.Button(
+                    f"{name} ({code})", 
+                    id=f"btn-{code}", 
+                    n_clicks=0, 
+                    className="btn", 
+                    style={
+                        'margin': '5px',
+                        'border': '2px solid',  # 테두리 색 지정 (파란색)
+                        'borderRadius': '5px',  # 테두리 둥글게
+                        'padding': '10px 20px',  # 버튼 패딩
+                        'backgroundColor': '#E0DCDD',  # 배경 색 (흰색)
+                        'color': '#3547B3',  # 글자 색 (파란색)
+                        'fontWeight': 'bold'  # 글자 두껍게
+                    }
+                ) for code, name in cj_stocks.items()
+            ], style={
+                'display': 'flex',          # Flexbox 사용
+                'gap': '10px',              # 버튼 간 간격
+                'marginBottom': '20px',     # 아래 여백
+                'flexWrap': 'wrap',         # 버튼이 줄 바꿈 되도록 설정
+                'justifyContent': 'center', # 가로 방향 가운데 정렬
+                'alignItems': 'center',     # 세로 방향 가운데 정렬
+                'textAlign': 'center',      # 텍스트 가운데 정렬
+            }),
+            
+            # 로딩 컴포넌트
+            dcc.Loading(
+                id="loading",
+                type="circle",  # 스피너 모양
                 style={
-                    'margin': '5px',
-                    'border': '2px solid',  # 테두리 색 지정 (파란색)
-                    'borderRadius': '5px',  # 테두리 둥글게
-                    'padding': '10px 20px',  # 버튼 패딩
-                    'backgroundColor': '#E0DCDD',  # 배경 색 (흰색)
-                    'color': '#3547B3',  # 글자 색 (파란색)
-                    'fontWeight': 'bold'  # 글자 두껍게
-                }
-            ) for code, name in cj_stocks.items()
-        ], style={
-            'display': 'flex',          # Flexbox 사용
-            'gap': '10px',              # 버튼 간 간격
-            'marginBottom': '20px',     # 아래 여백
-            'flexWrap': 'wrap',         # 버튼이 줄 바꿈 되도록 설정
-            'justifyContent': 'center', # 가로 방향 가운데 정렬
-            'alignItems': 'center',     # 세로 방향 가운데 정렬
-            'textAlign': 'center',      # 텍스트 가운데 정렬
-        }),
-        
-        # 로딩 컴포넌트
-        dcc.Loading(
-            id="loading",
-            type="circle",  # 스피너 모양
-            children=[
-                # 그래프 컴포넌트
-                dcc.Graph(id="live-graph")
-            ]
-        ),
-        
-        dcc.Interval(
-            id="interval-component",
-            interval=30 * 1000,  # 30초마다 업데이트
-            n_intervals=0
-        ),
-        
-        dcc.Store(id="selected-company", data=None),  # 선택된 회사 코드 저장
-        dcc.Store(id="real-time-data", data=[]),  # 실시간 데이터 저장
-    ])
+                    "backgroundColor": "#f8f9fa", 
+                },
+                children=[
+                    # 그래프 컴포넌트
+                    dcc.Graph(
+                        id="live-graph",
+                        style={
+                        "backgroundColor": "#f8f9fa",
+                        },
+                    )
+                ]
+            ),
+            
+            dcc.Interval(
+                id="interval-component",
+                interval=30 * 1000,  # 30초마다 업데이트
+                n_intervals=0,
+            ),
+            
+            dcc.Store(id="selected-company", data=None),  # 선택된 회사 코드 저장
+            dcc.Store(id="real-time-data", data=[]),  # 실시간 데이터 저장
+        ]
+    )
 
     @graph.callback(
         [Output("selected-company", "data"), Output("real-time-data", "data")],
@@ -690,6 +705,11 @@ def stock_live(app):
             data = pd.DataFrame(real_time_data)
             print(data)
             fig = px.line(data, x="Time", y="Now", title=f"실시간 데이터 - {cj_stocks[selected_code]}")
+            fig.update_layout(
+                xaxis=dict(
+                    tickangle=45  # X축 텍스트를 45도 기울임
+                )
+            )
             return fig
         except Exception as e:
             print(f"Error updating graph: {e}")
