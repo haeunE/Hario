@@ -1,12 +1,14 @@
 # Flask(Full Stack) Project 
-```
 Flask, html, css, javaScript, MySQL 이용한 CJ 기업의 Covid19 영향 분석
-```
----
+
 ## :computer: 프로젝트 소개
 
 
+## :watch: 개발기간
 
+## :cd: 멤버구성
+
+## :family: 개발환경
 
 
 
