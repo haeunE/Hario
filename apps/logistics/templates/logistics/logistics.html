@@ -15,22 +15,33 @@
 <body>
 
     <div class="container">
-        <img src="{{ url_for('logistics.static', filename='images/cj_logistics_index.png') }}" width="100%" alt="CJ대한통운">
+        <img src="{{ url_for('logistics.static', filename='images/cj_logistics_index.png') }}" width="100%"
+            alt="CJ대한통운">
 
         <!-- 전체 기간 파이형 그래프 (범례 표시) -->
         <section id="pie-graphs-all">
             <h3>전체 기간 품목 별 운송 비율</h3>
-            <div class="pie-graph-container">
-                <div class="pie-graph">
-                    <img src="data:image/png;base64,{{ pie_plot_urls[0] }}" alt="전체 기간 (2018~2024) 품목 별 운송 비율">
-                </div>
+            <div class="pie-graph">
+                <img src="data:image/png;base64,{{ pie_plot_urls[0] }}" alt="전체 기간 (2018~2024) 품목 별 운송 비율">
+            </div>
+            <div class="pie-all-analysis">
+                <p>2018년부터 2024년의 품목별 운송량을 분석한 파이 그래프입니다.<br>
+                    분석 결과, {{ top_pie_item }}가(이) {{ top_pie_percent }}%로 가장 높았습니다.
+                    {{ second_pie_item }}({{ second_pie_percent }}%), {{ third_pie_item }}({{ third_pie_percent }}%) 순으로
+                    수요가 많았습니다.
+                </p>
             </div>
         </section>
 
-        <section id="bar-graphs-periods">
+        <section id="bar-graphs">
             <h3>코로나 기간 별 운송량</h3>
             <div class="bar-graph-container">
                 <img src="data:image/png;base64,{{ bar_plot_urls }}" alt="코로나 기간별 운송량 막대 그래프">
+            </div>
+            <div class="bar-analysis">
+                <p>코로나 이전, 코로나 기간, 코로나 이후로 나누어 운송량을 분석한 막대 그래프입니다.<br>
+                    분석 결과, {{ high_bar_period }}의 운송량이 평균 {{ high_bar_volume }}건으로 가장 많았고,
+                    {{ low_bar_period }}의 운송량이 평균 {{low_bar_volume}}건으로 가장 적었습니다.</p>
             </div>
         </section>
 
@@ -49,13 +60,29 @@
 
         <!-- 전체 기간 선형 그래프 -->
         <section id="line-graphs">
-            <h3>전체 기간 품목 별 운송량</h3>
+            <h3>2018~2024 품목별 운송량</h3>
             <div class="line-graph">
-                <img src="data:image/png;base64,{{ line_plot_urls[0] }}" alt="전체 기간 품목 별 운송량">
-                <!-- 요일별 운송량 선형 그래프 -->
-                <h3>요일별 운송량 추이</h3>
-                <img src="data:image/png;base64,{{ weekday_line_plot_urls[0] }}" alt="요일별 운송량">
+                <img src="data:image/png;base64,{{ line_plot_urls[0] }}" alt="2018~2024 품목 별 운송량">
             </div>
+            <div class="line-analysis">
+                <p>2018~2024 품목별 운송량을 분석한 선형 그래프입니다.<br>
+                    분석 결과, {{ high_month[0] }}년 {{ high_month[1] }}월에 {{ high_month[2]}}건으로 운송량이 가장 많았고,
+                    {{ low_month[0] }}년 {{ low_month[1] }}월에 {{low_month[2] }}건으로 운송량이 가장 적었습니다.<br>
+                    월별 평균 운송량은 {{monthly_avg_volume}}건입니다.<br>
+                </p>
+            </div>
+        </section>
+
+
+        <!-- 요일별 운송량 선형 그래프 -->
+        <h3>요일별 운송량 추이</h3>
+        <img src="data:image/png;base64,{{ weekday_line_plot_urls[0] }}" alt="요일별 운송량">
+        <div class="weekday-line-analysis">
+            <p>요일별 운송량을 분석한 선형 그래프입니다.<br>
+                분석 결과, {{ high_day }}요일의 수요가 평균 {{ high_day_mean }}건으로 가장 많고,
+                {{ low_day }}요일의 수요가 {{ low_day_mean }}건으로 가장 적었습니다.</p>
+
+        </div>
         </section>
 
         <section>
@@ -64,36 +91,37 @@
                 <iframe src="{{ url_for('logistics.static', filename='images/dual_map.html') }}" width="100%"
                     height="600" style="border: none;"></iframe>
             </div>
-
-            <h5>요약</h5>
-
-            <p>송하인 순위 : {{ sender_text }}</p>
-            <p>수하인 순위 : {{ receiver_text }}</p>
-            <p>수요가 많은 대리점 : {{ combined_text }}</p>
-
+            <div class="map-analysis">
+                <p>2018~2024 서울시 자치구 별 택배 물류량을 분석했습니다.<br>
+                    입고량이 가장 많은 자치구는 {{ top_sender }}, 출고량이 가장 많은 자치구는 {{ top_receiver }}입니다.<br>
+                    {{ combined_text }} 순으로 택배 수요가 많습니다.</p>
+            </div>
         </section>
     </div>
 
     <!-- 위로 올라가는 버튼 -->
     <button id="scrollToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Scroll to top">
-     <i class="fa fa-arrow-up"></i>
-   </button>
- 
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-   
-   <script>
-     const scrollToTopButton = document.getElementById("scrollToTop");
- 
-     window.onscroll = function() {
-       if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-         scrollToTopButton.style.display = "block";
-       } else {
-         scrollToTopButton.style.display = "none";
-       }
-     };
-   </script>
+        <i class="fa fa-arrow-up"></i>
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <script>
+        const scrollToTopButton = document.getElementById("scrollToTop");
+
+        window.onscroll = function () {
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                scrollToTopButton.style.display = "block";
+            } else {
+                scrollToTopButton.style.display = "none";
+            }
+        };
+    </script>
 
 </body>
+
 </html>
 
 {% endblock %}
