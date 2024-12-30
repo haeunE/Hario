@@ -69,8 +69,6 @@ def stockspurchase_domestic(data_cnt, data,name):
 async def connect(stock_name):
   if stock_name in cj_stocks.keys():
     try:
-      
-
       url = 'ws://ops.koreainvestment.com:21000' # 실전투자계좌
 
       # 원하는 호출을 [tr_type, tr_id, tr_key] 순서대로 리스트 만들기
