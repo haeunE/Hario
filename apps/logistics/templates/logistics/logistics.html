@@ -20,17 +20,65 @@
 
         <!-- 전체 기간 파이형 그래프 (범례 표시) -->
         <section id="pie-graphs-all">
-            <h3>전체 기간 품목 별 운송 비율</h3>
+            <h3>품목 별 운송 비율</h3>
             <div class="pie-graph">
-                <img src="data:image/png;base64,{{ pie_plot_urls[0] }}" alt="전체 기간 (2018~2024) 품목 별 운송 비율">
+                <img id="pie-chart" src="data:image/png;base64,{{ pie_plot_urls[0] }}" alt="2018~2024 품목 별 운송 비율">
+                <map name="pie_map">
+                    {% for item in columns_item %}
+                    <area shape="circle" coords="{{ pie_coords[loop.index0] }}" alt="{{ item }}" title="{{ item }}"
+                        href="javascript:void(0);" data-item="{{ item }}">
+                    {% endfor %}
+                </map>
             </div>
+
+            <!-- 기간 선택 버튼 -->
+            <!-- <div class="period-buttons">
+                <button onclick="showPieChart(0)">전체 기간</button>
+                <button onclick="showPieChart(1)">코로나 이전</button>
+                <button onclick="showPieChart(2)">코로나 기간</button>
+                <button onclick="showPieChart(3)">코로나 이후</button>
+            </div> -->
+
+            <!-- 코로나 기간 별 파이형 그래프 -->
+            <div class="pie-graph-period">
+                {% for pie_img in pie_plot_urls[1:] %}
+                <div class="pie-graph" style="display: none;">
+                    <img src="data:image/png;base64,{{ pie_img }}" alt="기간 별 운송 비율">
+                </div>
+                {% endfor %}
+            </div>
+
             <div class="pie-all-analysis">
-                <p>2018년부터 2024년의 품목별 운송량을 분석한 파이 그래프입니다.<br>
+                <p>2018~2024 품목별 운송량을 분석한 파이 그래프입니다.<br>
                     분석 결과, {{ top_pie_item }}가(이) {{ top_pie_percent }}%로 가장 높았습니다.
                     {{ second_pie_item }}({{ second_pie_percent }}%), {{ third_pie_item }}({{ third_pie_percent }}%) 순으로
                     수요가 많았습니다.
                 </p>
+<!-- 
+                <div class="period-analysis">
+                    <h4>코로나 이전</h4>
+                    <p>코로나 이전 기간(2018.01 ~ 2019.12) 분석 결과, {{ pre_covid_top_item }}가(이) {{ pre_covid_top_percent }}%로 가장
+                        높았습니다.
+                        {{ pre_covid_second_item }}({{ pre_covid_second_percent }}%), {{ pre_covid_third_item }}({{
+                        pre_covid_third_percent }}%) 순으로 수요가 많았습니다.
+                    </p>
+
+                    <h4>코로나 기간</h4>
+                    <p>코로나 기간(2020.01 ~ 2022.04) 분석 결과, {{ covid_period_top_item }}가(이) {{ covid_period_top_percent }}%로
+                        가장 높았습니다.
+                        {{ covid_period_second_item }}({{ covid_period_second_percent }}%), {{ covid_period_third_item
+                        }}({{ covid_period_third_percent }}%) 순으로 수요가 많았습니다.
+                    </p>
+
+                    <h4>코로나 이후</h4>
+                    <p>코로나 이후 기간(2022.05 ~ 2023.12) 분석 결과, {{ post_covid_top_item }}가(이) {{ post_covid_top_percent }}%로
+                        가장 높았습니다.
+                        {{ post_covid_second_item }}({{ post_covid_second_percent }}%), {{ post_covid_third_item }}({{
+                        post_covid_third_percent }}%) 순으로 수요가 많았습니다.
+                    </p>
+                </div> -->
             </div>
+
         </section>
 
         <section id="bar-graphs">
@@ -46,21 +94,9 @@
         </section>
 
 
-        <!-- 코로나 기간 별 파이형 그래프 (범례 생략) -->
-        <!-- <section id="pie-graphs-periods">
-            <h2>코로나 기간 별 운송 비율</h2>
-            <div class="pie-graph-container">
-                {% for pie_img in pie_plot_urls[1:] %}
-                <div class="pie-graph">
-                    <img src="data:image/png;base64,{{ pie_img }}" alt="코로나 기간 별 운송 비율">
-                </div>
-                {% endfor %}
-            </div>
-        </section> -->
-
         <!-- 전체 기간 선형 그래프 -->
         <section id="line-graphs">
-            <h3>2018~2024 품목별 운송량</h3>
+            <h3>품목별 운송량</h3>
             <div class="line-graph">
                 <img src="data:image/png;base64,{{ line_plot_urls[0] }}" alt="2018~2024 품목 별 운송량">
             </div>
@@ -78,7 +114,7 @@
         <h3>요일별 운송량 추이</h3>
         <img src="data:image/png;base64,{{ weekday_line_plot_urls[0] }}" alt="요일별 운송량">
         <div class="weekday-line-analysis">
-            <p>요일별 운송량을 분석한 선형 그래프입니다.<br>
+            <p>2018~2024 요일별 운송량을 분석한 선형 그래프입니다.<br>
                 분석 결과, {{ high_day }}요일의 수요가 평균 {{ high_day_mean }}건으로 가장 많고,
                 {{ low_day }}요일의 수요가 {{ low_day_mean }}건으로 가장 적었습니다.</p>
 

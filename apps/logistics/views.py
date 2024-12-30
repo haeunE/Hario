@@ -2,12 +2,11 @@ from flask import Blueprint, render_template
 import folium.plugins
 import pandas as pd
 import matplotlib, io, os, base64, json, folium, chardet
-matplotlib.use('Agg')
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib import font_manager
-import mplcursors
+matplotlib.use('Agg')
 
 font_path = "C:/Windows/Fonts/malgun.ttf"
 font_prop = font_manager.FontProperties(fname=font_path)
@@ -15,19 +14,41 @@ plt.rcParams['font.family'] = font_prop.get_name()
 plt.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
 
 logistics = Blueprint('logistics', __name__, template_folder='templates', static_folder='static')
-
 geojson_path = os.path.join('apps', 'logistics', '서울_자치구_경계_2017.geojson')
+
+csv_files_all = [
+    ('apps/logistics/logi_all.csv', '전체 기간 (2018~2024)')
+]
+csv_files_term = [
+    ('apps/logistics/logi_before.csv', '코로나 이전 (2018.01 ~ 2019.12)'),
+    ('apps/logistics/logi_during.csv', '코로나 기간 (2020.01 ~ 2022.04)'),
+    ('apps/logistics/logi_after.csv', '코로나 이후 (2022.05 ~ 2023.12)')
+]
+
+def generate_logi_all():
+    column_remove = [    # 제거할 열
+        '송하인_시명', '송하인_시코드', '송하인_구명', '송하인_구코드',
+        '수하인_시명', '수하인_시코드', '수하인_구명', '수하인_구코드'
+    ]
+
+    dfs = []
+    for file_path, _ in csv_files_term:
+        df = pd.read_csv(file_path, encoding='euc-kr')
+        df = df.loc[(df != 0).any(axis=1)]  # 값이 0이 아닌 행만
+        dfs.append(df)
+
+    df_all = pd.concat(dfs)
+    df_cleaned = df_all.drop(columns=column_remove, errors='ignore') #  # logi_all.csv 파일 생성, 불필요한 열 제거
+    date_voiume_sum = df_cleaned.groupby(['배송년월일']).sum()  # 날짜별 운송량 집계
+    date_voiume_sum.to_csv('apps/logistics/logi_all.csv', encoding='utf-8-sig')  # 최종 파일로 저장
+    
+    return date_voiume_sum
+
 
 @logistics.route('/')
 def logistics_page():
-    csv_files_all = [
-        ('apps/logistics/logi_all.csv', '전체 기간 (2018~2024)')
-    ]
-    csv_files_term = [
-        ('apps/logistics/logi_before.csv', '코로나 이전 (2018.01 ~ 2019.12)'),
-        ('apps/logistics/logi_during.csv', '코로나 기간 (2020.01 ~ 2022.04)'),
-        ('apps/logistics/logi_after.csv', '코로나 이후 (2022.05 ~ 2023.12)')
-    ]
+    # 'logi_all.csv' 파일 생성 및 전처리
+    generate_logi_all()
     
     columns_item = [
     '가구/인테리어', '도서/음반', '디지털/가전', '생활/건강', 
@@ -119,20 +140,21 @@ def logistics_graph(csv_files_all, csv_files_term, columns_item):
     
     return pie_item_img, line_item_img, weekday_line_img, columns_item
 
-
 def generate_graph(file_path, title_prefix, columns_item):
+    # CSV 파일 읽기
     df = read_csv(file_path)
-    df['배송년월일'] = pd.to_datetime(df['배송년월일'], format='%Y%m%d')
-    df.set_index('배송년월일', inplace=True)
-    
+    df['배송년월일'] = pd.to_datetime(df['배송년월일'], format='%Y%m%d')  # 날짜 형식 변환
+    df.set_index('배송년월일', inplace=True)  # 날짜를 인덱스로 설정
+
+    # 각 항목의 총합 계산
     total_volume = df[columns_item].sum()
-    
+
+    # 그래프 생성
     bar_item = plot_bar_graph(title_prefix, columns_item, total_volume)
     pie_item = plot_pie_graph(total_volume, title_prefix)
     line_item = plot_line_graph(df, columns_item, title_prefix)
 
     return bar_item, pie_item, line_item
-
 
 # 전체 기간 품목별 파이형 그래프
 def plot_pie_graph(data, title):
@@ -140,7 +162,7 @@ def plot_pie_graph(data, title):
     colors = plt.cm.Paired(range(len(sorted_data)))
     
     plt.figure(figsize=(6, 6))
-    wedges, texts, autotexts = plt.pie(
+    wedges = plt.pie(
         sorted_data, 
         autopct='%1.1f%%', 
         startangle=90, 
@@ -180,8 +202,8 @@ def logistics_bar_graph(csv_files_term):
     ]
     total_volume = pd.DataFrame()
 
-    for file_path, title_prefix in csv_files_term:
-        df = read_csv(file_path)
+    for csv_files_term, title_prefix in csv_files_term:
+        df = read_csv(csv_files_term)
         df_selected = df[columns_item]
         total_volume[title_prefix] = df_selected.sum()      
 
@@ -261,16 +283,15 @@ def line_analysis(csv_files_term, columns_item):
         # 월별 데이터 집계
         df_monthly = df[columns_item].resample('M').sum()
         total_avg_volume.extend(df_monthly.sum(axis=1).values)
-
+        
+# 전체 운송량 데이터를 날짜별로 설정
     total_avg_volume = pd.Series(total_avg_volume, index=pd.date_range(start=df_monthly.index[0], periods=len(total_avg_volume), freq='M'))
     monthly_avg_volume = total_avg_volume.mean() # 월별 평균 운송량
 
+    # 가장 운송량이 많았던 월과 적었던 월
     max_month = total_avg_volume.idxmax()
     min_month = total_avg_volume.idxmin()
 
-    high_month = (max_month.year, max_month.month, total_avg_volume[max_month])
-    low_month = (min_month.year, min_month.month, total_avg_volume[min_month])
-    
     # 결과 형식 지정
     high_month = (max_month.year, max_month.month, f"{total_avg_volume[max_month]:,}")
     low_month = (min_month.year, min_month.month, f"{total_avg_volume[min_month]:,}")
@@ -279,8 +300,8 @@ def line_analysis(csv_files_term, columns_item):
     return high_month, low_month, monthly_avg_volume
 
 
-def plot_weekday_line_graph(csv_files_all, columns_item):
-    df = read_csv(csv_files_all)
+def plot_weekday_line_graph(file_path, columns_item):
+    df = read_csv(file_path)
     df['배송년월일'] = pd.to_datetime(df['배송년월일'], format='%Y%m%d')
     df.set_index('배송년월일', inplace=True)
     
@@ -341,7 +362,7 @@ def weekday_line_analysis(csv_files_all, columns_item):
 # 여기부터 듀얼맵
 
 def color_map(csv_files_term, columns_item):  # 운송량 집계, 색상 매핑
-    df = pd.concat([read_csv(file) for file, _ in csv_files_term], ignore_index=True)
+    df = pd.concat([read_csv(file_path) for file_path, _ in csv_files_term], ignore_index=True)
     df.columns = df.columns.str.strip()
     
     df['운송량'] = df[columns_item].sum(axis=1)
