@@ -44,35 +44,17 @@ def logistics_page():
     top_pie_item, top_pie_percent, second_pie_item, second_pie_percent, third_pie_item, third_pie_percent = pie_analysis(total_volume_all)
    
     # bar_analysis        
-    top_bar_period, top_bar_item, top_bar_volume = bar_analysis(csv_files_term, columns_item)
+    high_bar_period, high_bar_volume, low_bar_period, low_bar_volume = bar_analysis(csv_files_term, columns_item)
     
     # map_analysis        
     dual_map, top_sender, top_receiver, combined_text = color_map(csv_files_term, columns_item)
     
     # line_analysis        
-    top_line_period, top_line_month, top_line_item = line_analysis(csv_files_term, columns_item)
-    
-    
-    # # 분석 결과
-    # top_pie_item, top_pie_percent, second_pie_item, second_pie_percent, third_pie_item, third_pie_percent = get_pie_analysis(csv_files_all, columns_item)
-    # top_bar_period, top_bar_item, top_bar_volume = get_bar_analysis(csv_files_term, columns_item)
-    # max_day, min_day, max_day_volume, min_day_volume, top_item = get_weekday_analysis(csv_files_all, columns_item)
-    # dual_map, top_sender, top_receiver, combined_text = color_map(csv_files_term, columns_item)
-    # top_sender_volume, top_receiver_volume, third_sender, third_sender_volume = get_dual_map_analysis(dual_map)
+    high_month, low_month, monthly_avg_volume = line_analysis(csv_files_term, columns_item)
 
-    # return render_template(
-    #     'logistics/logistics.html',
-    #     pie_plot_urls=pie_item_img, line_plot_urls=line_item_img, bar_plot_urls=bar_item_img,
-    #     weekday_line_plot_urls=weekday_line_img,
-    #     dual_map=dual_map, top_sender=top_sender, top_receiver=top_receiver, combined_text=combined_text,
-    #     top_pie_item=top_pie_item, top_pie_percent=top_pie_percent, second_pie_item=second_pie_item,
-    #     second_pie_percent=second_pie_percent, third_pie_item=third_pie_item, third_pie_percent=third_pie_percent,
-    #     top_bar_period=top_bar_period, top_bar_item=top_bar_item, top_bar_volume=top_bar_volume,
-    #     max_day=max_day, min_day=min_day, max_day_volume=max_day_volume, min_day_volume=min_day_volume,
-    #     top_item=top_item,
-    #     top_sender_volume=top_sender_volume, top_receiver_volume=top_receiver_volume,
-    #     third_sender=third_sender, third_sender_volume=third_sender_volume
-    # )
+    # weekday_line_analysis
+    weekday_analysis_result = weekday_line_analysis(csv_files_all, columns_item)
+
 
     return render_template(
         'logistics/logistics.html', 
@@ -93,14 +75,20 @@ def logistics_page():
         third_pie_item=third_pie_item,
         third_pie_percent=third_pie_percent,
         
-        top_bar_period=top_bar_period,
-        top_bar_item=top_bar_item,
-        top_bar_volume=top_bar_volume,
+        high_bar_period=high_bar_period,
+        high_bar_volume=high_bar_volume,
+        low_bar_period=low_bar_period,
+        low_bar_volume=low_bar_volume,
         
-        top_line_period=top_line_period,
-        top_line_month=top_line_month,
-        top_line_item=top_line_item,
-        
+        high_month=high_month,
+        low_month=low_month,
+        monthly_avg_volume=monthly_avg_volume,
+        total_volume_all=total_volume_all,
+
+        high_day=weekday_analysis_result['high_day'],
+        high_day_mean=weekday_analysis_result['high_day_mean'],
+        low_day=weekday_analysis_result['low_day'],
+        low_day_mean=weekday_analysis_result['low_day_mean']
     )
 
 
@@ -174,19 +162,14 @@ def plot_pie_graph(data, title):
 
 
 def pie_analysis(total_volume):
-    total = total_volume.sum()  # 전체 운송량 합계
-    
-    top_item = total_volume.index[0]
-    top_item_percentage = round((total_volume.iloc[0] / total) * 100, 1)
-    
-    second_item = total_volume.index[1]
-    second_item_percentage = round((total_volume.iloc[1] / total) * 100, 1)
-    
-    third_item = total_volume.index[2]
-    third_item_percentage = round((total_volume.iloc[2] / total) * 100, 1)
-    
-    return top_item, top_item_percentage, second_item, second_item_percentage, third_item, third_item_percentage
+    total = total_volume.sum()
+    sorted_volume = total_volume.sort_values(ascending=False)
+    top_items = sorted_volume.iloc[:3]
+    top_items_percentage = (top_items / total) * 100
 
+    result = [(top_items.index[i], round(top_items_percentage.iloc[i], 1)) for i in range(3)]
+
+    return tuple(result[0] + result[1] + result[2])
 
 
 # 코로나 기간 별 운송량 (막대 그래프)
@@ -234,11 +217,13 @@ def bar_analysis(csv_files_term, columns_item):
         df_selected = df[columns_item]
         total_volume[title_prefix] = df_selected.sum()
     
-    top_bar_period = total_volume.sum(axis=0).idxmax()  # 가장 높은 운송량을 기록한 기간
-    top_bar_volume = total_volume.sum(axis=0).max()  # 해당 기간의 운송량
-    top_bar_item = total_volume[top_bar_period].idxmax()  # 해당 기간의 가장 높은 품목
+    # 각 기간별 총 운송량과 평균 구하기
+    high_bar_period = total_volume.sum(axis=0).idxmax()
+    high_bar_volume = total_volume[high_bar_period].mean()
+    low_bar_period = total_volume.sum(axis=0).idxmin()
+    low_bar_volume = total_volume[low_bar_period].mean()
     
-    return top_bar_period, top_bar_item, top_bar_volume
+    return high_bar_period, high_bar_volume, low_bar_period, low_bar_volume
 
 
 def plot_line_graph(df, columns_item, title):
@@ -265,25 +250,33 @@ def plot_line_graph(df, columns_item, title):
 
 
 def line_analysis(csv_files_term, columns_item):
-    total_volume = pd.DataFrame()
-    
+    monthly_avg_volume = {}  # 월별 평균 운송량
+    total_avg_volume = []    # 전체 운송량 리스트
+
     for file_path, title_prefix in csv_files_term:
         df = read_csv(file_path)
-        df_selected = df[columns_item]
-        total_volume[title_prefix] = df_selected.sum()
+        df['배송년월일'] = pd.to_datetime(df['배송년월일'], format='%Y%m%d')
+        df.set_index('배송년월일', inplace=True)
+
+        # 월별 데이터 집계
+        df_monthly = df[columns_item].resample('M').sum()
+        total_avg_volume.extend(df_monthly.sum(axis=1).values)
+
+    total_avg_volume = pd.Series(total_avg_volume, index=pd.date_range(start=df_monthly.index[0], periods=len(total_avg_volume), freq='M'))
+    monthly_avg_volume = total_avg_volume.mean() # 월별 평균 운송량
+
+    max_month = total_avg_volume.idxmax()
+    min_month = total_avg_volume.idxmin()
+
+    high_month = (max_month.year, max_month.month, total_avg_volume[max_month])
+    low_month = (min_month.year, min_month.month, total_avg_volume[min_month])
     
-    line_total = total_volume.sum(axis=0)
-    
-    top_line_period = line_total.idxmax()  # 최고 운송량을 기록한 기간
-    top_line_volume = line_total.max()  # 해당 기간의 운송량
-    top_line_item = total_volume[top_line_period].idxmax()  # 최고 운송량 품목
-    
-    # low_line_period = line_total.idxmin()  # 최저 운송량을 기록한 기간
-    # low_line_volume = line_total.min()  # 해당 기간의 운송량
-    # low_line_item = total_volume[low_line_period].idxmin()  # 최저 운송량 품목
-    
-    return top_line_period, top_line_item, top_line_volume
-# , low_line_period, low_line_item, low_line_volume
+    # 결과 형식 지정
+    high_month = (max_month.year, max_month.month, f"{total_avg_volume[max_month]:,}")
+    low_month = (min_month.year, min_month.month, f"{total_avg_volume[min_month]:,}")
+    monthly_avg_volume = f"{monthly_avg_volume:,.0f}"
+
+    return high_month, low_month, monthly_avg_volume
 
 
 def plot_weekday_line_graph(csv_files_all, columns_item):
@@ -329,6 +322,27 @@ def plot_weekday_line_graph(csv_files_all, columns_item):
 #     # 운송량 합계가 가장 적은 품목
 #     # 요일 별 운송량 합계
 #     return 
+
+def weekday_line_analysis(csv_files_all, columns_item):
+    df = pd.concat([read_csv(file_path) for file_path, _ in csv_files_all], ignore_index=True)
+    df['배송년월일'] = pd.to_datetime(df['배송년월일'], format='%Y%m%d')
+    df.set_index('배송년월일', inplace=True)
+    
+    # 요일별로 운송량 합계 계산 (주말 제외)
+    df['요일'] = df.index.dayofweek
+    df_weekday = df[df['요일'] < 5]  # 주말 필터링 (0:월~4:금)
+    weekday_sum = df_weekday.groupby('요일')[columns_item].sum()
+    weekday_avg = weekday_sum.mean(axis=1)
+
+    high_day, low_day = weekday_avg.idxmax(), weekday_avg.idxmin()
+    
+    days_of_week = ['월', '화', '수', '목', '금']
+    return {
+        'high_day': days_of_week[high_day],
+        'high_day_mean': round(weekday_avg.max(), 2),
+        'low_day': days_of_week[low_day],
+        'low_day_mean': round(weekday_avg.min(), 2),
+    }
 
 
 # 여기부터 듀얼맵

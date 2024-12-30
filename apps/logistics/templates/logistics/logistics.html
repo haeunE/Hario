@@ -26,7 +26,7 @@
             </div>
             <div class="pie-all-analysis">
                 <p>2018년부터 2024년의 품목별 운송량을 분석한 파이 그래프입니다.<br>
-                    분석 결과, {{ top_pie_item }}이(가) {{ top_pie_percent }}%로 가장 높았고,
+                    분석 결과, {{ top_pie_item }}가(이) {{ top_pie_percent }}%로 가장 높았습니다.
                     {{ second_pie_item }}({{ second_pie_percent }}%), {{ third_pie_item }}({{ third_pie_percent }}%) 순으로
                     수요가 많았습니다.
                 </p>
@@ -39,9 +39,9 @@
                 <img src="data:image/png;base64,{{ bar_plot_urls }}" alt="코로나 기간별 운송량 막대 그래프">
             </div>
             <div class="bar-analysis">
-                <p>코로나 전후 품목별 운송량을 분석한 막대 그래프입니다.<br>
-                    분석 결과, {{ top_bar_period }}에 {{ top_bar_volume }}건으로 운송량이 가장 많았고,
-                    {{ top_bar_item }}이(가) 가장 수요가 많았습니다.</p>
+                <p>코로나 이전, 코로나 기간, 코로나 이후로 나누어 운송량을 분석한 막대 그래프입니다.<br>
+                    분석 결과, {{ high_bar_period }}의 운송량이 평균 {{ high_bar_volume }}건으로 가장 많았고,
+                    {{ low_bar_period }}의 운송량이 평균 {{low_bar_volume}}건으로 가장 적었습니다.</p>
             </div>
         </section>
 
@@ -60,33 +60,29 @@
 
         <!-- 전체 기간 선형 그래프 -->
         <section id="line-graphs">
-            <h3>전체 기간 품목 별 운송량</h3>
+            <h3>2018~2024 품목별 운송량</h3>
             <div class="line-graph">
-                <img src="data:image/png;base64,{{ line_plot_urls[0] }}" alt="전체 기간 품목 별 운송량">
+                <img src="data:image/png;base64,{{ line_plot_urls[0] }}" alt="2018~2024 품목 별 운송량">
             </div>
             <div class="line-analysis">
-                <p>2018~2024 기간 중 품목 별 운송량을 분석한 선형 그래프입니다.<br>
-                    분석 결과, 운송량이 가장 많은 날은 {{ top_line_period }}이고, 운송량이 가장 많은 달은 {{ top_line_month }}이고,
-                    운송량이 가장 많은 품목은 {{ top_line_item }}입니다.<br>
-                    품목 별 일 평균 운송량은 다음과 같습니다.<br>
-                <ul>
-                    {% for item, average in average_items %}
-                    <li>{{ item }}: {{ average }} units/day</li>
-                    {% endfor %}
-                </ul>
+                <p>2018~2024 품목별 운송량을 분석한 선형 그래프입니다.<br>
+                    분석 결과, {{ high_month[0] }}년 {{ high_month[1] }}월에 {{ high_month[2]}}건으로 운송량이 가장 많았고,
+                    {{ low_month[0] }}년 {{ low_month[1] }}월에 {{low_month[2] }}건으로 운송량이 가장 적었습니다.<br>
+                    월별 평균 운송량은 {{monthly_avg_volume}}건입니다.<br>
                 </p>
             </div>
+        </section>
 
-            <!-- 요일별 운송량 선형 그래프 -->
-            <h3>요일별 운송량 추이</h3>
-            <img src="data:image/png;base64,{{ weekday_line_plot_urls[0] }}" alt="요일별 운송량">
-            <div class="weekday-line-analysis">
-                <p>요일별 운송량을 분석한 선형 그래프입니다.<br>
-                    {{max_day}}요일의 수요가 {{max_day_volume}}건으로 가장 많고, 
-                    {{min_day}}요일의 수요가 {{min_day_volume}}건으로 가장 적습니다.
-                    요일 별 평균 운송량은 월요일 {{}}건, 화요일 {{}}건, 수요일{{}}건, 목요일{{}}, 금요일{{}}건 입니다.
-                </p>
-            </div>
+
+        <!-- 요일별 운송량 선형 그래프 -->
+        <h3>요일별 운송량 추이</h3>
+        <img src="data:image/png;base64,{{ weekday_line_plot_urls[0] }}" alt="요일별 운송량">
+        <div class="weekday-line-analysis">
+            <p>요일별 운송량을 분석한 선형 그래프입니다.<br>
+                분석 결과, {{ high_day }}요일의 수요가 평균 {{ high_day_mean }}건으로 가장 많고,
+                {{ low_day }}요일의 수요가 {{ low_day_mean }}건으로 가장 적었습니다.</p>
+
+        </div>
         </section>
 
         <section>
