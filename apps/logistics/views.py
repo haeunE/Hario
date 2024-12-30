@@ -315,13 +315,6 @@ def plot_weekday_line_graph(csv_files_all, columns_item):
 
     return weekday_volume
 
-# def weekday_summary():
-#     # 운송량 합계가 가장 많은 요일
-#     # 운송량 합계가 가장 적은 요일
-#     # 운송량 합계가 가장 많은 품목
-#     # 운송량 합계가 가장 적은 품목
-#     # 요일 별 운송량 합계
-#     return 
 
 def weekday_line_analysis(csv_files_all, columns_item):
     df = pd.concat([read_csv(file_path) for file_path, _ in csv_files_all], ignore_index=True)
