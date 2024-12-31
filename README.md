@@ -50,6 +50,13 @@ FLASK_DEBUG=True
 FLASK_CONFIG_KEY=local
 ```
 
+## requirements.txt 설정
+```
+pip install -r requirements.txt
+pip freeze > requirements.txt
+
+```
+
 ## DB 설정
 
 ```
