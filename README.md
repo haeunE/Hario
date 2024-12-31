@@ -64,3 +64,28 @@ flask db init
 flask db migrate
 flask db upgrade
 ```
+
+# 한국투자증권 API 사용 가이드
+
+실시간 주식 그래프를 작동시킬려면 한국투자증권의 API가 필요합니다. API를 사용하려면 먼저 한국투자증권에 가입하고 API 키를 발급받으세요.
+
+## 1. 한국투자증권 가입
+
+먼저 한국투자증권에 가입해야 합니다.
+
+- [한국투자증권 홈페이지](https://securities.koreainvestment.com/main/Main.jsp)로 이동합니다.
+- 회원가입을 진행합니다.
+
+## 2. API 키 신청
+
+- [API 신청 페이지](https://apiportal.koreainvestment.com/about)로 이동합니다.
+- API 신청 절차를 완료합니다.
+- 신청이 완료되면 API 키와 시크릿 키가 발급됩니다.
+
+## 3. API 키 및 시크릿 키 확인
+
+.env 파일에 아래와 같은 형식으로 추가해주세요
+
+```.env
+API_KEY = '여기에 발급받은 API 키를 입력'
+API_SECRET = '여기에 발급받은 시크릿 키를 입력'
