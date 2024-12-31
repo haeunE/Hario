@@ -161,8 +161,8 @@ def plot_pie_graph(data, title):
     sorted_data = data.sort_values(ascending=False)
     colors = plt.cm.Paired(range(len(sorted_data)))
     
-    plt.figure(figsize=(6, 6))
-    wedges = plt.pie(
+    plt.figure(figsize=(8,8,))
+    wedges, texts, autotexts = plt.pie(
         sorted_data, 
         autopct='%1.1f%%', 
         startangle=90, 
@@ -172,10 +172,10 @@ def plot_pie_graph(data, title):
     
     plt.legend(wedges, sorted_data.index, loc='upper left', bbox_to_anchor=(1, 1), fontsize=10)
     plt.tight_layout()
-    # plt.title(f'{title}')
+    plt.title(f'{title}')
 
     pie_img_io = io.BytesIO()
-    plt.savefig(pie_img_io, format='png')
+    plt.savefig(pie_img_io, format='png', bbox_inches='tight')
     pie_img_io.seek(0)
     pie_item_img = base64.b64encode(pie_img_io.getvalue()).decode()
     plt.close()
@@ -211,7 +211,7 @@ def logistics_bar_graph(csv_files_term):
 
 
 def plot_bar_graph(title, columns_item, total_volume):
-    fig, ax = plt.subplots(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(12, 4))
 
     total_volume.plot(kind='bar', ax=ax, width=0.8)    # 그룹화된 막대 그래프 생성
 
@@ -250,7 +250,7 @@ def bar_analysis(csv_files_term, columns_item):
 
 def plot_line_graph(df, columns_item, title):
     df_monthly = df[columns_item].resample('ME').sum()
-    fig, ax = plt.subplots(figsize=(17, 4))
+    fig, ax = plt.subplots(figsize=(12, 4))
 
     for column in columns_item:
         ax.plot(df_monthly.index, df_monthly[column], label=column)
@@ -310,7 +310,7 @@ def plot_weekday_line_graph(file_path, columns_item):
     
     weekday_sum = df_weekday.groupby('요일')[columns_item].sum()
     
-    fig, ax = plt.subplots(figsize=(7, 4))
+    fig, ax = plt.subplots(figsize=(12, 4))
     weekday_sum.plot(ax=ax)
 
     ax.set_title('요일별 운송량')
@@ -397,12 +397,10 @@ def generate_dual_map(sender_rank, receiver_rank):
     def color_opacity(volume, max_volume):
         return 0.2 + (volume / max_volume) * 0.8
 
-
     def color_gu(volume, max_volume):
         opacity = color_opacity(volume, max_volume)
         return mcolors.to_rgba('#0047AB', alpha=opacity)
         
-    
     def sender_geojson():            
         max_sender_volume = sender_rank['운송량'].max()
         

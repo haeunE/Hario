@@ -40,13 +40,13 @@
             </div> -->
 
             <!-- 코로나 기간 별 파이형 그래프 -->
-            <div class="pie-graph-period">
+            <!-- <div class="pie-graph-period">
                 {% for pie_img in pie_plot_urls[1:] %}
                 <div class="pie-graph" style="display: none;">
                     <img src="data:image/png;base64,{{ pie_img }}" alt="기간 별 운송 비율">
                 </div>
                 {% endfor %}
-            </div>
+            </div> -->
 
             <div class="pie-all-analysis">
                 <p>2018~2024 품목별 운송량을 분석한 파이 그래프입니다.<br>
@@ -81,22 +81,10 @@
 
         </section>
 
-        <section id="bar-graphs">
-            <h3>코로나 기간 별 운송량</h3>
-            <div class="bar-graph-container">
-                <img src="data:image/png;base64,{{ bar_plot_urls }}" alt="코로나 기간별 운송량 막대 그래프">
-            </div>
-            <div class="bar-analysis">
-                <p>코로나 이전, 코로나 기간, 코로나 이후로 나누어 운송량을 분석한 막대 그래프입니다.<br>
-                    분석 결과, {{ high_bar_period }}의 운송량이 평균 {{ high_bar_volume }}건으로 가장 많았고,
-                    {{ low_bar_period }}의 운송량이 평균 {{low_bar_volume}}건으로 가장 적었습니다.</p>
-            </div>
-        </section>
-
-
+        
         <!-- 전체 기간 선형 그래프 -->
         <section id="line-graphs">
-            <h3>품목별 운송량</h3>
+            <h3>2018~2024 품목별 운송량</h3>
             <div class="line-graph">
                 <img src="data:image/png;base64,{{ line_plot_urls[0] }}" alt="2018~2024 품목 별 운송량">
             </div>
@@ -109,6 +97,18 @@
             </div>
         </section>
 
+
+        <section id="bar-graphs">
+            <h3>코로나 전/후 기간 별 운송량</h3>
+            <div class="bar-graph-container">
+                <img src="data:image/png;base64,{{ bar_plot_urls }}" alt="코로나 기간별 운송량 막대 그래프">
+            </div>
+            <div class="bar-analysis">
+                <p>코로나 이전, 코로나 기간, 코로나 이후로 나누어 운송량을 분석한 막대 그래프입니다.<br>
+                    분석 결과, {{ high_bar_period }}의 운송량이 평균 {{ high_bar_volume }}건으로 가장 많았고,
+                    {{ low_bar_period }}의 운송량이 평균 {{low_bar_volume}}건으로 가장 적었습니다.</p>
+            </div>
+        </section>
 
         <!-- 요일별 운송량 선형 그래프 -->
         <h3>요일별 운송량 추이</h3>
