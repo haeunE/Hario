@@ -88,22 +88,21 @@ def create_app():
   from apps.auth import views as auth_views
   app.register_blueprint(auth_views.auth, url_prefix='/auth')
 
-
   from apps.crud import views as crud_views
   app.register_blueprint(crud_views.crud)
 
   from apps.graph import views as graph_views
   app.register_blueprint(graph_views.graph, url_prefix='/graph')
-  
-
 
   from apps.board import views as board_views
   app.register_blueprint(board_views.board, url_prefix='/board')
 
   from apps.search import views as search_views
   app.register_blueprint(search_views.search, url_prefix='/search')
+  
+  from apps.logistics import views as logistics_views
+  app.register_blueprint(logistics_views.logistics, url_prefix='/logistics')
 
-      
     # #========================== department 초기 값 설정 ============================
 
   # with app.app_context():
@@ -116,10 +115,6 @@ def create_app():
   # with app.app_context():
   #   from apps.crud.models import seed_initial_data  # 모델 임포트
   #   seed_initial_data()
-
-  # 에러 핸들러 설정
-  app.register_error_handler(404, page_not_found)
-  app.register_error_handler(500, internal_server_error)
 
   return app
 
