@@ -40,7 +40,7 @@ def generate_logi_all():
     df_all = pd.concat(dfs)
     df_cleaned = df_all.drop(columns=column_remove, errors='ignore') #  # logi_all.csv 파일 생성, 불필요한 열 제거
     date_voiume_sum = df_cleaned.groupby(['배송년월일']).sum()  # 날짜별 운송량 집계
-    date_voiume_sum.to_csv('apps/logistics/logi_all.csv', encoding='utf-8-sig')  # 최종 파일로 저장
+    date_voiume_sum.to_csv('apps/logistics/logi_all.csv', encoding='utf-8-sig')  # logi_all.csv 파일 저장
     
     return date_voiume_sum
 
@@ -143,8 +143,8 @@ def logistics_graph(csv_files_all, csv_files_term, columns_item):
 def generate_graph(file_path, title_prefix, columns_item):
     # CSV 파일 읽기
     df = read_csv(file_path)
-    df['배송년월일'] = pd.to_datetime(df['배송년월일'], format='%Y%m%d')  # 날짜 형식 변환
-    df.set_index('배송년월일', inplace=True)  # 날짜를 인덱스로 설정
+    df['배송년월일'] = pd.to_datetime(df['배송년월일'], format='%Y%m%d')
+    df.set_index('배송년월일', inplace=True)
 
     # 각 항목의 총합 계산
     total_volume = df[columns_item].sum()
@@ -161,7 +161,7 @@ def plot_pie_graph(data, title):
     sorted_data = data.sort_values(ascending=False)
     colors = plt.cm.Paired(range(len(sorted_data)))
     
-    plt.figure(figsize=(8,8,))
+    plt.figure(figsize=(7, 7))
     wedges, texts, autotexts = plt.pie(
         sorted_data, 
         autopct='%1.1f%%', 
@@ -219,8 +219,6 @@ def plot_bar_graph(title, columns_item, total_volume):
     ax.set_title(f'{title} 기간별 운송량')
     ax.set_xticklabels(columns_item, rotation=45, ha="right")
     ax.legend(title='기간', bbox_to_anchor=(1, 1), loc='upper left', fontsize=10)
-    
-    # plt.text() - 진행중! 막대 그래프 위에 값 표시 (for문)
 
     bar_img_io = io.BytesIO()    # 그래프 이미지 저장
     plt.savefig(bar_img_io, format='png', bbox_inches='tight')

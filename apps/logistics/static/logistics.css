@@ -1,54 +1,121 @@
-.logistics {
-  color: #000000; /* 기본 텍스트 색상 */
+body {
+  width: 100%;
   font-family: 'YESMyoungjo-Regular', Arial, sans-serif;
   margin: 0;
   padding: 0;
   display: flex;
-  justify-content: center; /* 수평 중앙 정렬 */
-  align-items: center; /* 수직 중앙 정렬 */
-  flex-direction: column; /* 세로 정렬 */
-  min-height: 100vh; /* 화면 전체 높이 차지 */
-  text-align: center; /* 텍스트 가운데 정렬 */
-  width: 100%; /* 부모 요소의 너비를 꽉 채움 */
+  flex-direction: column;
+  min-height: 100vh;
+  justify-content: flex-start;
+  align-items: center;
 }
 
-.pie-graph img, .bar-graph img, .line-graph img, .weekday-line-graph img {
-  max-width: 100%; /* 이미지의 너비를 화면에 맞게 조정 */
-  width: 80%; /* 이미지의 최대 크기 설정 */
-  max-width: 800px; /* 그래프 이미지의 최대 크기 제한 */
-  display: block; /* 이미지를 블록 요소로 변경하여 중앙 정렬을 쉽게 할 수 있도록 */
-  margin: 0 auto; /* 이미지 가운데 정렬 */
-}
-
-section {
-  margin-top: 40px;    /* 각 섹션 위에 40px 간격 추가 */
-  margin-bottom: 40px; /* 각 섹션 아래에 40px 간격 추가 */
-  display: flex;
-  flex-direction: column; /* 세로 정렬 */
-  align-items: center; /* 중앙 정렬 */
-  justify-content: center; /* 수직 중앙 정렬 */
-  width: 100%; /* 섹션이 전체 너비를 차지하게 합니다 */
-}
-
-iframe {
-  border: none;
+.container {
   width: 100%;
-  height: 600px;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  align-items: center;
 }
 
-/* 반응형 처리 */
-@media (max-width: 768px) {
-  .pie-graph-container, .line-graph {
-      flex-direction: column;
-      justify-content: center;
-  }
+/* 이미지 및 그래프의 중앙 정렬 */
+img {
+  width: 80%;
+  display: block;
+  justify-content: center;
+  margin-bottom: 40px;
+}
 
-  .pie-graph img, .line-graph img {
-      width: 90%;
-      max-width: 400px;
-  }
+.line-graph-container, .bar-graph-container {
+  display: flex; 
+  justify-content: center; 
+}
 
-  iframe {
-      height: 400px;
-  }
+/* 섹션 스타일 */
+section {
+  margin-bottom: 80px;
+  justify-content: center;
+}
+
+h2 {
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 40px;
+  color: #333;
+}
+
+h3 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.pie-all-analysis p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #555;
+  text-align: left;
+  display: flex; 
+  justify-content: center; 
+}
+
+.line-analysis p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #555;
+  text-align: left;
+  display: flex; 
+  justify-content: center; 
+}
+
+.bar-analysis p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #555;
+  text-align: left;
+  display: flex; 
+  justify-content: center; 
+}
+
+.weekday-line-analysis p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #555;
+  text-align: left;
+  margin-bottom: 40px;
+  display: flex; 
+  justify-content: center; 
+}
+
+.logistics-volume-map {
+  width: 1100px;
+  text-align: center;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.map-analysis p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #555;
+  text-align: left;
+  display: flex; 
+  justify-content: center; 
+}
+
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #45a049;
 }
