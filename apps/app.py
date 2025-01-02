@@ -103,6 +103,9 @@ def create_app():
   from apps.logistics import views as logistics_views
   app.register_blueprint(logistics_views.logistics, url_prefix='/logistics')
 
+  from apps.react import views as react_views
+  app.register_blueprint(react_views.react, url_prefix='/react')
+       
     # #========================== department 초기 값 설정 ============================
 
   # with app.app_context():

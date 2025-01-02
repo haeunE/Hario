@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block css %}
+  <title>CJ계열 코로나 대응 사례</title>
+  <link rel="stylesheet" href="{{ url_for('react.static', filename='react.css') }}">
+  {% endblock %}
+
+  {% block content %}
+  <body>
+  <div class="title"><b>CJ계열사들의 코로나 팬데믹으로 인한 위기와 이를 극복하기 위한 대응</b></div>
+  <header>
+    <nav>
+      <ul>
+          <li><a href="/react">CJ 대한통운</a></li>
+          <li><a href="CJ1">CJ 제일제당</a></li>
+          <li><a href="CJ2">CJ ENM</a></li>
+          <li><a href="CJ3">CJ 올리브영</a></li>
+          <li><a href="CJ4">CJ 프레시웨이</a></li>
+          <li><a href="CJ5">CJ CGV</a></li>
+          <li><a href="CJ6">CJ 스튜디오드래곤</a></li>
+          <li><a href="CJ7">CJ 씨푸드</a></li>
+          <li><a href="CJ8">CJ 바이오사이언스</a></li>
+      </ul>
+  </nav>
+  </header>
+  <div class="tt">CJ 대한통운</div>
+  <main>
+    <section id="posts">
+        <article class="post">
+            <h2>위기</h2>
+            <p>
+              CJ대한통운은 코로나19 팬데믹으로 인해 여러 가지 물류 및 운영상의 위기에 직면했습니다. 이 팬데믹은 전 세계적인 경제 활동의 둔화와 함께 물류 및 유통 분야에 큰 영향을 미쳤고, 특히 CJ대한통운은 급증하는 온라인 쇼핑 수요와 그에 따른 물류 처리의 부담 증가, 그리고 안전 문제 등을 동시에 해결해야 했습니다.<br><br>
+              1. 집에서 보내는 시간이 늘어나 식료품, 생필품, 의약품 등의 온라인 수요가 급증해 배송 혼잡이 심화됨.<br>
+              2. 코로나19 감염자 발생으로 인해 물류센터 셧다운 및 배송 지연 문제가 발생할 위험과 자가격리나 병가로 결근으로 인한 인력 부족 상황 가능성.<br>
+              3. 국경 봉쇄나 운송 제한이 시행으로 인한 수출입 물류의 차질이 발생, CJ대한통운의 글로벌 서비스에도 차질이 생김.
+            </p>
+        </article>
+    <article class="post">
+      <h2>대응</h2>
+      <p>
+         1. 물류센터와 배송 네트워크를 확장하여 급증한 수요를 수용할 수 있도록 했습니다. 특히, 자동화 시스템을 도입하여 물류센터의 효율성을 극대화했습니다.
+         주요 전자상거래 플랫폼과 협력하여 물류 효율을 높였고, 대형 유통업체와의 협력을 통해 물류 처리 능력을 극대화했습니다.<br><br>
+         2. 물류센터와 배송 현장에서 마스크 착용, 체온 측정, 손 세정제 비치 등 방역을 철저히 준수했습니다. 또한, 방역 강화와 소독 작업을 강화했습니다.
+         택배 기사들이 고객의 문 앞에 상품을 두고 가는 방식으로 접촉을 피했고, 부족한 인력을 채우기 위해 임시 인력을 투입했습니다.<br><br>
+         3. 해외 현지 물류 네트워크를 재정비하고, 글로벌 물류 서비스를 보다 효율적으로 운영하기 위해 노력했습니다.
+         항공편이 제한되었을 때는 해상 물류와 같은 대체 운송 수단을 적극 활용하였고, 다양한 운송 경로를 활용하여 물류 흐름을 회복하려 했습니다.
+         AI, 빅데이터, IoT를 활용해 물류 경로를 최적화하고, 물류 흐름을 보다 예측 가능하고 효율적으로 만들기 위한 디지털 전환에 집중했습니다.
+      </p>
+  </article>
+</a>
+  </section>
+  </div>
+  
+  </main>
+ 
+  
+</body>
+<a href="https://www.newsprime.co.kr/news/article/?no=527914" target="_blank" class="news-link">관련 뉴스 기사 자세히 보기</a> <a href="" target="_blank" class="news-link1">그래프 보기</a>
+{% endblock %}

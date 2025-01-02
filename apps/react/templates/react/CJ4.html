@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block css %}
+  <title>CJ계열 코로나 대응 사례</title>
+  <link rel="stylesheet" href="{{ url_for('react.static', filename='react.css') }}">
+  {% endblock %}
+
+  {% block content %}
+  <body>
+  <div class="title"><b>CJ계열사들의 코로나 팬데믹으로 인한 위기와 이를 극복하기 위한 대응</b></div>
+  <header>
+    <nav>
+      <ul>
+          <li><a href="/react">CJ 대한통운</a></li>
+          <li><a href="CJ1">CJ 제일제당</a></li>
+          <li><a href="CJ2">CJ ENM</a></li>
+          <li><a href="CJ3">CJ 올리브영</a></li>
+          <li><a href="CJ4">CJ 프레시웨이</a></li>
+          <li><a href="CJ5">CJ CGV</a></li>
+          <li><a href="CJ6">CJ 스튜디오드래곤</a></li>
+          <li><a href="CJ7">CJ 씨푸드</a></li>
+          <li><a href="CJ8">CJ 바이오사이언스</a></li>
+      </ul>
+  </nav>
+  </header>
+  <div class="tt">CJ 프레시웨이</div>
+  <main>
+    <section id="posts">
+        <article class="post">
+            <h2>위기</h2>
+            <p>
+              CJ프레시웨이는 코로나19 팬데믹으로 인해 다양한 위기를 겪었습니다. 외식 산업의 전반적인 침체와 공급망의 불안정성, 사회적 거리두기와 같은 제약들이 그 핵심이었으나, 이에 대응하기 위한 다양한 전략들을 펼쳤습니다.<br><br>
+              1. 외식업체들이 운영에 어려움을 겪어 식자재 공급 및 서비스의 중단 또는 축소가 불가피해짐.<br>
+              2. 직원들의 건강과 안전을 보호하는 동시에 정상적인 업무를 지속하는 것이 중요한 과제가 되었음.<br>
+              3. 코로나19 팬데믹 동안 홈쿡과 간편식 시장이 급성장하여 사람들은 외식을 줄이고 집에서 식사를 준비하는 경향이 강해짐.
+            </p>
+        </article>
+  
+      <article class="post">
+        <h2>대응</h2>
+        <p>
+          1. 외식업체들이 위기 상황을 극복할 수 있도록 배달용 식자재, 포장형 식사와 같은 서비스를 제공하며 온라인 주문 시스템을 강화했습니다. 특히, 배달 및 포장에 필요한 특수 식자재와 간편식을 공급하여 외식업체들이 새로운 수익 모델을 찾을 수 있도록 지원했습니다.<br><br>
+          2. 재택근무, 교대 근무, 출퇴근 시간 조정 등을 통해 직원들의 안전을 확보하며, 마스크 착용, 손 세정제 배치, 열 체크 등의 방역 조치를 철저히 했습니다. 외식업체 및 소상공인들에게는 식자재 공급 및 재정적 지원을 통해 상생할 수 있도록 돕는 동시에, 사회적 책임을 다하기 위해 다양한 지원 프로그램을 운영했습니다.<br><br>
+          3. HMR(간편식) 제품군을 확장하고, 집에서 쉽게 요리할 수 있는 밀키트나 반조리 제품을 대거 출시했습니다. 이를 통해 홈쿡 트렌드에 맞춘 제품을 소비자에게 제공하며 수요를 충족시켰습니다.
+          간편식 및 홈쿡 제품의 온라인 판매를 강화하고, 온라인 쇼핑몰과 B2B 플랫폼을 통해 소비자들이 비대면으로 손쉽게 제품을 구매할 수 있도록 지원했습니다.
+        </p>
+      </article>
+  </a>
+  </section>
+  </div>
+  </main>
+  
+ 
+</body>
+<a href="https://www.hankyung.com/article/2021011104291" target="_blank" class="news-link">관련 뉴스 기사 자세히 보기</a><a href="" target="_blank" class="news-link1">그래프 보기</a>
+{% endblock %}
