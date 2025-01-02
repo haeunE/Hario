@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %} 코로나 {% endblock %}
+{% block content %}
+<div class="mb-2">
+</div>
+<iframe src="/graph/covid/" width="100%" height="865.45px" frameborder="0"></iframe>
+<script>
+  // iframe의 크기를 자동으로 조정하는 함수
+  function resizeIframe() {
+    var iframe = document.getElementById('myIframe');
+    // iframe의 크기 구하기
+    var iframeWidth = iframe.offsetWidth;
+    var iframeHeight = iframe.offsetHeight;
+
+    // 크기 출력 (디버그용)
+    console.log('iframe width:', iframeWidth);
+    console.log('iframe height:', iframeHeight);
+
+    // iframe 높이 업데이트 (자동 조정)
+    iframe.style.height = iframeHeight + 'px';
+  }
+
+  // 페이지가 로드되면 크기 조정
+  window.onload = function() {
+    resizeIframe();
+  };
+
+  // 윈도우 리사이즈 이벤트가 발생할 때마다 크기 재조정
+  window.onresize = function() {
+    resizeIframe();
+  };
+</script>
+{% endblock %}

@@ -94,56 +94,66 @@ class Department(db.Model):
     name = db.Column(db.String(255), nullable=False, unique=True)
    
 class Board(db.Model):
-  __tablename__ = "board"
-  id = db.Column(db.Integer, primary_key = True)
-  subject = db.Column(db.String(255),nullable = False)
-  content = db.Column(db.Text(), nullable=False)
-  created_at = db.Column(db.DateTime, default=datetime.now)
-  updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
-  # 직장인(1) / 취준생(2) / 모두(3) 페이지 어디에 저장
-  selection = db.Column(db.Integer, nullable=False)
+    __tablename__ = "board"
+    id = db.Column(db.Integer, primary_key = True)
+    subject = db.Column(db.String(255),nullable = False)
+    content = db.Column(db.Text(), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
+    # 직장인(1) / 취준생(2) / 모두(3) 페이지 어디에 저장
+    selection = db.Column(db.Integer, nullable=False)
 
-  user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-  user = db.relationship("User", backref=db.backref("boards"))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user = db.relationship("User", backref=db.backref("boards"))
 
-  # 부서 
-  department_id = db.Column(db.Integer, db.ForeignKey("department.id", ondelete="CASCADE"), nullable=False)
-  department = db.relationship("Department", backref=db.backref("boards"))
+    # 부서 
+    department_id = db.Column(db.Integer, db.ForeignKey("department.id", ondelete="CASCADE"), nullable=False)
+    department = db.relationship("Department", backref=db.backref("boards"))
 
-  # 조회수
-  views = db.Column(db.Integer, default=0, nullable=False)
+    # 조회수
+    views = db.Column(db.Integer, default=0, nullable=False)
 
-  # 추천 기능 관계 설정 - 다대다
-  recommender = db.relationship("User", secondary="recommend", backref=db.backref("recommender_list"))
+    # 추천 기능 관계 설정 - 다대다
+    recommender = db.relationship("User", secondary="recommend", backref=db.backref("recommender_list"))
 
-  # 게시글에 조회수를 증가시키는 메소드
-  def increment_views(self):
-    self.views += 1
-    db.session.commit()
+    # 게시글에 조회수를 증가시키는 메소드
+    def increment_views(self):
+        self.views += 1
+        db.session.commit()
 
-  # 페이지 이전, 이후
-  def get_pre_board(self):
-      return(
-          Board.query.filter(Board.selection == self.selection, Board.id < self.id)
-          .order_by(Board.id.desc())
-          .first()
-      ) 
-  def get_next_board(self):
-      return(
-          Board.query.filter(Board.selection == self.selection, Board.id > self.id)
-          .order_by(Board.id.asc())
-          .first()
-      )
-
-
-
+    # 페이지 이전, 이후
+    def get_pre_board(self):
+        return(
+            Board.query.filter(Board.selection == self.selection, Board.id < self.id)
+            .order_by(Board.id.desc())
+            .first()
+        ) 
+    def get_next_board(self):
+        return(
+            Board.query.filter(Board.selection == self.selection, Board.id > self.id)
+            .order_by(Board.id.asc())
+            .first()
+        )
 
 class Recommend(db.Model):
-  __tablename__ = "recommend"
-  id = db.Column(db.Integer, primary_key=True)
-  user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-  user = db.relationship("User", backref=db.backref("recommends"))
-  board_id = db.Column(db.Integer, db.ForeignKey("board.id", ondelete="CASCADE"), nullable=False)
+    __tablename__ = "recommend"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user = db.relationship("User", backref=db.backref("recommends"))
+    board_id = db.Column(db.Integer, db.ForeignKey("board.id", ondelete="CASCADE"), nullable=False)
+
+
+class Comment(db.Model):
+    __tablename__ = "comment"
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user = db.relationship("User", backref=db.backref("comments"))
+    board_id = db.Column(db.Integer, db.ForeignKey("board.id", ondelete="CASCADE"), nullable=False)
+    board = db.relationship("Board", backref=db.backref("comments"))
+
 
 def seed_initial_data():
     """초기 데이터를 삽입하는 통합 함수"""
@@ -183,6 +193,8 @@ def seed_initial_data():
         users = [
             {"username": "admin", "password": "admin123", "role": UserRole.ADMIN, "userinfo_id": 1},
             {"username": "worker1", "password": "worker123", "role": UserRole.WORKER, "userinfo_id": 2},
+            {"username": "worker", "password": "123", "role": UserRole.WORKER, "userinfo_id": 3},
+            {"username": "아이디", "password": "123", "role": UserRole.WORKER, "userinfo_id": 4},
         ]
         for user_data in users:
             user = User(username=user_data["username"], role=user_data["role"], userinfo_id=user_data["userinfo_id"])

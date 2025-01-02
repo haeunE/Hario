@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block title %}운송량 분석{% endblock %}
+{% block content %}
+
+<link rel="stylesheet" href="{{url_for('logistics.static', filename='logistics.css')}}">
+<!-- apps/logistics/static/logistics.css -->
+
+    <div class="container">
+        <img src="{{ url_for('logistics.static', filename='images/cj_logistics_index.png') }}" width="100%"
+            alt="CJ대한통운">
+
+        <!-- 전체 기간 파이형 그래프 (범례 표시) -->
+        <section id="pie-graphs-all">
+            <h2>대한통운 물동량 분석</h2>
+            <div class="pie-graph">
+                <img id="pie-chart" src="data:image/png;base64,{{ pie_plot_urls[0] }}" alt="2018~2024 품목 별 운송 비율">
+                <map name="pie_map">
+                    {% for item in columns_item %}
+                    <area shape="circle" coords="{{ pie_coords[loop.index0] }}" alt="{{ item }}" title="{{ item }}"
+                        href="javascript:void(0);" data-item="{{ item }}">
+                    {% endfor %}
+                </map>
+            </div>
+
+            <div class="pie-all-analysis">
+                <p>2018~2024 품목별 운송량을 분석한 파이 그래프입니다.<br>
+                    분석 결과, {{ top_pie_item }}가(이) {{ top_pie_percent }}%로 가장 높았습니다.
+                    {{ second_pie_item }}({{ second_pie_percent }}%), {{ third_pie_item }}({{ third_pie_percent }}%) 순으로
+                    수요가 많았습니다.
+                </p>
+
+
+<!-- 
+                <div class="period-analysis">
+                    <h4>코로나 이전</h4>
+                    <p>코로나 이전 기간(2018.01 ~ 2019.12) 분석 결과, {{ pre_covid_top_item }}가(이) {{ pre_covid_top_percent }}%로 가장
+                        높았습니다.
+                        {{ pre_covid_second_item }}({{ pre_covid_second_percent }}%), {{ pre_covid_third_item }}({{
+                        pre_covid_third_percent }}%) 순으로 수요가 많았습니다.
+                    </p>
+
+                    <h4>코로나 기간</h4>
+                    <p>코로나 기간(2020.01 ~ 2022.04) 분석 결과, {{ covid_period_top_item }}가(이) {{ covid_period_top_percent }}%로
+                        가장 높았습니다.
+                        {{ covid_period_second_item }}({{ covid_period_second_percent }}%), {{ covid_period_third_item
+                        }}({{ covid_period_third_percent }}%) 순으로 수요가 많았습니다.
+                    </p>
+
+                    <h4>코로나 이후</h4>
+                    <p>코로나 이후 기간(2022.05 ~ 2023.12) 분석 결과, {{ post_covid_top_item }}가(이) {{ post_covid_top_percent }}%로
+                        가장 높았습니다.
+                        {{ post_covid_second_item }}({{ post_covid_second_percent }}%), {{ post_covid_third_item }}({{
+                        post_covid_third_percent }}%) 순으로 수요가 많았습니다.
+                    </p>
+                </div> -->
+
+            </div>
+        </section>
+
+        
+        <!-- 전체 기간 선형 그래프 -->
+        <section id="line-graphs">
+            <h3>2018~2024 품목별 운송량</h3>
+            <div class="line-graph-container">
+                <img src="data:image/png;base64,{{ line_plot_urls[0] }}" alt="2018~2024 품목 별 운송량">
+            </div>
+            <div class="line-analysis">
+                <p>2018~2024 품목별 운송량을 분석한 선형 그래프입니다.<br>
+                    분석 결과, {{ high_month[0] }}년 {{ high_month[1] }}월에 {{ high_month[2]}}건으로 운송량이 가장 많았고,
+                    {{ low_month[0] }}년 {{ low_month[1] }}월에 {{low_month[2] }}건으로 운송량이 가장 적었습니다.<br>
+                    월별 평균 운송량은 {{monthly_avg_volume}}건입니다.<br>
+                </p>
+            </div>
+        </section>
+
+
+        <section id="bar-graphs">
+            <h3>코로나 전/후 기간 별 운송량</h3>
+            <div class="bar-graph-container">
+                <img src="data:image/png;base64,{{ bar_plot_urls }}" alt="코로나 기간별 운송량 막대 그래프">
+            </div>
+            <div class="bar-analysis">
+                <p>코로나 이전, 코로나 기간, 코로나 이후로 나누어 운송량을 분석한 막대 그래프입니다.<br>
+                    분석 결과, {{ high_bar_period }}의 운송량이 평균 {{ high_bar_volume }}건으로 가장 많았고,<br>
+                    {{ low_bar_period }}의 운송량이 평균 {{low_bar_volume}}건으로 가장 적었습니다.</p>
+            </div>
+        </section>
+
+        <!-- 요일별 운송량 선형 그래프 -->
+        <h3>요일별 운송량 추이</h3>
+        <img src="data:image/png;base64,{{ weekday_line_plot_urls[0] }}" alt="요일별 운송량">
+        <div class="weekday-line-analysis">
+            <p>2018~2024 요일별 운송량을 분석한 선형 그래프입니다.<br>
+                분석 결과, {{ high_day }}요일의 수요가 평균 {{ high_day_mean }}건으로 가장 많고,
+                {{ low_day }}요일의 수요가 {{ low_day_mean }}건으로 가장 적었습니다.</p>
+
+        </div>
+        </section>
+
+        <section>
+            <h3>지역 별 대한통운 이용량</h3>
+            <div class="logistics-volume-map">
+                <iframe src="{{ url_for('logistics.static', filename='images/dual_map.html') }}" width="100%"
+                    height="600" style="border: none;"></iframe>
+            </div>
+            <div class="map-analysis">
+                <p>2018~2024 서울시 자치구 별 택배 물류량을 분석했습니다.<br>
+                    입고량이 가장 많은 자치구는 {{ top_sender }}, 출고량이 가장 많은 자치구는 {{ top_receiver }}입니다.<br>
+                    {{ combined_text }} 순으로 택배 수요가 많습니다.</p>
+            </div>
+        </section>
+    </div>
+
+{% endblock %}
