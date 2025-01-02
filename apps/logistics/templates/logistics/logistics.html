@@ -2,13 +2,16 @@
 {% block title %}운송량 분석{% endblock %}
 {% block content %}
 
+<link rel="stylesheet" href="{{url_for('logistics.static', filename='logistics.css')}}">
+<!-- apps/logistics/static/logistics.css -->
+
     <div class="container">
         <img src="{{ url_for('logistics.static', filename='images/cj_logistics_index.png') }}" width="100%"
             alt="CJ대한통운">
 
         <!-- 전체 기간 파이형 그래프 (범례 표시) -->
         <section id="pie-graphs-all">
-            <h3>품목 별 운송 비율</h3>
+            <h2>대한통운 물동량 분석</h2>
             <div class="pie-graph">
                 <img id="pie-chart" src="data:image/png;base64,{{ pie_plot_urls[0] }}" alt="2018~2024 품목 별 운송 비율">
                 <map name="pie_map">
@@ -19,29 +22,14 @@
                 </map>
             </div>
 
-            <!-- 기간 선택 버튼 -->
-            <!-- <div class="period-buttons">
-                <button onclick="showPieChart(0)">전체 기간</button>
-                <button onclick="showPieChart(1)">코로나 이전</button>
-                <button onclick="showPieChart(2)">코로나 기간</button>
-                <button onclick="showPieChart(3)">코로나 이후</button>
-            </div> -->
-
-            <!-- 코로나 기간 별 파이형 그래프 -->
-            <div class="pie-graph-period">
-                {% for pie_img in pie_plot_urls[1:] %}
-                <div class="pie-graph" style="display: none;">
-                    <img src="data:image/png;base64,{{ pie_img }}" alt="기간 별 운송 비율">
-                </div>
-                {% endfor %}
-            </div>
-
             <div class="pie-all-analysis">
                 <p>2018~2024 품목별 운송량을 분석한 파이 그래프입니다.<br>
                     분석 결과, {{ top_pie_item }}가(이) {{ top_pie_percent }}%로 가장 높았습니다.
                     {{ second_pie_item }}({{ second_pie_percent }}%), {{ third_pie_item }}({{ third_pie_percent }}%) 순으로
                     수요가 많았습니다.
                 </p>
+
+
 <!-- 
                 <div class="period-analysis">
                     <h4>코로나 이전</h4>
@@ -65,27 +53,15 @@
                         post_covid_third_percent }}%) 순으로 수요가 많았습니다.
                     </p>
                 </div> -->
-            </div>
 
-        </section>
-
-        <section id="bar-graphs">
-            <h3>코로나 기간 별 운송량</h3>
-            <div class="bar-graph-container">
-                <img src="data:image/png;base64,{{ bar_plot_urls }}" alt="코로나 기간별 운송량 막대 그래프">
-            </div>
-            <div class="bar-analysis">
-                <p>코로나 이전, 코로나 기간, 코로나 이후로 나누어 운송량을 분석한 막대 그래프입니다.<br>
-                    분석 결과, {{ high_bar_period }}의 운송량이 평균 {{ high_bar_volume }}건으로 가장 많았고,
-                    {{ low_bar_period }}의 운송량이 평균 {{low_bar_volume}}건으로 가장 적었습니다.</p>
             </div>
         </section>
 
-
+        
         <!-- 전체 기간 선형 그래프 -->
         <section id="line-graphs">
-            <h3>품목별 운송량</h3>
-            <div class="line-graph">
+            <h3>2018~2024 품목별 운송량</h3>
+            <div class="line-graph-container">
                 <img src="data:image/png;base64,{{ line_plot_urls[0] }}" alt="2018~2024 품목 별 운송량">
             </div>
             <div class="line-analysis">
@@ -97,6 +73,18 @@
             </div>
         </section>
 
+
+        <section id="bar-graphs">
+            <h3>코로나 전/후 기간 별 운송량</h3>
+            <div class="bar-graph-container">
+                <img src="data:image/png;base64,{{ bar_plot_urls }}" alt="코로나 기간별 운송량 막대 그래프">
+            </div>
+            <div class="bar-analysis">
+                <p>코로나 이전, 코로나 기간, 코로나 이후로 나누어 운송량을 분석한 막대 그래프입니다.<br>
+                    분석 결과, {{ high_bar_period }}의 운송량이 평균 {{ high_bar_volume }}건으로 가장 많았고,<br>
+                    {{ low_bar_period }}의 운송량이 평균 {{low_bar_volume}}건으로 가장 적었습니다.</p>
+            </div>
+        </section>
 
         <!-- 요일별 운송량 선형 그래프 -->
         <h3>요일별 운송량 추이</h3>
@@ -110,7 +98,7 @@
         </section>
 
         <section>
-            <h2>지역 별 대한통운 이용량</h2>
+            <h3>지역 별 대한통운 이용량</h3>
             <div class="logistics-volume-map">
                 <iframe src="{{ url_for('logistics.static', filename='images/dual_map.html') }}" width="100%"
                     height="600" style="border: none;"></iframe>
