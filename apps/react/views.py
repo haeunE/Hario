@@ -9,6 +9,6 @@ react = Blueprint('react', __name__, template_folder='templates/react', static_f
 def index(): # 함수    
     return render_template("react.html") # index.html를 보여주게 함
 
-@react.route("/CJ")
-def CJ():
-    return render_template("CJ.html")
+@react.route("/<data>")
+def CJ1(data):
+    return render_template(f"{data}.html")

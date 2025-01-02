@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block css %}
+  <title>CJ계열 코로나 대응 사례</title>
+  <link rel="stylesheet" href="{{ url_for('react.static', filename='react.css') }}">
+  {% endblock %}
+
+  {% block content %}
+  <body>
+  <div class="title"><b>CJ계열사들의 코로나 팬데믹으로 인한 위기와 이를 극복하기 위한 대응</b></div>
+  <header>
+    <nav>
+      <ul>
+          <li><a href="/react">CJ 대한통운</a></li>
+          <li><a href="CJ1">CJ 제일제당</a></li>
+          <li><a href="CJ2">CJ ENM</a></li>
+          <li><a href="CJ3">CJ 올리브영</a></li>
+          <li><a href="CJ4">CJ 프레시웨이</a></li>
+          <li><a href="CJ5">CJ CGV</a></li>
+          <li><a href="CJ6">CJ 스튜디오드래곤</a></li>
+          <li><a href="CJ7">CJ 씨푸드</a></li>
+          <li><a href="CJ8">CJ 바이오사이언스</a></li>
+      </ul>
+  </nav>
+  </header>
+  <div class="tt">CJ 제일제당</div>
+  <main>
+    <section id="posts">
+        <article class="post">
+            <h2>위기</h2>
+            <p>CJ 제일제당은 코로나19 팬데믹으로 인해 여러 가지 위기를 겪었으나, 이를 극복하기 위한 다양한 전략을 펼쳤습니다. 팬데믹은 식품업계를 포함한 여러 산업에 큰 영향을 미쳤으며, 특히 공급망, 소비자 행동 변화, 생산 시설 운영 등에서 어려움을 겪었습니다. CJ 제일제당은 이러한 위기 속에서 효율적인 대응 방안을 모색하고, 신속하게 변화를 수용하며 위기를 기회로 전환하기 위해 노력했습니다.<br><br>
+              1. 공급망의 차질, 원자재 수급과 생산에 필요한 부품의 공급에 어려움, 주요 해외 공급처에서의 생산 중단, 물류 지연 등의 문제.  <br>
+              2. 소비 패턴의 급변, 홈쿡(Home-cooking) 관련 제품 수요가 급증했지만, 동시에 외식 관련 제품이나 식음료 분야는 수요 감소를 겪음. <br>
+              3. 생산 시설 운영의 어려움, 일부 생산 시설은 코로나19로 운영에 어려움을 겪음.
+            </p>
+        </article>
+  
+      <article class="post">
+        <h2>대응</h2>
+        <p>
+          1. 일부 주요 공급처에서의 차질을 막기 위해 다양한 대체 공급처를 확보하고, 글로벌 공급망의 리스크를 분산시켰고, 해외 원자재 수입이 어려운 상황에서, 국내 생산을 강화하고 지역별 생산기지 확대를 통해 물류 리스크를 최소화했습니다.<br><br>
+          2. 비대면 소비 패턴에 맞춘 제품 라인업 강화
+          코로나19로 인해 외식이 줄어들고 집에서 식사를 준비하는 홈쿡 트렌드가 확산되자, CJ 제일제당은 가정간편식(HMR, Home Meal Replacement), 즉석식품, 건강식품 등과 같은 편의식 관련 제품군을 강화했습니다. <br><br>
+          3. 생산 현장의 직원들에게 방역 물품을 지급하고, 직원 간 접촉을 최소화하기 위한 조치를 취했습니다. 또한, 비대면 업무와 재택근무를 가능한 범위에서 시행하며, 제조 현장에서는 교대 근무제와 같은 유연한 근무 방식도 도입했습니다.
+        </p>
+      </article>
+  </a>
+  </section>
+  </div>
+  </main>
+  
+ 
+</body>
+<a href="https://www.ebn.co.kr/news/articleView.html?idxno=1433772" target="_blank" class="news-link">관련 뉴스 기사 자세히 보기</a><a href="" target="_blank" class="news-link1">그래프 보기</a>
+{% endblock %}

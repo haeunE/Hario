@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block css %}
+  <title>CJ계열 코로나 대응 사례</title>
+  <link rel="stylesheet" href="{{ url_for('react.static', filename='react.css') }}">
+  {% endblock %}
+
+  {% block content %}
+  <body>
+  <div class="title"><b>CJ계열사들의 코로나 팬데믹으로 인한 위기와 이를 극복하기 위한 대응</b></div>
+  <header>
+    <nav>
+      <ul>
+          <li><a href="/react">CJ 대한통운</a></li>
+          <li><a href="CJ1">CJ 제일제당</a></li>
+          <li><a href="CJ2">CJ ENM</a></li>
+          <li><a href="CJ3">CJ 올리브영</a></li>
+          <li><a href="CJ4">CJ 프레시웨이</a></li>
+          <li><a href="CJ5">CJ CGV</a></li>
+          <li><a href="CJ6">CJ 스튜디오드래곤</a></li>
+          <li><a href="CJ7">CJ 씨푸드</a></li>
+          <li><a href="CJ8">CJ 바이오사이언스</a></li>
+      </ul>
+  </nav>
+  </header>
+  <div class="tt">CJ 스튜디오드래곤</div>
+  <main>
+    <section id="posts">
+        <article class="post">
+            <h2>위기</h2>
+            <p>
+              CJ 스튜디오드래곤은 CJ ENM의 드라마 콘텐츠 제작 및 배급을 담당하는 자회사로, 코로나19 팬데믹 동안 큰 위기를 겪었습니다. 팬데믹은 제작 일정 지연, 촬영 중단, 방송 및 유통 방식 변화 등 다양한 영향을 미쳤으며, 스튜디오드래곤은 이를 극복하기 위한 여러 대응을 시도했습니다.<br><br>
+              1. 사회적 거리두기와 이동 제한이 강화되면서 드라마 촬영이 중단되거나 지연됨. 주요 드라마의 촬영 일정이 변경되었고, 일부 드라마는 편성 차질이 발생하여 방영 시점이 미뤄짐.<br>
+              2. 촬영 현장 방역과 안전 조치를 강화하는 데 따른 추가 비용이 예산 초과로 이어졌습니다.<br>
+              3. 팬데믹 상황에서 신규 콘텐츠 제작이 지연되자, 방송사의 콘텐츠 확보가 어려워짐.
+            </p>
+        </article>
+  
+      <article class="post">
+        <h2>대응</h2>
+        <p>
+          1. 제작 일정 재조정을 통해 드라마의 촬영을 재개하며 편성에 유연성을 확보하려 했습니다. 지연된 드라마는 빠르게 촬영을 재개하여 후반기 방영 일정을 맞추기 위해 계획 변경을 적극적으로 진행했습니다.
+          특히 예상보다 촬영 기간이 길어진 드라마에 대해서는 콘텐츠 공급 계획을 유동적으로 변경하며 방송사와 협력했습니다.<br><br>
+          2. 팬데믹 상황에서 제작비 절감을 위해 스튜디오 환경 개선, 촬영 인력 최적화, 디지털 촬영 기법 등의 효율적인 제작 시스템을 도입했습니다.
+          고정비 절감을 위해 소규모 세트 활용, 비대면 촬영 등을 통해 비용을 최소화하려는 노력을 기울였습니다.<br><br>
+          3. 기존 인기 드라마 재방송이나 특별 편성을 통해 드라마 콘텐츠의 공급을 이어갔습니다. 예를 들어, 인기 드라마의 스페셜 방송이나 비하인드 영상 등을 방송하여 팬들의 관심을 끌었습니다.
+        </p>
+      </article>
+  </a>
+  </section>
+  </div>
+  </main>
+  
+ 
+</body>
+<a href="https://www.hankyung.com/finance/article/202003220731i" target="_blank" class="news-link">관련 뉴스 기사 자세히 보기</a><a href="" target="_blank" class="news-link1">그래프 보기</a>
+{% endblock %}

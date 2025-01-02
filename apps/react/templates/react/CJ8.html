@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block css %}
+  <title>CJ계열 코로나 대응 사례</title>
+  <link rel="stylesheet" href="{{ url_for('react.static', filename='react.css') }}">
+  {% endblock %}
+
+  {% block content %}
+  <body>
+  <div class="title"><b>CJ계열사들의 코로나 팬데믹으로 인한 위기와 이를 극복하기 위한 대응</b></div>
+  <header>
+    <nav>
+      <ul>
+          <li><a href="/react">CJ 대한통운</a></li>
+          <li><a href="CJ1">CJ 제일제당</a></li>
+          <li><a href="CJ2">CJ ENM</a></li>
+          <li><a href="CJ3">CJ 올리브영</a></li>
+          <li><a href="CJ4">CJ 프레시웨이</a></li>
+          <li><a href="CJ5">CJ CGV</a></li>
+          <li><a href="CJ6">CJ 스튜디오드래곤</a></li>
+          <li><a href="CJ7">CJ 씨푸드</a></li>
+          <li><a href="CJ8">CJ 바이오사이언스</a></li>
+      </ul>
+  </nav>
+  </header>
+  <div class="tt">CJ 바이오사이언스</div>
+  <main>
+    <section id="posts">
+        <article class="post">
+            <h2>위기</h2>
+            <p>   
+            CJ 바이오사이언스는 CJ 제일제당의 계열사로, 생명공학 기반의 바이오 제품을 개발하고 생산하는 기업입니다. 코로나19 팬데믹은 제약 및 바이오 산업에 큰 영향을 미쳤고, CJ 바이오사이언스도 다양한 위기에 직면했지만, 이를 극복하기 위한 여러 대응을 펼쳤습니다.<br><br>
+            1. 원자재 공급 및 부품 조달에 어려움이 발생했습니다. 특히, 활성 제제 원료(API)나 생산 부자재의 수급에 지연이 생기며, 일부 생산이 중단되거나 지연되었음.<br>
+            2. 팬데믹으로 인해 연구개발이 일정 지연을 겪었으며, 연구팀들이 원활한 협력을 하지 못하는 상황이 발생하여 일부 임상 시험이 중단되거나 지연되었음.<br>
+            3. 제 물류 및 수출 문제가 발생하면서 해외 시장에서의 거래가 어려워졌습니다. 특히 유럽과 미국 등 주요 시장에서의 수출 감소가 문제였음.
+            </p>
+        </article>
+  
+      <article class="post">
+        <h2>대응</h2>
+        <p>
+          1. 공급망 리스크를 최소화하기 위해 공급망을 다변화하고, 다수의 공급처와 협력 관계를 강화하여 원자재 조달 안정성을 확보했습니다. 국내외 물류망의 불확실성을 줄이기 위해 로컬화 전략을 강화하고, 국내 생산을 확대함으로써 공급망의 안정성을 높였습니다.<br><br>
+          2. 코로나19 팬데믹으로 중단된 임상 시험과 연구개발을 점차적으로 재개하며, 비대면 방식의 연구 협력 및 디지털 헬스케어 기술을 활용한 임상 시험 방식을 도입했습니다. 신약 개발 및 제품 혁신을 지속적으로 추진하여 포스트 팬데믹 시대를 대비한 혁신적인 바이오 제품을 준비하고 있습니다.<br><br>
+          3. 해외 연구소 및 바이오 기업과의 협력을 통해 국제적인 연구개발 프로젝트를 지속하고, 신약 개발 및 기능성 식품의 글로벌 시장 출시를 준비했습니다. 특히, 아시아, 미국, 유럽 시장에서의 수출 기회를 강화하기 위해 로컬 파트너십을 강화했습니다.
+        </p>
+      </article>
+  </a>
+  </section>
+  </div>
+  </main>
+  
+ 
+</body>
+<a href="https://news.einfomax.co.kr/news/articleView.html?idxno=4188603" target="_blank" class="news-link">관련 뉴스 기사 자세히 보기</a><a href="" target="_blank" class="news-link1">그래프 보기</a>
+{% endblock %}
