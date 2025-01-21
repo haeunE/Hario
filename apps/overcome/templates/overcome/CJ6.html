@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block css %}
   <title>CJ계열 코로나 대응 사례</title>
-  <link rel="stylesheet" href="{{ url_for('react.static', filename='react.css') }}">
+  <link rel="stylesheet" href="{{ url_for('overcome.static', filename='overcome.css') }}">
   {% endblock %}
 
   {% block content %}
@@ -10,7 +10,7 @@
   <header>
     <nav>
       <ul>
-          <li><a href="/react">CJ 대한통운</a></li>
+          <li><a href="/overcome">CJ 대한통운</a></li>
           <li><a href="CJ1">CJ 제일제당</a></li>
           <li><a href="CJ2">CJ ENM</a></li>
           <li><a href="CJ3">CJ 올리브영</a></li>
@@ -52,5 +52,5 @@
   
  
 </body>
-<a href="https://www.hankyung.com/finance/article/202003220731i" target="_blank" class="news-link">관련 뉴스 기사 자세히 보기</a><a href="" target="_blank" class="news-link1">그래프 보기</a>
+<a href="https://www.hankyung.com/finance/article/202003220731i" target="_blank" class="news-link">관련 뉴스 기사 자세히 보기</a><a href="http://127.0.0.1:5000/graph/covid" target="_blank" class="news-link1">그래프 보기</a>
 {% endblock %}

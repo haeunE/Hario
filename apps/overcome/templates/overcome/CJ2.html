@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block css %}
   <title>CJ계열 코로나 대응 사례</title>
-  <link rel="stylesheet" href="{{ url_for('react.static', filename='react.css') }}">
+  <link rel="stylesheet" href="{{ url_for('overcome.static', filename='overcome.css') }}">
   {% endblock %}
 
   {% block content %}
@@ -10,7 +10,7 @@
   <header>
     <nav>
       <ul>
-          <li><a href="/react">CJ 대한통운</a></li>
+          <li><a href="/overcome">CJ 대한통운</a></li>
           <li><a href="CJ1">CJ 제일제당</a></li>
           <li><a href="CJ2">CJ ENM</a></li>
           <li><a href="CJ3">CJ 올리브영</a></li>
@@ -49,5 +49,5 @@
   
  
 </body>
-<a href="https://cjnews.cj.net/%EC%9D%B8%ED%84%B0%EB%B7%B0-%EA%B8%89%EB%B3%80%ED%95%98%EB%8A%94-%EA%B5%AD%EB%82%B4-%EC%BD%98%ED%85%90%EC%B8%A0-%EC%9C%A0%ED%86%B5-%ED%8C%A8%EB%9F%AC%EB%8B%A4%EC%9E%84-%EA%B7%B8-%EC%9D%B4%EC%9C%A0/" target="_blank" class="news-link">관련 뉴스 기사 자세히 보기</a><a href="" target="_blank" class="news-link1">그래프 보기</a>
+<a href="https://cjnews.cj.net/%EC%9D%B8%ED%84%B0%EB%B7%B0-%EA%B8%89%EB%B3%80%ED%95%98%EB%8A%94-%EA%B5%AD%EB%82%B4-%EC%BD%98%ED%85%90%EC%B8%A0-%EC%9C%A0%ED%86%B5-%ED%8C%A8%EB%9F%AC%EB%8B%A4%EC%9E%84-%EA%B7%B8-%EC%9D%B4%EC%9C%A0/" target="_blank" class="news-link">관련 뉴스 기사 자세히 보기</a><a href="http://127.0.0.1:5000/graph/covid" target="_blank" class="news-link1">그래프 보기</a>
 {% endblock %}
